@@ -4,8 +4,6 @@
         <p class="text-center"><?php echo $_GET["formmsg"]; ?></p>
     </div>
   <?php endif; ?>
-
-  <div>
-  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-</div>
+ <div id="map">
+   
+ </div>
