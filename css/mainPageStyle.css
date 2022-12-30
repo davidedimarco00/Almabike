@@ -1,3 +1,59 @@
-#map {
-  height: 500px;
+
+html { 
+  height:100%;
 }
+body { 
+  min-height:100%;
+}
+
+
+.selector-for-some-widget {
+    box-sizing: border-box;
+}
+
+
+
+#map{
+  height: 1080px;
+  z-index:1;
+}
+
+.gridcontainer {
+
+  position: absolute;
+  z-index: 3;
+  margin-top: -60%;
+  margin-left: 10%;
+  width: 100%;
+  pointer-events: none;
+
+}
+
+.col-sm{
+  text-align: end;
+}
+
+.card {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+ 
+  z-index: 4;
+  pointer-events: all;
+  width: 60%;
+
+  border-radius: 80px;
+  margin-right: 0%;
+
+ 
+}
+
+.card-body {
+  background-color: #d2d2d2;
+ 
+ 
+}
+
+.row {
+  padding-top: 10px;
+}
+
+

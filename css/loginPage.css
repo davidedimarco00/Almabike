@@ -1,0 +1,12 @@
+
+html { 
+    height:100%;
+  }
+body { 
+    min-height:100%;
+}
+
+  
+.selector-for-some-widget {
+    box-sizing: border-box;
+}
