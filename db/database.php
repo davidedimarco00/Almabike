@@ -1,7 +1,7 @@
 <?php
 
 /*
-This class contains all the functions for require data from database
+This class contains all the functions for require data from sensors' database
 Database must be connect on 3306 port and its name is "almabikedatabase".
 Database is a local database.
 */

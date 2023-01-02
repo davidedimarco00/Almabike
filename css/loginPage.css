@@ -1,12 +1,19 @@
 
 html { 
     height:100%;
+    width: 100%;
   }
 body { 
     min-height:100%;
+    position: relative;
 }
 
-  
 .selector-for-some-widget {
     box-sizing: border-box;
 }
+
+#loginButton {
+    background-color: #BC2E29;
+    color: white;
+}
+

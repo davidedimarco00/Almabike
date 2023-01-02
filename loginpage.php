@@ -11,7 +11,7 @@
     $templateParams["pagereq"] = "template/loginPageTemplate.php";
 
     //require all css of the site and the specific page array contains all the css to implement
-    $templateParams["css"] = array("css/loginPage.css");  //, "css/header.css", "css/footer.css");
+    $templateParams["css"] = array("css/loginPage.css", "css/header.css");  //, "css/header.css", "css/footer.css");
 
     require 'template/base.php';
 ?>

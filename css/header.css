@@ -1,11 +1,10 @@
 #mainNav {
     min-height: 3.5rem;
-    margin-bottom: 10px !important;
     padding: 10px;
     box-shadow: red;
   }
   
-  nav a, li {
+  nav a, li, label {
     color: white !important;
   }
   
@@ -14,10 +13,10 @@
   }
   
   .container-fluid{
-    background-color: #4B4B4B !important;
-    margin-left: 5% !important;
-    margin-right: 5% !important;
+    background-color: #BC2E29 !important;
     border-radius: 20px;
   }
+
+  
 
   
