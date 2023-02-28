@@ -5,73 +5,81 @@
     </div>
   <?php endif; ?>
 
-
-
-<div id="container">
-
-  <div id="map"></div>
+  
 
 
 
-  <div class="gridcontainer">
-    
-    <div class="row ">
-      <div class="col-md-8">
-        <div class="blankDiv"></div>
-      </div>
+  <div class="myContainer">
+    <div id="map"></div>
+  </div>
+  
+  <div class="containerr">
+  
 
-      <div class="col-md-4" >
+    <div class="row justify-content-end" >
+        <div class="col-md-3" >
 
-      <!-- Calendar card -->
-      <div class="card" >
-        <div class="card-body">
-            <h5 class="card-title">Calendar</h5>
-
-            <div class = "graphDiv">
-              <canvas id="myChart2"></canvas>
-            </div>
-            
-        </div>
-      </div>
-      <!-- Chart card -->
-      <div class="card" >
-        <div class="card-body">
-            <h5 class="card-title">Grafico</h5>
-            <div class = "graphDiv">
-              <canvas id="myChart"></canvas>
-            </div>
-
-           
-        </div>
-      </div>
-      
-        <?php for($i = 0; $i < 3; $i++): ?> 
-          <div class="card" >
-            <div class="card-body">
-                <h5 class="card-title">Calendar</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="card text-center">
+            <div class="sensorsSelection">
+            <select class="form-select" aria-label="Sensor selection" id="selectSensor">
+              <option value="" selected> Scegli sensore...</option>
+              <option value=""> Sensori disponibili: <? echo count($templateParams["devices"]) ?></option>
+                <?php foreach($templateParams["devices"] as $current): ?>
+                  
+                  <option value="<?php echo $current['Name']?>">Sensore <?php echo $current['Name']?></option>
+                <?php endforeach; ?>
+            </select>
+              
             </div>
           </div>
 
-          <?php endfor; ?>
       
 
+        <div class="card text-center">
+          
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs justify-content-center">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#" id="daily">Giornaliero</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="weekly">Settimanale</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link " href="#" id="monthly">Mensile</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link " href="#" id="annual">Annuale</a>
+                </li>
+              </ul>
+            </div>
 
-        
-      </div>
-    </div>
+            
+
+            <div class="card-body">
+
+              <form id="chartForm" class="row align-items-start">
+                  <div class="col-12 justify-content-start">
+                    <input type="date" placeholder="Seleziona anno" class="form-control" id="datepicker" min-value="<?php echo $templateParams["initialYear"][0]['initialYear']?>" required></input>
+                    <button id="searchChart" class="btn btn-primary">Cerca</button>
+                  </div>
+	            </form>
+
+
+
+                  <div class = "chartContainer">
+                    <canvas id="myChart"></canvas>
+                  </div>
+              </div>   
+        </div>  
   </div>
 
 
 
+  
 
 
-
-
-
-
-  </div>
+  
 
 
 
