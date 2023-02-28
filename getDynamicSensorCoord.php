@@ -7,11 +7,23 @@
 
 
     $data = $dbh -> getMeasurementCoord($sensorName);
-    
-   
-    
+    //$returnResult = array();
+    if($data) {
+        // collect results
+        while($row = $result->fetch_all())
+        {
+            echo json_encode($row);
+            // assign to new array
+            // make returnResult an array for multiple results
+            $returnResult = $row;
+        }
+    }
 
-    $featureCollection = [ "type"=>"FeatureCollection", "features"=>[] ];
+    echo json_encode(['result' => $returnResult, 'errors' => $errors]);
+
+    exit;
+
+    /*$featureCollection = [ "type"=>"FeatureCollection", "features"=>[] ];
     foreach ($data as $row) {
 
         $feature = [
@@ -28,7 +40,7 @@
         $featureCollection["features"][] = $feature;
     }
 
-    $_SESSION["arr"] = $featureCollection;
+    $_SESSION["arr"] = $featureCollection;*/
     
 
     ?>

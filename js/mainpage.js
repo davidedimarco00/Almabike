@@ -63,6 +63,48 @@ $(document).ready(function() {
         
     });
 
+
+    var markerpositions;
+    var map = L.map('map').setView([-55.7770641,55.6602758], 13);
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    getlocations();
+    var marker = L.marker(markerpositions).addTo(map);
+
+
+function getlocations(){
+        var id = "1";
+
+
+            $.ajax({
+                type: "POST",
+                url: "getDynamicSensorCoord.php",
+                data: {id:id},
+                dataType: 'json',
+                cache: false,
+            })
+
+            .success(function(response) {
+                alert("sono qui");
+                alert(response);
+                if(!response.errors && response.result) {
+                    $.each(response.result, function( index, value) {
+                        markerpositions = '['+value[0]+','+value[1]+']';
+                    
+                        L.marker([ value[0], value[1] ]).addTo(map);
+                });
+
+
+                } else {
+                    $.each(response.errors, function( index, value) {
+                        $('input[name*='+index+']').addClass('error').after('<div class="errormessage">'+value+'</div>')
+                    });
+                }
+            });
+        }
+
 });
 
 
@@ -74,13 +116,15 @@ $(document).ready(function() {
 //DA QUI IN GIU ROBA DELLA MAPPA
 
 
-let map = L.map('map', {zoomControl:false}).setView([ 44.4663908,11.4231331], 12);
+/*let map = L.map('map', {zoomControl:false}).setView([ 44.4663908,11.4231331], 12);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+}).addTo(map);*/
 
+
+/*
 var mcg = L.markerClusterGroup({
     chunkedLoading: true,
     singleMarkerMode: true,
@@ -90,7 +134,7 @@ var mcg = L.markerClusterGroup({
 map.addLayer(mcg);
 
 /*Legend specific*/
-var legend = L.control({ position: "topleft" });
+/*var legend = L.control({ position: "topleft" });
 
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
@@ -126,7 +170,7 @@ map.on('zoomend', function() {
     else {
             map.addLayer(shelterMarkers);
         }
-});
+});*/
 
 
 
