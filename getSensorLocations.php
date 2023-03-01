@@ -31,7 +31,7 @@ if( !$errors ) {
             WHERE `deviceid` = '" . $inputvalues['id'] . "'
 
          ";
-         
+
 //$returnResult = array();
          if( $result = $mysqli->query($addresult) ) {
             // collect results
@@ -48,7 +48,9 @@ if( !$errors ) {
     mysqli_close($mysqli);
 
     // print result for ajax request
-    echo json_encode(['result' => $returnResult, 'errors' => $errors]);
 
-    exit;
+    $finalResult = json_encode(['result' => $returnResult, 'errors' => $errors]); 
+    echo "<p>$finalResult</p>";
+
+    exit();
 ?>

@@ -137,10 +137,10 @@ class DatabaseHelper {
     /*SENSORS POSITION QUERY*/
 
     public function getMeasurementCoord($sensorName) {
-        $query = "SELECT DISTINCT `id`, CAST(`GPS_Latitude`*1000 as DECIMAL) AS number1, CAST(`GPS_Longitude`*1000 as DECIMAL) as number2, COUNT(`GPS_Latitude`), COUNT(`GPS_Longitude`)
+        $query = "SELECT DISTINCT CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi
         FROM `readings` 
         WHERE `ID_device`=?
-        GROUP BY number1, number2
+        GROUP BY lati, longi
         HAVING COUNT(`GPS_Latitude`) = 1 and COUNT(`GPS_Longitude`) = 1;";
 
         $stmt = $this->db->prepare($query);

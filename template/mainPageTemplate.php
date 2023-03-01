@@ -20,17 +20,20 @@
         <div class="col-md-3" >
 
           <div class="card text-center">
-            <div class="sensorsSelection">
-            <select class="form-select" aria-label="Sensor selection" id="selectSensor">
-              <option value="" selected> Scegli sensore...</option>
-              <option value=""> Sensori disponibili: <? echo count($templateParams["devices"]) ?></option>
-                <?php foreach($templateParams["devices"] as $current): ?>
-                  
-                  <option value="<?php echo $current['Name']?>">Sensore <?php echo $current['Name']?></option>
-                <?php endforeach; ?>
-            </select>
+            <form class="sensorsSelection" id = "formSensor" action="POST">
+
+                <select class="form-select" aria-label="Sensor selection" id="selectSensor" name="sensorName" >
+                  <option value="" selected> Scegli sensore...</option>
+                  <option value=""> Sensori disponibili: <? echo count($templateParams["devices"]) ?></option>
+                    <?php foreach($templateParams["devices"] as $current): ?>
+                      
+                      <option value="<?php echo $current['Name']?>" name="<?php echo $current['Name']?>">Sensore <?php echo $current['Name']?></option>
+                    <?php endforeach; ?>
+                </select>
+
+               
               
-            </div>
+              </form>
           </div>
 
       

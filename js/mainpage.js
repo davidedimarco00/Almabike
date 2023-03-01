@@ -55,57 +55,325 @@ $(document).ready(function() {
 
     $('#selectSensor').on('change', function() {
 
-        let sensorName = $(this).val();
-        let a = getSensorMeasurement(sensorName);
-        //changeColorMap();
-        map._onResize(); 
+         // Prevent default posting of form - put here to work in case of errors
+         event.preventDefault();
+    
+         // Abort any pending request
+         if (request) {
+             request.abort();
+         }
+         // setup some local variables
+         var $form = $('#selectSensor');
+     
+         // Let's select and cache all the fields
+         var $inputs = $form.find("select");
+     
+         // Serialize the data in the form
+         var serializedData = $form.serialize();
+     
+         // Let's disable the inputs for the duration of the Ajax request.
+         // Note: we disable elements AFTER the form data has been serialized.
+         // Disabled form elements will not be serialized.
+         $inputs.prop("disabled", true);
+ 
+ 
+ 
+          /* Get from elements values */
+         //var values = $(this).serialize();
+ 
+         $.ajax({
+                 url: "getDynamicSensorCoord.php",
+                 type: "post",
+                 data:  serializedData,
+                 cache: false,
+                
+                 success: function (response) {
+                 // You will get response from your PHP page (what you echo or print)
+ 
+                 let positions = JSON.parse(response);
+ 
+                 if (flag){
+                     markers.clearLayers();
+                 }
+                 markers = L.markerClusterGroup();
+                 for(var key in positions) {
+                     for (var key1 in positions[key]) {
+                         var title = "popup";
+                         var marker = L.marker(new L.LatLng( positions[key][key1]["lati"]/100000,  positions[key][key1]["longi"]/100000), {
+                                 title: title
+                         });
+                         marker.bindPopup(title);
+                         markers.addLayer(marker);
+                         //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
+                         //console.log(positions[key][key1]["lati"]/1000)
+                     }
+                     map.addLayer(markers);
+                     flag = true;
+                  }
+                  
+ 
+                 /*for (let car of positions) 
+                 {
+                   console.log(car.lati);
+                 }*/
+ 
+                 /*alert(positions.toString());
+ 
+                 positions.forEach(obj => {
+                     Object.entries(obj).forEach(([key, value]) => {
+                         console.log(`${key} ${value}`);
+                     });
+                     console.log('-------------------');
+                 });
+                   /*
+                     $.each(positions.result, function( index, value) {
+                         alert(value[0]);
+                         L.marker([ value[0]/1000, value[1]/1000 ]).addTo(map);
+                     });*/
+ 
+                 },
+ 
+                 error: function(jqXHR, textStatus, errorThrown) {
+                 console.log(textStatus, errorThrown);
+                 }
+             });
+         
+ 
+         /*
+ 
+         $.post('getDynamicSensorCoord.php', serializedData, function(response) {
+ 
+             // Log the response to the console
+ 
+             var myData = JSON.parse(response);
+                 for(var i in myData)
+                 {
+                     console.log(i + " = " + myData[i]);
+                 }
+             
+         });
+     
+         // Fire off the request to /form.php
+         /*
+         request = $.ajax({
+             url: "getDynamicSensorCoord.php",
+             type: "post",
+             data: serializedData
+         });*/
+     
+         // Callback handler that will be called on success
+        /* request.done(function (response, textStatus, jqXHR){
+             // Log a message to the console
+             console.log("Hooray, it worked!" );
+         });*/
+     
+         // Callback handler that will be called on failure
+        /* request.fail(function (jqXHR, textStatus, errorThrown){
+             // Log the error to the console
+             console.error(
+                 "The following error occurred: "+
+                 textStatus, errorThrown
+             );
+         });*/
+     
+         // Callback handler that will be called regardless
+         // if the request failed or succeeded
+        /* request.always(function () {
+             // Reenable the inputs
+             $inputs.prop("disabled", false);
+         });*/
+     
+     });
+
+
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /* let sensorName = $(this).val();
+        let a = getSensorMeasurement(sensorName);
+        //changeColorMap();*/
+
+      
         
     });
 
 
-    var markerpositions;
-    var map = L.map('map').setView([-55.7770641,55.6602758], 13);
+    //var markerpositions;
+    var map = L.map('map').setView([45.7770641,11.6602758], 7);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
-    getlocations();
-    var marker = L.marker(markerpositions).addTo(map);
+
+    let request;
+    let flag = false;
+    let markers;
+
+    $("#formSensor").submit(function(event){
+
+        // Prevent default posting of form - put here to work in case of errors
+        event.preventDefault();
+    
+        // Abort any pending request
+        if (request) {
+            request.abort();
+        }
+        // setup some local variables
+        var $form = $('#selectSensor');
+    
+        // Let's select and cache all the fields
+        var $inputs = $form.find("select");
+    
+        // Serialize the data in the form
+        var serializedData = $form.serialize();
+    
+        // Let's disable the inputs for the duration of the Ajax request.
+        // Note: we disable elements AFTER the form data has been serialized.
+        // Disabled form elements will not be serialized.
+        $inputs.prop("disabled", true);
 
 
-function getlocations(){
-        var id = "1";
 
+         /* Get from elements values */
+        //var values = $(this).serialize();
 
-            $.ajax({
-                type: "POST",
+        $.ajax({
                 url: "getDynamicSensorCoord.php",
-                data: {id:id},
-                dataType: 'json',
+                type: "post",
+                data:  serializedData,
                 cache: false,
-            })
+               
+                success: function (response) {
+                // You will get response from your PHP page (what you echo or print)
 
-            .success(function(response) {
-                alert("sono qui");
-                alert(response);
-                if(!response.errors && response.result) {
-                    $.each(response.result, function( index, value) {
-                        markerpositions = '['+value[0]+','+value[1]+']';
-                    
-                        L.marker([ value[0], value[1] ]).addTo(map);
-                });
+                let positions = JSON.parse(response);
 
+                if (flag){
+                    markers.clearLayers();
+                }
+                markers = L.markerClusterGroup();
+                for(var key in positions) {
+                    for (var key1 in positions[key]) {
+                        var title = "popup";
+                        var marker = L.marker(new L.LatLng( positions[key][key1]["lati"]/100000,  positions[key][key1]["longi"]/100000), {
+                                title: title
+                        });
+                        marker.bindPopup(title);
+                        markers.addLayer(marker);
+                        //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
+                        //console.log(positions[key][key1]["lati"]/1000)
+                    }
+                    map.addLayer(markers);
+                    flag = true;
+                 }
+                 
 
-                } else {
-                    $.each(response.errors, function( index, value) {
-                        $('input[name*='+index+']').addClass('error').after('<div class="errormessage">'+value+'</div>')
+                /*for (let car of positions) 
+                {
+                  console.log(car.lati);
+                }*/
+
+                /*alert(positions.toString());
+
+                positions.forEach(obj => {
+                    Object.entries(obj).forEach(([key, value]) => {
+                        console.log(`${key} ${value}`);
                     });
+                    console.log('-------------------');
+                });
+                  /*
+                    $.each(positions.result, function( index, value) {
+                        alert(value[0]);
+                        L.marker([ value[0]/1000, value[1]/1000 ]).addTo(map);
+                    });*/
+
+                },
+
+                error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
                 }
             });
-        }
+        
 
-});
+        /*
+
+        $.post('getDynamicSensorCoord.php', serializedData, function(response) {
+
+            // Log the response to the console
+
+            var myData = JSON.parse(response);
+                for(var i in myData)
+                {
+                    console.log(i + " = " + myData[i]);
+                }
+            
+        });
+    
+        // Fire off the request to /form.php
+        /*
+        request = $.ajax({
+            url: "getDynamicSensorCoord.php",
+            type: "post",
+            data: serializedData
+        });*/
+    
+        // Callback handler that will be called on success
+       /* request.done(function (response, textStatus, jqXHR){
+            // Log a message to the console
+            console.log("Hooray, it worked!" );
+        });*/
+    
+        // Callback handler that will be called on failure
+       /* request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });*/
+    
+        // Callback handler that will be called regardless
+        // if the request failed or succeeded
+       /* request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+        });*/
+    
+    });
+    
+    //getlocations();
+
+    //var marker = L.marker(markerpositions).addTo(map);
+
+
+
 
 
 
