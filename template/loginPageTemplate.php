@@ -1,7 +1,7 @@
 <?php
-
-
 ?>
+
+
 
 <section class="vh-100">
   <div class="container-fluid-login">
@@ -19,14 +19,16 @@
           <span class="h1 fw-bold mb-0"></span>
         </div>
 
-        <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+        <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5" id="loginDiv" >
 
-          <form style="width: 23rem;">
+          <form style="width: 23rem;" id = "loginForm">
 
             <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Almabike Login</h3>
 
             <div class="form-outline mb-4">
-              <label class="form-label" for="form2Example18">Email</label>
+              <label class="form-label" for="form2Example18">Email o Username</label>
+
+              
               <input type="email" id="form2Example18" class="form-control form-control-lg" />
               
             </div>
@@ -42,7 +44,7 @@
             </div>
 
             <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Hai dimenticato la password?</a></p>
-            <p>Non hai un account? <a href="#!" class="link-info">Registrati</a></p>
+            <p>Non hai un account? <a href="#!" class="link-info" id="signUp">Registrati</a></p>
 
           </form>
 
@@ -53,9 +55,6 @@
     </div>
   </div>
 </section>
-
-
-
-
-
 </div>
+
+<script type="text/javascript"src="js/loginpage.js"></script>

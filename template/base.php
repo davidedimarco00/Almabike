@@ -4,7 +4,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Bootstrap CSS importa tutti i css -->
+        <!-- importa tutti i css -->
         <?php if(isset($templateParams["css"])): ?>
           <?php for($i = 0; $i < count($templateParams["css"]); $i++): ?>
             <link href="<?php echo $templateParams["css"][$i] ?>" rel="stylesheet" type="text/css">
@@ -13,23 +13,38 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
           <!-- Leaflet CSS importa tutti i css di leaflet -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
-        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.0/MarkerCluster.Default.min.css" />
         <!-- Leaflet js script -->
+        
+
+       
+   
         <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+        
+   
+    <!-- Load Heatmap Feature Layer from CDN -->
+  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
         <title><?php echo $templateParams["titolo"]; ?></title>
         <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
       
         <!-- Chart.js script -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+        <!-- DatePicker css -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   </head>
 
-    <body>
+    <body id="body">
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS (at the end of file) -->
+
       <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+      <script src="plugin/leaflet-heat.js" type="text/javascript"></script>
 
       
         <header>
@@ -61,7 +76,7 @@
                     
                           <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="nightMapToggle">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Mappa notturna</label>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Modalità scura</label>
 
 
                             <a href="#" class="d-inline-block" data-bs-toggle="tooltip" title="" data-bs-original-title="Default tooltip">
@@ -89,22 +104,17 @@
         <!-- qua va il codice dinamico -->
         <!-- INCLUDE IL TEMPLATE  -->
 
-        <div>
           <?php
             if(isset($templateParams["pagereq"])){
               require($templateParams["pagereq"]);
             }
           ?>
-        </div>
 
       </main>
-
-
-
       
-      <footer class="justify-content-between align-items-center py-3 border-top" id="myFooter">
-        <div class="col-md-4 d-flex align-items-center mx-2">
-         AAAAAAAAAAAAAAAAAAAAAA
+      <footer class="justify-content-center align-items-center py-3 border-top" id="myFooter">
+        <div class="col">
+        <p>©Copyright 2023 - ALMA MATER STUDIORUM - Università di Bologna - Via Zamboni, 33 - 40126 Bologna - Partita IVA: 01131710376</p>
         </div>
       </footer>
 
@@ -112,54 +122,38 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"  integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script type="text/javascript "src="javascript/ajaxutils.js"></script>
-    <script type="text/javascript "src="js/mainpage.js"></script>
+    
+    
 
     <script>
         let ctx = document.getElementById('myChart');
 
         new Chart(ctx, {
-          type: 'bar',
+          type: 'line',
           data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['09:00', '12:00', '15:00', '18:00', '21:00', '00:00'],
             datasets: [{
-              label: 'Sound',
-              data: [12, 19, 3, 5, 2, 3],
-              borderWidth: 1
+              label: 'Livelli del suono in dB',
+              data: [60, 90, 85, 80, 55, 55],
+              borderWidth: 1,
+              tension: 0.2,
             }]
           },
           options: {
             scales: {
               y: {
                 beginAtZero: true
+              
               }
             }
           }
         });
 
-  ctx = document.getElementById('myChart2');
-  
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: 'Sound',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+ 
 </script>
 
- 
- 
-    
+<script type="module"src="js/mainpage.js"></script>
+<script type="module"src="js/ajaxUtils.js"></script>
+
+
 </html>
