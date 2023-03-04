@@ -8,33 +8,31 @@
 //
 
 
-import {getSoundLevelChart, getSensorMeasurement } from './ajaxUtils.js';
+import {getSoundLevelChart} from './ajaxUtils.js';
 
-
-
+let selectedTab;
 $(document).ready(function() {
     //INITIALIZING PAGE
     //Disable the default style of chart to customize it
     $('#myChart').removeAttr("style"); 
     //Graph tab click change status to active
     let tabs = '.nav-link#daily,.nav-link#monthly,.nav-link#weekly,.nav-link#annual';
-    
+
     let selTab=$('.nav-link#daily').attr("id");
 
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
     var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var today = now.getFullYear()+"/"+(month)+"/"+(day) ;
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
     $('#datepicker').attr("value", today);
     $(tabs).on("click",  function() { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         $(tabs).removeClass('active');
         $(this).addClass("active");
-        let selectedTab =  $(this).attr("id");
+        selectedTab =  $(this).attr("id");
         selTab = selectedTab;
         switch (selectedTab) {
             case "daily":
                 $('#datepicker').attr("type","date");
-                
                 break;
             case "weekly":
                 $('#datepicker').attr("type","week"); 
@@ -48,180 +46,132 @@ $(document).ready(function() {
         }
     });
 
-    $("#searchChart").on("click",  function() { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
-        getSoundLevelChart(selTab, $('#datepicker').val());
+    $('#nightMapToggle').change(function() {
+
+        //da fare per modalità scura
+        
+            changeColorMap();
+
+               
+    });
+
+    
+    $("#searchChart").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        /*var returnResult = getSoundLevelChart(selTab, $('#datepicker').val());
+        alert(returnResult);*/
+        // Abort any pending request
+
+       
+         // setup some local variables
+         e.preventDefault();
+         var $form = $("#chartForm");
+         // Let's select and cache all the fields
+         var $inputs = $form.find("#datepicker, #inputAnnual");
+         // Serialize the data in the form
+         var serializedData = $inputs.serialize();
+         //alert("A post passo i valori\n" + serializedData);
+         $inputs.prop("disabled", true);
+
+
+         $.ajax({
+                 url: "getDynamicSoundLevelChart.php",
+                 type: "post",
+                 data:  serializedData,
+                 cache: false,
+                 success: function (response) {
+
+                    let data= JSON.parse(response);
+                    let heatPoints = [];
+
+                    
+                    for(var key in data) {
+                        for (var key1 in data[key]) {
+                            let heatPoint = [data[key][key1]["lati"]/100000, data[key][key1]["longi"]/100000, data[key][key1]["Noise_dBA"]/100];
+                            heatPoints.push(heatPoint);
+                        }
+                    }
+
+                        var heat = L.heatLayer(heatPoints, {
+                            radius: 15,
+                            blur: 1,
+                            gradient: {0.3: 'green', 0.5:"yellow", 0.8: "red"}}).addTo(map);
+    
+                },
+                 
+                 error: function(jqXHR, textStatus, errorThrown) {
+                        alert("Chiamata fallita");
+                         console.log(textStatus, errorThrown);
+                 }
+             });
+
+          
+
+
+
+    
+
     });
 
 
+
+
+    let flag = false;
+    let markers;
     $('#selectSensor').on('change', function() {
 
-         // Prevent default posting of form - put here to work in case of errors
-         event.preventDefault();
-    
+         
          // Abort any pending request
-         if (request) {
-             request.abort();
-         }
+       
          // setup some local variables
-         var $form = $('#selectSensor');
-     
+         var $form = $(this);
          // Let's select and cache all the fields
          var $inputs = $form.find("select");
-     
          // Serialize the data in the form
          var serializedData = $form.serialize();
-     
-         // Let's disable the inputs for the duration of the Ajax request.
-         // Note: we disable elements AFTER the form data has been serialized.
-         // Disabled form elements will not be serialized.
+
          $inputs.prop("disabled", true);
- 
- 
- 
-          /* Get from elements values */
-         //var values = $(this).serialize();
- 
+
          $.ajax({
                  url: "getDynamicSensorCoord.php",
                  type: "post",
                  data:  serializedData,
                  cache: false,
-                
+
                  success: function (response) {
-                 // You will get response from your PHP page (what you echo or print)
  
-                 let positions = JSON.parse(response);
- 
-                 if (flag){
-                     markers.clearLayers();
-                 }
-                 markers = L.markerClusterGroup();
-                 for(var key in positions) {
-                     for (var key1 in positions[key]) {
-                         var title = "popup";
-                         var marker = L.marker(new L.LatLng( positions[key][key1]["lati"]/100000,  positions[key][key1]["longi"]/100000), {
-                                 title: title
-                         });
-                         marker.bindPopup(title);
-                         markers.addLayer(marker);
-                         //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
-                         //console.log(positions[key][key1]["lati"]/1000)
-                     }
-                     map.addLayer(markers);
-                     flag = true;
-                  }
-                  
- 
-                 /*for (let car of positions) 
-                 {
-                   console.log(car.lati);
-                 }*/
- 
-                 /*alert(positions.toString());
- 
-                 positions.forEach(obj => {
-                     Object.entries(obj).forEach(([key, value]) => {
-                         console.log(`${key} ${value}`);
-                     });
-                     console.log('-------------------');
-                 });
-                   /*
-                     $.each(positions.result, function( index, value) {
-                         alert(value[0]);
-                         L.marker([ value[0]/1000, value[1]/1000 ]).addTo(map);
-                     });*/
- 
-                 },
- 
+                    let positions = JSON.parse(response);
+
+                    
+                    if (flag){
+                        markers.clearLayers();
+                    }
+
+                    if (positions) {
+                        markers = L.markerClusterGroup();
+                        for(var key in positions) {
+                            for (var key1 in positions[key]) {
+                                var title = "Livello sonoro:" +  positions[key][key1]["Noise_dBA"] + "dB";
+                                var marker = L.marker(new L.LatLng( positions[key][key1]["lati"]/100000,  positions[key][key1]["longi"]/100000), {
+                                        title: title
+                                });
+                                marker.bindPopup(title);
+                                markers.addLayer(marker);
+                                //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
+                                //console.log(positions[key][key1]["lati"]/1000)
+                            }
+                            map.addLayer(markers);
+                            flag = true;
+                        }
+                    }
+                },
+                 
                  error: function(jqXHR, textStatus, errorThrown) {
-                 console.log(textStatus, errorThrown);
+                    console.log(textStatus, errorThrown);
                  }
              });
-         
- 
-         /*
- 
-         $.post('getDynamicSensorCoord.php', serializedData, function(response) {
- 
-             // Log the response to the console
- 
-             var myData = JSON.parse(response);
-                 for(var i in myData)
-                 {
-                     console.log(i + " = " + myData[i]);
-                 }
-             
-         });
-     
-         // Fire off the request to /form.php
-         /*
-         request = $.ajax({
-             url: "getDynamicSensorCoord.php",
-             type: "post",
-             data: serializedData
-         });*/
-     
-         // Callback handler that will be called on success
-        /* request.done(function (response, textStatus, jqXHR){
-             // Log a message to the console
-             console.log("Hooray, it worked!" );
-         });*/
-     
-         // Callback handler that will be called on failure
-        /* request.fail(function (jqXHR, textStatus, errorThrown){
-             // Log the error to the console
-             console.error(
-                 "The following error occurred: "+
-                 textStatus, errorThrown
-             );
-         });*/
-     
-         // Callback handler that will be called regardless
-         // if the request failed or succeeded
-        /* request.always(function () {
-             // Reenable the inputs
-             $inputs.prop("disabled", false);
-         });*/
-     
      });
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       /* let sensorName = $(this).val();
-        let a = getSensorMeasurement(sensorName);
-        //changeColorMap();*/
-
-      
-        
+     
+     
     });
 
 
@@ -232,10 +182,9 @@ $(document).ready(function() {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    let request;
-    let flag = false;
-    let markers;
+    
 
+    /*
     $("#formSensor").submit(function(event){
 
         // Prevent default posting of form - put here to work in case of errors
@@ -262,9 +211,9 @@ $(document).ready(function() {
 
 
          /* Get from elements values */
-        //var values = $(this).serialize();
+        /*var values = $(this).serialize();
 
-        $.ajax({
+        /*$.ajax({
                 url: "getDynamicSensorCoord.php",
                 type: "post",
                 data:  serializedData,
@@ -314,12 +263,12 @@ $(document).ready(function() {
                         L.marker([ value[0]/1000, value[1]/1000 ]).addTo(map);
                     });*/
 
-                },
-
+              /*  },
+/*
                 error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
                 }
-            });
+          /*  });
         
 
         /*
@@ -366,7 +315,7 @@ $(document).ready(function() {
             $inputs.prop("disabled", false);
         });*/
     
-    });
+    /*});
     
     //getlocations();
 
@@ -402,6 +351,7 @@ var mcg = L.markerClusterGroup({
 map.addLayer(mcg);
 
 /*Legend specific*/
+
 /*var legend = L.control({ position: "topleft" });
 
 legend.onAdd = function(map) {
@@ -443,10 +393,12 @@ map.on('zoomend', function() {
 
 
 function changeColorMap() {
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+/*
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+    */
     
 }
 

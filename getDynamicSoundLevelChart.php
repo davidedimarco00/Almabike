@@ -1,27 +1,14 @@
 <?php
     require_once "bootstrap.php";
+    //THIS SCRIPT PROVIDE SOUND LEVEL BY ALL SENSOR
 
-    $availableCategory = array("daily","weekly", "monthly", "annual");  
-
-    $cat=$_REQUEST["q"];
-    $range = $_REQUEST["r"];
-
-    if (in_array($cat, $availableCategory)) {
-
-        $data = $dbh -> getDataforChart($cat, $range);
-
-        $output = json_encode($data);
-        
-        
-    }
-
-    foreach($data as $current){
-
-        $item = $current['Noise_dBA'];
-
-        echo "<script>console.log('{$current}' );</script>";
-    }
-
-
+    $data = $dbh -> getDataforChart($_POST["typeofdate"], $_POST["datepicker"]);
+    $returnResult = array();
+        // collect results
+        foreach ($data as $row) {
+            array_push($returnResult ,$row);
+        }
+    echo json_encode(['result' => $returnResult]);
+   
 
 ?>

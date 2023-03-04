@@ -76,9 +76,6 @@ class DatabaseHelper {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);*/
-
-        
-
         switch ($cat){
             case 'annual':
                 return $this->getDataByYear($r);
@@ -94,13 +91,39 @@ class DatabaseHelper {
 
 
     public function getDataByYear($year) {
-        $query = "SELECT `ID_device`,`Time`,`Noise_dBA` FROM `readings` WHERE YEAR(`Time`) = ?";
+        $query = "SELECT DISTINCT `ID_device`,`Time`,`Noise_dBA`, CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi 
+        FROM `readings` WHERE YEAR(`Time`) = ?  GROUP BY lati, longi
+        HAVING COUNT(`GPS_Latitude`) = 1 and COUNT(`GPS_Longitude`) = 1;";
+
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('s',$year);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function getDataByDay($date) {
         $query = "SELECT `Time`, `ID_device`, `Noise_dBA` from readings where DATE(`Time`) = ?;";
@@ -137,7 +160,7 @@ class DatabaseHelper {
     /*SENSORS POSITION QUERY*/
 
     public function getMeasurementCoord($sensorName) {
-        $query = "SELECT DISTINCT CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi
+        $query = "SELECT DISTINCT CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi, `Noise_dBA` 
         FROM `readings` 
         WHERE `ID_device`=?
         GROUP BY lati, longi

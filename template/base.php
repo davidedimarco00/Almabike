@@ -15,10 +15,17 @@
           <!-- Leaflet CSS importa tutti i css di leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.0/MarkerCluster.Default.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.0/MarkerCluster.Default.min.css" />
         <!-- Leaflet js script -->
         
+
+       
+   
         <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+        
+   
+    <!-- Load Heatmap Feature Layer from CDN -->
+  
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
         <title><?php echo $templateParams["titolo"]; ?></title>
         <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
@@ -35,7 +42,9 @@
     <body id="body">
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS (at the end of file) -->
+
       <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+      <script src="plugin/leaflet-heat.js" type="text/javascript"></script>
 
       
         <header>
@@ -67,7 +76,7 @@
                     
                           <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="nightMapToggle">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Mappa notturna</label>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Modalità scura</label>
 
 
                             <a href="#" class="d-inline-block" data-bs-toggle="tooltip" title="" data-bs-original-title="Default tooltip">
@@ -140,32 +149,11 @@
           }
         });
 
-  ctx = document.getElementById('myChart2');
-  
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: 'Sound',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+ 
 </script>
 
 <script type="module"src="js/mainpage.js"></script>
 <script type="module"src="js/ajaxUtils.js"></script>
 
- 
- 
-    
+
 </html>

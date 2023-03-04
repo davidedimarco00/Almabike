@@ -30,29 +30,44 @@
                       <option value="<?php echo $current['Name']?>" name="<?php echo $current['Name']?>">Sensore <?php echo $current['Name']?></option>
                     <?php endforeach; ?>
                 </select>
-
-               
-              
               </form>
           </div>
+
+
+
+
+
+
+
+
+
+
+
 
       
 
         <div class="card text-center">
           
+        <form id="chartForm" class="row align-items-start">
+          
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs justify-content-center">
+
                 <li class="nav-item">
-                  <a class="nav-link active" href="#" id="daily">Giornaliero</a>
+                  <a class="nav-link active" id="daily">Giornaliero</a>
+                </li>
+
+
+                <li class="nav-item">
+                  <a class="nav-link" id="weekly">Settimanale</a>
+                </li>
+
+
+                <li class="nav-item">
+                <input type="hidden" class="link"><a class="nav-link"  id="monthly">Mensile</a></input>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#" id="weekly">Settimanale</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link " href="#" id="monthly">Mensile</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link " href="#" id="annual">Annuale</a>
+                  <input type="hidden" id="inputAnnual" value="annual" name="typeofdate"><a class="nav-link"  id="annual">Annuale</a></input>
                 </li>
               </ul>
             </div>
@@ -60,15 +75,11 @@
             
 
             <div class="card-body">
-
-              <form id="chartForm" class="row align-items-start">
                   <div class="col-12 justify-content-start">
-                    <input type="date" placeholder="Seleziona anno" class="form-control" id="datepicker" min-value="<?php echo $templateParams["initialYear"][0]['initialYear']?>" required></input>
+                    <input type="date" placeholder="Seleziona anno" class="form-control" id="datepicker" name="datepicker" min-value="<?php echo $templateParams["initialYear"][0]['initialYear']?>" required></input>
                     <button id="searchChart" class="btn btn-primary">Cerca</button>
                   </div>
 	            </form>
-
-
 
                   <div class = "chartContainer">
                     <canvas id="myChart"></canvas>
