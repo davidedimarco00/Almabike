@@ -339,50 +339,6 @@ $(document).ready(function() {
     
 
 
-    
-
-
-
-    function getRadius(currentZoom){
-        var radius;
-        if (currentZoom === 7){
-            radius=2
-        }
-        else if (currentZoom === 8) {
-            radius = 4;
-        }
-        else if (currentZoom === 9) {
-            radius = 6;
-        }
-        else if (currentZoom === 10) {
-            radius = 8;
-        }
-        else if (currentZoom === 11) {
-            radius = 10;
-        }
-        else if (currentZoom === 12) {
-            radius = 12;
-        }
-        else if (currentZoom === 13) {
-            radius = 14;
-        }
-        else if (currentZoom === 14) {
-            radius = 16;
-        }
-        else if (currentZoom === 15) {
-            radius = 18;
-        }
-        else if (currentZoom === 16) {
-            radius = 20;
-        }
-        else if (currentZoom === 17) {
-            radius = 22;
-        }
-        else if (currentZoom === 18) {
-            radius = 24;
-        }
-        return radius;
-    }
 
 function changeColorMap() {
 /*
