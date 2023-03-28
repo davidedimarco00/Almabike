@@ -99,13 +99,32 @@ $(document).ready(function() {
                     }
 
                         heat = L.heatLayer(heatPoints, {
-                            radius: 40,
-                            blur: 0.5,
+                            radius: 25,
+                            blur: 25,
+                   
                             //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
-                            gradient: {0.59: 'green', 0.6:'yellow', 0.8: 'orange', 0.95: 'red'}}).addTo(map);
+                            gradient: {0: 'green', 0.6:'yellow', 0.80: 'orange', 0.95: 'red'}}).addTo(map);
 
                     flagHeatMap=true;
                     loadingSpinner.css("visibility", "hidden");
+
+                
+
+                    /*for(var key in data) {
+                        for (var key1 in data[key]) {
+
+                        var marker = L.circleMarker([data[key][key1]["lati"]/100000, data[key][key1]["longi"]/100000], {
+                            color: getColor(data[key][key1]["Noise_dBA"]/100),
+                            fillOpacity: 0.5,
+                            radius: 15,
+                        }).addTo(map);
+
+
+                        
+                        
+                        marker.bindPopup("Livello di inquinamento: " + data[key][key1]["Noise_dBA"]);
+                    }
+                }*/
     
                 },
                  
@@ -118,6 +137,22 @@ $(document).ready(function() {
              $inputs.prop("disabled", false);
 
     });
+
+    function getColor(value) {
+        if (value < 0.6) {
+            return "green";
+        }
+        else if (value >= 0.6 && value < 0.8) {
+            return "yellow";
+        }
+        else if (value >= 0.8 && value < 0.95) {
+            return "orange";
+        }else if (value >= 0.95){
+            return "red";
+        }
+
+    }
+
 
 
 
@@ -160,7 +195,7 @@ $(document).ready(function() {
                                 var title = "Livello sonoro:" +  positions[key][key1]["Noise_dBA"] + "dB";
                                 var marker = L.marker(new L.LatLng( positions[key][key1]["lati"]/100000,  positions[key][key1]["longi"]/100000), {
                                         title: title
-                                });
+                                });s
                                 marker.bindPopup(title);
                                 markers.addLayer(marker);
                                 //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
@@ -261,6 +296,28 @@ $(document).ready(function() {
     info.addTo(map);
 
 
+    /*map.on('zoomstart', function(ev) {
+        
+
+        if (flagHeatMap) {
+
+            heat.setOptions({
+                radius: getRadius(map.currentZoom),
+                max: 1.0,
+                blur: 15,              
+                gradient: {
+                    0.0: 'green',
+                    0.5: 'yellow',
+                    1.0: 'red'
+                },
+                minOpacity: 0.7
+            });
+            // render the new options
+            heat.redraw();
+        }
+    });*/
+
+
 
 
     
@@ -279,12 +336,53 @@ $(document).ready(function() {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
+    
+
 
     
 
 
 
-
+    function getRadius(currentZoom){
+        var radius;
+        if (currentZoom === 7){
+            radius=2
+        }
+        else if (currentZoom === 8) {
+            radius = 4;
+        }
+        else if (currentZoom === 9) {
+            radius = 6;
+        }
+        else if (currentZoom === 10) {
+            radius = 8;
+        }
+        else if (currentZoom === 11) {
+            radius = 10;
+        }
+        else if (currentZoom === 12) {
+            radius = 12;
+        }
+        else if (currentZoom === 13) {
+            radius = 14;
+        }
+        else if (currentZoom === 14) {
+            radius = 16;
+        }
+        else if (currentZoom === 15) {
+            radius = 18;
+        }
+        else if (currentZoom === 16) {
+            radius = 20;
+        }
+        else if (currentZoom === 17) {
+            radius = 22;
+        }
+        else if (currentZoom === 18) {
+            radius = 24;
+        }
+        return radius;
+    }
 
 function changeColorMap() {
 /*

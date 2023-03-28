@@ -82,14 +82,8 @@
                         </ul>
 
                         <ul class="navbar-nav mr-auto">
-
-
-
-
-
-
                             <!-- Se sono nella pagina principale abilito il toggle altrimenti lo tolgo -->
-                            <?php if(isset($templateParams["pagereq"]) && $templateParams["pagereq"] == "template/mainPageTemplate.php"): ?>
+                            <?php if(isset($templateParams["pagereq"]) && $templateParams["pagereq"] == "src/view/html/template/mainPageTemplate.php"): ?>
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="nightMapToggle">
