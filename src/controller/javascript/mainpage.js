@@ -99,9 +99,10 @@ $(document).ready(function() {
                     }
 
                         heat = L.heatLayer(heatPoints, {
-                            radius: 15,
-                            blur: 1,
-                            gradient: {0.3: 'green', 0.5:"yellow", 0.8: "red"}}).addTo(map);
+                            radius: 40,
+                            blur: 0.5,
+                            //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
+                            gradient: {0.59: 'green', 0.6:'yellow', 0.8: 'orange', 0.95: 'red'}}).addTo(map);
 
                     flagHeatMap=true;
                     loadingSpinner.css("visibility", "hidden");
