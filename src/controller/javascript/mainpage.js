@@ -154,9 +154,7 @@ $(document).ready(function() {
     }
 
 
-
-
-
+    
     let flag = false;
     let markers;
     $('#selectSensor').on('change', function() {
@@ -278,6 +276,10 @@ $(document).ready(function() {
           polygons.addTo(map);
     });
 
+
+
+
+    //card info
     var info = L.control({position: 'topleft'});
 
     info.onAdd = function (map) {
@@ -293,7 +295,44 @@ $(document).ready(function() {
             : 'Passa con il mouse sopra');
     };
 
+
+    //card dei livelli
+    var levelsCard = L.control({position: 'topleft'});
+
+    levelsCard.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info1'); // create a div with a class "info"
+        this.update();
+        return this._div;
+    };
+
+    levelsCard.update = function (props) {
+        this._div.innerHTML =`
+        <div class="btn-group-vertical">
+            <button type="button" class="btn btn-default"><img class="layerImages layerSelected" src="resources/images/layers/sat.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
+            <button type="button" class="btn btn-default"><img class="layerImages" src="resources/images/layers/streetMap.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
+            <button type="button" class="btn btn-default"><img class="layerImages" src="resources/images/layers/lightMap.png" style="width: 52px;height=52px;border-radius:8px;"></button>
+        </div>`
+    };
+
+
+
     info.addTo(map);
+    levelsCard.addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /*map.on('zoomstart', function(ev) {

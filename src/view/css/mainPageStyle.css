@@ -32,6 +32,11 @@ html, body {
   
 }
 
+.layerbutton {
+  height: 80px;
+  width: 40px;
+}
+
 
 
 .row {
@@ -100,7 +105,6 @@ div btn-group-sm btn-check {
 .info {
   margin-left: 20% !important;
   margin-top: 80px !important;
-  padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
   background: rgba(255,255,255,0.8);
@@ -112,12 +116,53 @@ div btn-group-sm btn-check {
   color: #777;
 }
 
+.info1 {
+  margin-left: 20% !important;
+  margin-top: 20px !important;
+  border-radius: 20px;
+  padding: 10px;
+  background: #F3EED9;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+.btn-default:hover{
+  transform: scale(1.2);
+  transition: transform .2s;
+}
+
+.btn-default{
+  padding: 5px !important;
+  border-color: red;
+}
+
+.btn-default:focus{
+  outline: none !important;
+  box-shadow: none !important;
+
+
+}
+
+.layerImages {
+  border: 0px solid #000;
+  object-fit: cover;
+  transition: transform .2s;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+
+
+
+
+
+
+
 table {
   width:100%;
   height:100%;
   border-collapse:collapse;
   padding:5px;
 }
+
 table th {
   padding:5px;
   column-span: all;

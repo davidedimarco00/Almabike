@@ -7,8 +7,6 @@
 
 
 
-
-
   <div class="myContainer">
       <div id="map"></div>
   </div>
@@ -17,28 +15,22 @@
       <div class="row justify-content-end">
           <div class="col-md-3">
 
-              <div class="row justify-content-center">
+              <!--- <div class="row justify-content-start">
                   <div class="col-md-6">
                       <div class="card">
-                          <img src="resources/images/layers/sat.PNG" class="card-img-top" alt="alt">
-                          <div class="card-body">
-                              <p class="card-text">Satellite</p>
-                          </div>
+                          <img src="resources/images/layers/sat.PNG" class="card-img-top layerbutton" alt="alt">
                       </div>
 
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-6 justify-content-start">
                       <div class="card">
-                          <img src="resources/images/layers/sat.PNG" class="card-img-top" alt="alt">
-                          <div class="card-body">
-                              <p class="card-text">Satellite</p>
-                          </div>
+                          <img src="resources/images/layers/sat.PNG" class="card-img-top layerbutton" alt="alt">
                       </div>
 
                   </div>
 
-              </div>
+              </div> --->
 
               <div class="card text-center">
                   <form class="sensorsSelection" id="formSensor" action="POST">
