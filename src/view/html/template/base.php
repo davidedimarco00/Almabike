@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- importa tutti i css -->
-    <?php if(isset($templateParams["css"])): ?>
+
     <?php for($i = 0; $i < count($templateParams["css"]); $i++): ?>
     <link href="<?php echo $templateParams["css"][$i] ?>" rel="stylesheet" type="text/css">
     <?php endfor; ?>
-    <?php endif; ?>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
@@ -37,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <!-- DatePicker css -->
+    <!-- FONTAWESOME css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- JQuery UI -->
@@ -45,102 +42,220 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
+    <!-- Leaflet point inside polygons-->  
+    <script src="https://cdn.rawgit.com/hayeswise/Leaflet.PointInPolygon/v1.0.0/wise-leaflet-pip.js"></script>
 
 
-</head>
 
-<body>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS (at the end of file) -->
-
-    <script src="plugin/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
-    <script src="plugin/leaflet/leaflet-heat.js" type="text/javascript"></script>
+   
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-
-            <div class="container-fluid px-6 px-lg-4">
-                <a class="navbar-brand" href="#">
-                    <a class="navbar-brand" href="./index.php"> Almabike Map</a>
-                    <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
+    
 
 
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item"><a class="nav-link" href="#about">Info</a></li>
-                            <li class="nav-item"><a class="nav-link" target="_blank"
-                                    href="https://site.unibo.it/multicampus-sostenibile/it/mobilita/almabike">Vai ad
-                                    Almabike</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#signup">Contatti</a></li>
-                            <li class="nav-item"><a class="nav-link" href="./loginpage.php">Area riservata</a></li>
-                        </ul>
+  </head>
+  <body>
 
-                        <ul class="navbar-nav mr-auto">
-                            <!-- Se sono nella pagina principale abilito il toggle altrimenti lo tolgo -->
-                            <?php if(isset($templateParams["pagereq"]) && $templateParams["pagereq"] == "src/view/html/template/mainPageTemplate.php"): ?>
-
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="nightMapToggle">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Modalità scura</label>
-
-
-                                <a href="#" class="d-inline-block" data-bs-toggle="tooltip"
-                                    title="Attiva la modalità scura della mappa">
-                                    <img src="resources/images/svg/info.svg" id="infoNightMap" alt="Modalità scura">
-                                </a>
+		
+  <div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar" class="active">
+      <div class="custom-menu">
+          <button type="button" id="sidebarCollapse" class="btn btnMenuToggle">
+          <i class="fa fa-bars"  aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="img bg-wrap text-center py-4">
+          <div class="user-logo">
+            <div class="img logo"></div>
+            <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]): ?>
+              <?php echo "<h3>".$_SESSION["Nome"]." ".$_SESSION["Cognome"]."</h3>" ?>
+              <?php else: ?>
+              <?php endif; ?>
+              
 
 
-                            </div>
+          </div>
+      </div>
+      <ul class="list-unstyled">
+          <li class="active">
+            <a href="index.php"><span class="fa fa-map mr-3"></span>Vai alla Mappa</a>
+          </li>
 
 
-                            <?php endif;  ?>
+          <li>
+            <a href="https://site.unibo.it/multicampus-sostenibile/it/mobilita/almabike"><span class="fa fa-bicycle mr-3"></span>Vai al sito Almabike</a>
+          </li>
+          <li>
+            <a href="#"><span class="fa fa-envelope mr-3 notif"></span>Contatti</a>
+          </li>
+          <li>
 
-                        </ul>
-                    </div>
-            </div>
-            </div>
-        </nav>
+          <?php if(isset($_SESSION["Nome"]) && isset($_SESSION["Cognome"])): ?>
+            <?php echo "<li><a href='#'><span class='fa fa-road mr-3'></span> I miei percorsi</a></li>"?>
+              
+              <?php else: ?>
+                
+                <?php echo "<li><a href='loginpage.php'><span class='fa fa-lock mr-3'></span>Area riservata</a></li>"?>
+              <?php endif; ?>
+           
 
-    </header>
+            
+          </li>
+          <li>
+            <a href="#"><span class="fa fa-cog mr-3"></span>Impostazioni</a>
+          </li>
+          <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]): ?>
+              <?php echo "<li><a href='index.php?action=logout'><span class='fa fa-sign-out mr-3'></span> Log out</a></li>"?>
+              
+              <?php else: ?>
+              <?php endif; ?>
 
-    <main>
+          
+      </ul>
+    </nav>
 
-        <!-- qua va il codice dinamico -->
-        <!-- INCLUDE IL TEMPLATE  -->
 
+
+    <div id="content">
         <?php
-            if(isset($templateParams["pagereq"])){
-              require($templateParams["pagereq"]);
-            }
-          ?>
+              if(isset($templateParams["pagereq"])){
+                require($templateParams["pagereq"]);
+              }
+        ?>
+    </div>
 
-    </main>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <!--<div id="sidebarRight" class="order-last active">
+   <div class="custom-menu">
+      <button type="button" id="sidebarCollapseRight" class="btn btnMenuToggle">
+      <i class="fa fa-bars white"></i>
+      </button>
+   </div>
+   <div class="img bg-wrap text-center py-4">
+      <div class="user-logo">
+         <div class="img logo"></div>
+         <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]) ?>
+         <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <?php /*echo "<h2>"."Benvenuto ".$_SESSION["Nome"]." ".$_SESSION["Cognome"]."</h2>"*/ ?>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark flex" aria-labelledby="navbarDarkDropdownMenuLink">
+               <li><a class="dropdown-item" href="#">Action</a></li>
+               <li><a class="dropdown-item" href="#">Another action</a></li>
+               <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+            <?php/* else: */?>
+            <li class="nav-item"><a class="nav-link" href="./loginpage.php">Area riservata</a></li>
+            <?php /* endif;  */?>
+         </div>
+      </div>
+      <ul class="list-unstyled">
+         <li class="active">
+            <a href="#"><span class="fa fa-home mr-3"></span>Vai alla Mappa</a>
+         </li>
+      </ul>
+   </div>
+</div>-->
+
+        <!-- Page Content  -->
+     
+        
+  
+
+
+
+
+
+
+
+
+		</div>
+
 
     <footer class="justify-content-center align-items-center py-3 border-top" id="myFooter">
-        <div class="col">
-            <p>©Copyright 2023 - ALMA MATER STUDIORUM - Università di Bologna - Via Zamboni, 33 - 40126 Bologna -
-                Partita IVA: 01131710376</p>
-        </div>
-    </footer>
+      <div class="col">
+          <p>©Copyright 2023 - ALMA MATER STUDIORUM - Università di Bologna - Via Zamboni, 33 - 40126 Bologna -
+              Partita IVA: 01131710376</p>
+      </div>
+  </footer>
 
-</body>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+
+    
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
     integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
 </script>
+ 
+
+<script type="module" src="src/model/javascript/main.js"></script>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  
 
 
 
-<script>
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- JQuery e plugin -->
+    <script src="plugin/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script  type="text/javascript" src="src/model/javascript/sidebar.js"></script>
+    <script src="plugin/leaflet/leaflet-heat.js" type="text/javascript"></script>
+
+
+
+    
+
+<!--- <script>
 let ctx = document.getElementById('myChart');
 
 new Chart(ctx, {
@@ -163,13 +278,6 @@ new Chart(ctx, {
         }
     }
 });
-</script>
-
-
-<script type="module" src="src/controller/javascript/mainpage.js"></script>
-<script type="module" src="src/controller/ajax/ajaxUtils.js"></script>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-
+</script> ---->
+    
 </html>

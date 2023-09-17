@@ -12,7 +12,7 @@ body {
     box-sizing: border-box;
 }
 
-#loginButton, #signupButton {
+#loginButton {
     background-color: #BC2E29;
     color: white;
 }
@@ -20,4 +20,7 @@ body {
 .form-label{
     color:black !important ;
 }
+
+
+
 

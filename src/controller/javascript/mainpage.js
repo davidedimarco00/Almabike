@@ -8,9 +8,21 @@
 //
 
 
-//import {getSoundLevelChart} from './ajaxUtils.js';
+//import {getSoundLevelChart} from '../../../resources/UISound/click-21156.mp3';
+import {MainPageController} from  "../javascript/MainpageController.js";
+
+
+
+
+
+
 
 let selectedTab;
+var map = L.map('map', {zoomControl: false}).setView([44.4992192,11.2616459], 12);
+
+let mainpageController = new MainPageController();
+
+
 $(document).ready(function() {
     //INITIALIZING PAGE
     //Disable the default style of chart to customize it
@@ -44,15 +56,6 @@ $(document).ready(function() {
                 $('#datepicker').attr("type","number");
                 break;
         }
-    });
-
-    $('#nightMapToggle').change(function() {
-
-        //da fare per modalità scura
-        
-            changeColorMap();
-
-               
     });
 
     let flagHeatMap = false ;
@@ -214,13 +217,6 @@ $(document).ready(function() {
      });
 
 
-
-
-
-
-
-
-
      let zones = fetch("./resources/json/bologna.geojson");
      zones.then(response => {
                 return response.json();
@@ -230,8 +226,9 @@ $(document).ready(function() {
               color: 'red', // colore del bordo del poligono
               weight: 2,
               fillColor: 'black', // colore del riempimento del poligono
-              fillOpacity: 0.05 // opacità del riempimento del poligono
+              fillOpacity: 0.05, // opacità del riempimento del poligono
             },
+
             onEachFeature: function(feature, layer) {
               // aggiungi il popup al poligono
               //questo è solo un codice di esempio.
@@ -267,12 +264,21 @@ $(document).ready(function() {
                                                 </td>
                                             </tr>
                                         </tbody>
-                                 </table>`;
+                                 </table>`
 
 
               layer.bindPopup(popupHTML);
+             /* layer.on('mouseover', function () {
+                    this.openPopup();
+              });
+              layer.on('mouseout', function () {
+                this.closePopup();
+              });*/
+
+            
             }
           });
+         
           polygons.addTo(map);
     });
 
@@ -297,20 +303,20 @@ $(document).ready(function() {
 
 
     //card dei livelli
-    var levelsCard = L.control({position: 'topleft'});
+    var levelsCard = L.control({position: 'bottomleft'});
 
     levelsCard.onAdd = function (map) {
-        this._div = L.DomUtil.create('div', 'info1'); // create a div with a class "info"
+        this._div = L.DomUtil.create('div', 'levelsCard'); // create a div with a class "info"
         this.update();
         return this._div;
     };
 
     levelsCard.update = function (props) {
         this._div.innerHTML =`
-        <div class="btn-group-vertical">
-            <button type="button" class="btn btn-default"><img class="layerImages layerSelected" src="resources/images/layers/sat.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
-            <button type="button" class="btn btn-default"><img class="layerImages" src="resources/images/layers/streetMap.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
-            <button type="button" class="btn btn-default"><img class="layerImages" src="resources/images/layers/lightMap.png" style="width: 52px;height=52px;border-radius:8px;"></button>
+        <div class="btn-group-horizontal layerGroup">
+            <button type="button" class="btn btn-default layers" id="satLayer"><img class="layerImages layerSelected" src="resources/images/layers/sat.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
+            <button type="button" class="btn btn-default layers" id="streetMapLayer"><img class="layerImages" src="resources/images/layers/streetMap.png" style="width: 52px;height=52px;border-radius:8px;"></img></button>
+            <button type="button" class="btn btn-default layers" id="lightMapLayer"><img class="layerImages" src="resources/images/layers/lightMap.png" style="width: 52px;height=52px;border-radius:8px;"></button>
         </div>`
     };
 
@@ -318,6 +324,36 @@ $(document).ready(function() {
 
     info.addTo(map);
     levelsCard.addTo(map);
+
+     let baselayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxNativeZoom: 18,
+        maxZoom: 50,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    //===========================PROVE PER MVC
+    
+   
+    $(".layers").on( "click", function(e) {
+        map.removeLayer(baselayer)
+        mainpageController.applyMapLayer($(this).attr("id"), map);
+    });
+
+    $("#nightMapToggle").on( "click", function(e) {
+        if (this.checked){
+            $(this).prop('checked', true); 
+            mainpageController.applyDarkMode(map);
+        }else{
+            $(this).prop('checked', false); 
+            mainpageController.applyLightMode(map);
+        }
+    });
+
+    
+
+
+
+
 
 
 
@@ -359,69 +395,19 @@ $(document).ready(function() {
 
 
 
-    
-
-
-
-
 
 });
 
 
     //var markerpositions;
-    var map = L.map('map', {zoomControl: false}).setView([44.4992192,11.2616459], 12);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //var map = L.map('map', {zoomControl: false}).setView([44.4992192,11.2616459], 12);
+   /* var baselayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-
-    
-
-
-
-function changeColorMap() {
-/*
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    */
-    
-}
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }).addTo(map);*/
+
+
+
+
+
+

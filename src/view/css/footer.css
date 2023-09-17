@@ -1,7 +1,11 @@
 footer {
-    margin-top: auto;
-    background-color: #BC2E29;
-    color: white;
-    text-align: center !important;
-    bottom: 0;
-}
+    background-color: #a60a04;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+  }
+
+
+
+
