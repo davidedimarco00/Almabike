@@ -120,10 +120,12 @@ export class MainpageModel {
           //ed anche il grafico con la media
 
         }else{
-          alert("i campi dell'ora sono pieni")
+          starthour = starthour +":00"; //preparo la formattazione dei due parametri
+          endhour = endhour+":00";
+          alert(starthour + " " + endhour);
+          this.getValuesForDailyChartBetweenHours($('#selectSensor').val(), datePickerValue, starthour, endhour);
+
         }
-
-
       }
 
 
@@ -142,8 +144,6 @@ export class MainpageModel {
       let self = this;
 
       console.log("I'm here ", selectedSensor, date);
-
-      
           $.ajax({
             url: "./src/controller/php/getAllMeasureForDay.php",
             type: "POST",
@@ -155,13 +155,40 @@ export class MainpageModel {
               console.log(textStatus, errorThrown);
             },
           });
-
-
           function success(response)  {
 
             let responseParsed = JSON.parse(response);
 
-         
+            self.createChart(responseParsed);
+            
+          }
+    }
+
+    getValuesForDailyChartBetweenHours(selectedSensor, date, startHour, endHour) { //giornalieri nelle ore...
+
+      let self = this;
+
+      console.log("I'm here ", selectedSensor, date);
+
+      
+          $.ajax({
+            url: "./src/controller/php/getAllMeasureForDayBetweenHours.php",
+            type: "POST",
+            data: {"selectedSensor": selectedSensor, "date": date, "starthour": startHour, "endhour": endHour},
+            cache: false,
+      
+            success: success,
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+            },
+          });
+
+
+          function success(response)  {
+
+            console.log(response);
+
+            let responseParsed = JSON.parse(response);
 
             self.createChart(responseParsed);
             
@@ -667,9 +694,9 @@ export class MainpageModel {
               }
               map.addLayer(markers);
               flag = true;
-              $("#maxSoundLevelLabel").text(Math.max.apply(Math, soundLevels));
+             // $("#maxSoundLevelLabel").text(Math.max.apply(Math, soundLevels));
               //qui bisogna aggiungere la media
-              $("#minSoundLevelLabel").text(Math.min.apply(Math, soundLevels));
+             // $("#minSoundLevelLabel").text(Math.min.apply(Math, soundLevels));
             }
             console.log(soundLevels);
             soundLevels = [];

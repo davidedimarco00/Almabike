@@ -46,16 +46,8 @@ export class MainPageController extends Controller {
     this.model.getBaseInfoFromSelectedSensor(this.model.getMap(), selectedSensor);
   }
 
-  showSelectedSensorInfoBetween(start, end, selectedSensor) { //intervallo di ore
-
-  }
 
 
-
-
-
-
-  
   searchButtonClick(){
     this.model.searchButtonClick();
   }

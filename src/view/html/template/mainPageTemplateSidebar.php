@@ -26,13 +26,13 @@
   
   <div class="row">
       <div class="col-md-4">
-        <div class="card dashboard-card mb-3">
+        <div class="card dashboard-card mb-3 h-100">
           <div class="card-body">
             <h5 class="card-title">Scegli il sensore e i filtri</h5>
             <small text="muted">Scegli il sensore per isolare le informazioni riguardanti il sensore, altrimenti scegli i filtri per visualizzare le informazioni globali di tutti i sensori nell'intervallo specificato</small>
           
             
-            <div class="text-center">
+            <div class="d-flex flex-column justify-content-center flex-grow-1">
                   <form class="sensorsSelection" id="formSensor" action="POST">
                       <select class="form-select" aria-label="Sensor selection" id="selectSensor" name="sensorName">
                           <option value="" selected> Scegli sensore...</option>
@@ -102,75 +102,106 @@
       </div>
 
       <div class="col-md-6">
-        <div class="card dashboard-card mb-3">
+        <div class="card dashboard-card mb-3 h-100">
           <div class="card-body">
-            <h5 class="card-title">Grafico:</h5>
-            <small text="muted">Descrizione blablablablablablablablablablablablablablablablablablablablablablablablablablablabla</small>
+            <h5 class="card-title">Grafico Sensore</h5>
+            <small text="muted">Qui puoi visualizzare il grafico in base ai filtri selezionati.</small>
 
          <!----   <div class="text-end">
                 <button id="colorZone" class="btn btn-primary" >Mappa con zone colorate</button>
             </div> ---->
-
-  
-
-          
-            
-            <div class="text-center">
+            <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1">
               <canvas id="myChart">
 
-                          </canvas>
-               
+              </canvas>
              </div>
+
+             <button>AAA</button>
+             
           </div>
         </div>
       </div>
 
-      <?php 
-      $ids=array('maxSoundLevel', 'minSoundLevel', 'averageSoundLevel');
-      $labels=array('massima','minima','media');
-
-      for ($i=0;$i<3;$i++): ?>
-
-
-    
-     
-    
       <div class="col-md-2">
-        <div class="card dashboard-card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Rilevazione <?php echo $labels[$i]?></h5>
-            <div class="text-end max-sound-card">
-                  <span class="recordLabel" id="<?php echo $ids[$i].'Label'?>">
-                    # dB
-                  </span>
-             </div>
+            <div class="row"> 
+                <div class="card dashboard-card mb-3">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-center">Rilevazione Massima</h6>
+                      <div class=" max-sound-card">
+                            <p>12 dB<p>
+                      </div>
+                    </div>
+                </div>
+           
+            </div>
+            <div class="row"> 
+                <div class="card dashboard-card mb-3">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-center">Rilevazione Media</h6>
+                      <div class=" max-sound-card">
+                            <p>12 dB<p>
+                      </div>
+                    </div>
+                </div>
+           
+            </div>
+            <div class="row"> 
+                <div class="card dashboard-card mb-3">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-center">Rilevazione Minima</h6>
+                      <div class=" max-sound-card">
+                            <p>12 dB<p>
+                      </div>
+                    </div>
+                </div>
+           
+            </div>
+            <div class="row"> 
+                <div class="card dashboard-card mb-3">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-center">Rilevazione Media</h6>
+                      <div class=" max-sound-card">
+                            <p>12 dB<p>
+                      </div>
+                    </div>
+                </div>
+           
+            </div>
         </div>
-      </div>
-        <?php if($i==0): ?> <!--- se sono nella prima colonna ---->
-          <div class="card dashboard-card mb-3 mt-3">
-          <div class="card-body">
-            <h5 class="card-title">Rilevazione <?php echo $labels[$i]?></h5>
-            <div class="text-end max-sound-card">
-                  <span class="recordLabel" id="<?php echo $ids[$i].'Label'?>">
-                    # dB
-                  </span>
-             </div>
-        </div>
-      </div>
-          
-        <?php endif;?> <!--- fine prima colonna ---->
-            
+    </div>
+
       
-          
-      </div>
-
-      <?php endfor; ?>
-
    
       
 
 
       <!-- seconda riga ---->
+      <div class="row mt-2">
+              <?php 
+                  $ids=array('maxSoundLevel', 'minSoundLevel', 'averageSoundLevel');
+
+                  $labels=array('Sensore','Numero di rilevazioni','Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova');
+
+              for ($i=0;$i<6;$i++): ?>
+                  <div class="col-md-2">
+                  <div class="card dashboard-card mb-3">
+                            <div class="card-body text-center">
+                              <h6 class="card-title text-center"><?php echo $labels[$i] ?></h6>
+                              <div class=" max-sound-card">
+                                    <p>12 dB<p>
+                              </div>
+                            </div>
+                        </div>
+                  </div>
+              <?php endfor; ?>
+      </div>
+
+                            
+              
+
+      
+
+
 
 
       <!-- terza riga ---->

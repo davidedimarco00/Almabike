@@ -238,34 +238,48 @@ class DatabaseHelper {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-     /*TODO*/ 
-    public function getSoundLevelBetweenHours($sensorName,$startHour, $endHour) { //il giorno va dalle 06 alle 18
-        $query = "SELECT * FROM `readings` 
-        WHERE `ID_device`=? 
-        AND (TIME_FORMAT(`Time`, '%H:%i') >= ? OR TIME_FORMAT(`Time`, '%H:%i') <= ?);";
+
+
+
+   
+
+
+    public function getAllMainStatsForSensor($sensor) {
+        $query = "SELECT `ID_device`, MAX(`Noise_dBA`), MIN(`Noise_dBA`), AVG(`Noise_dBA`) FROM `readings`
+        WHERE `ID_device`=? AND `Noise_dBA` <> 0
+        GROUP BY `ID_device`;";
+
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sss',$sensorName,$startHour, $endHour);
+        $stmt->bind_param('s',$sensor);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-
     public function getAllMeasureForDay($sensor, $day) {
-
         $query = "SELECT DISTINCT `GPS_Latitude` AS lati, `GPS_Longitude` as longi, `Noise_dBA` as Noise_dBA  , DATE_FORMAT(`Time`, '%H:%i:00') AS Hour   FROM `readings`
         WHERE (MINUTE(`Time`) = 0 OR MINUTE(`Time`) = 30 )
-        
         AND DATE(`Time`) = ? and `ID_device`=? GROUP BY Hour ORDER BY Hour;";
-
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss',$day,$sensor);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
-
-    
     }
+
+    public function getAllMeasureForDayBetweenHpurs($sensor, $day, $startHour, $endHour) {
+        $query =  "SELECT DISTINCT `GPS_Latitude` AS lati, `GPS_Longitude` as longi, `Noise_dBA`, `Time`, DATE_FORMAT(`Time`, '%H:%i:00') AS Hour FROM `readings` 
+                    WHERE DATE(`Time`) = ?
+                    AND TIME(`Time`) BETWEEN ? AND ?
+                    AND `ID_device`= ?;";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ssss',$day,$startHour,$endHour,$sensor);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
 
 
 
