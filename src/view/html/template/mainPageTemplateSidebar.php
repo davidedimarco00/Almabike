@@ -24,7 +24,7 @@
 
   <small text="muted">Nella seguente dashboard puoi selezionare i filtri di tuo interesse da visualizzare sulla mappa. Clicca su una zona per visualizzare la dashboard relativa all'area selezionata</small>
   
-  <div class="row">
+  <div class="row mt-4">
       <div class="col-md-4">
         <div class="card dashboard-card mb-3 h-100">
           <div class="card-body">
@@ -103,20 +103,40 @@
 
       <div class="col-md-6">
         <div class="card dashboard-card mb-3 h-100">
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">Grafico Sensore</h5>
             <small text="muted">Qui puoi visualizzare il grafico in base ai filtri selezionati.</small>
 
          <!----   <div class="text-end">
                 <button id="colorZone" class="btn btn-primary" >Mappa con zone colorate</button>
             </div> ---->
+
+            <div class="d-flex flex-column align-items-center justify-content-center">
+              <div class="d-flex justify-content-between">
+                  <button class="btn mr-2 btn-light btn-outline-warning">
+                      <i class="fa-solid fa-sun"></i>
+                  </button>
+                  <button class="btn mr-2 btn-light btn-outline-dark">
+                      <i class="fas fa-moon"></i>
+                  </button>
+              </div>
+          </div>
+
+
+
+
             <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1">
               <canvas id="myChart">
 
               </canvas>
              </div>
 
-             <button>AAA</button>
+             <div class="d-flex justify-content-center">
+                <button class="">A linee</button> <!-- Primo pulsante -->
+                <button>Istogramma</button> <!-- Secondo pulsante -->
+                <button>Istogramma</button> <!-- Secondo pulsante -->
+                <button>Istogramma</button> <!-- Secondo pulsante -->
+             </div>
              
           </div>
         </div>
@@ -128,7 +148,7 @@
                     <div class="card-body text-center">
                       <h6 class="card-title text-center">Rilevazione Massima</h6>
                       <div class=" max-sound-card">
-                            <p>12 dB<p>
+                            <h4><span class = "label label-default" id="maxSoundLevel">12dB</span></h4>
                       </div>
                     </div>
                 </div>
@@ -139,7 +159,7 @@
                     <div class="card-body text-center">
                       <h6 class="card-title text-center">Rilevazione Media</h6>
                       <div class=" max-sound-card">
-                            <p>12 dB<p>
+                      <h4><span class = "label label-default" id="averageSoundLevel">12dB</span></h4>
                       </div>
                     </div>
                 </div>
@@ -150,7 +170,7 @@
                     <div class="card-body text-center">
                       <h6 class="card-title text-center">Rilevazione Minima</h6>
                       <div class=" max-sound-card">
-                            <p>12 dB<p>
+                      <h4><span class = "label label-default" id="minSoundLevel">12dB</span></h4>
                       </div>
                     </div>
                 </div>
@@ -178,7 +198,7 @@
       <!-- seconda riga ---->
       <div class="row mt-2">
               <?php 
-                  $ids=array('maxSoundLevel', 'minSoundLevel', 'averageSoundLevel');
+                  $ids=array('sensor','measurements','lastMeasurement','firstMeasurements','averageMeasurement','prova');
 
                   $labels=array('Sensore','Numero di rilevazioni','Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova');
 
@@ -188,7 +208,7 @@
                             <div class="card-body text-center">
                               <h6 class="card-title text-center"><?php echo $labels[$i] ?></h6>
                               <div class=" max-sound-card">
-                                    <p>12 dB<p>
+                              <h4><span class = "label label-default" id="<?php echo $ids[$i]?>">12dB</span></h4>     
                               </div>
                             </div>
                         </div>

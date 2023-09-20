@@ -1,9 +1,8 @@
  
 <?php
-    //This script return all main stats: min, max and average and insert the result into cards.
-    // it refers to all history
+    //This script get all the position of readings
     require_once "../../../bootstrap.php";
-    $data = $dbh -> getAllMainStatsForSensor($_POST['selectedSensor']);
+    $data = $dbh -> getAllMeasureForYear($_POST['selectedSensor'], $_POST['year']);
     $returnResult = array();
         // collect results
         foreach ($data as $row) {

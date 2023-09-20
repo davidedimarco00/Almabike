@@ -44,6 +44,7 @@ export class MainPageController extends Controller {
   getBaseInfoFromSelectedSensor(selectedSensor){
     console.log("selected Sensor: " + selectedSensor);
     this.model.getBaseInfoFromSelectedSensor(this.model.getMap(), selectedSensor);
+    this.model.getAllStatsFromSensor(selectedSensor);
   }
 
 

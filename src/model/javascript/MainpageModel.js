@@ -113,7 +113,7 @@ export class MainpageModel {
           //allora voglio il grafico giornaliero con tutte le misurazioni del giorno
           
           console.log("Sensore attualmente selezionato=", $('#selectSensor').val());
-          this.getValuesForDailyChart($('#selectSensor').val(), datePickerValue);
+          this.getValuesForDailyChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
           //console.log(this.ajaxResponse);
           
 
@@ -123,9 +123,13 @@ export class MainpageModel {
           starthour = starthour +":00"; //preparo la formattazione dei due parametri
           endhour = endhour+":00";
           alert(starthour + " " + endhour);
-          this.getValuesForDailyChartBetweenHours($('#selectSensor').val(), datePickerValue, starthour, endhour);
+          this.getValuesForDailyChartBetweenHours($('#selectSensor').val(), datePickerValue, starthour, endhour, typeofdateValue);
 
         }
+      } else if (typeofdateValue=="monthly") {
+          this.getValuesForMonthlyChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
+      } else if (typeofdateValue=="annual") {
+          this.getValuesForAnnualChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
       }
 
 
@@ -139,7 +143,7 @@ export class MainpageModel {
     }
 
 
-    getValuesForDailyChart(selectedSensor, date) { //giornalieri
+    getValuesForDailyChart(selectedSensor, date, typeofdateValue) { //giornalieri
 
       let self = this;
 
@@ -159,12 +163,13 @@ export class MainpageModel {
 
             let responseParsed = JSON.parse(response);
 
-            self.createChart(responseParsed);
+            self.createChart(responseParsed,typeofdateValue);
             
           }
     }
 
-    getValuesForDailyChartBetweenHours(selectedSensor, date, startHour, endHour) { //giornalieri nelle ore...
+
+    getValuesForDailyChartBetweenHours(selectedSensor, date, startHour, endHour, typeofdateValue) { //giornalieri nelle ore...
 
       let self = this;
 
@@ -190,11 +195,71 @@ export class MainpageModel {
 
             let responseParsed = JSON.parse(response);
 
-            self.createChart(responseParsed);
+            self.createChart(responseParsed, typeofdateValue);
             
           }
 
     }
+
+    getValuesForMonthlyChart(selectedSensor, month, typeofdateValue) { //mensili
+
+      let self = this;
+
+      console.log("I'm here ", selectedSensor, typeofdateValue);
+          $.ajax({
+            url: "./src/controller/php/getAllMeasureForMonth.php",
+            type: "POST",
+            data: {"selectedSensor": selectedSensor, "month": month},
+            cache: false,
+      
+            success: success,
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+            },
+          });
+          function success(response)  {
+            console.log(response);
+
+            let responseParsed = JSON.parse(response);
+
+            
+
+            self.createChart(responseParsed, typeofdateValue);
+            
+          }
+    }
+
+    getValuesForAnnualChart(selectedSensor, year, typeofdateValue) { //annuale
+
+      let self = this;
+
+      console.log("I'm here ", selectedSensor, typeofdateValue);
+          $.ajax({
+            url: "./src/controller/php/getAllMeasureForYear.php",
+            type: "POST",
+            data: {"selectedSensor": selectedSensor, "year": year},
+            cache: false,
+      
+            success: success,
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+            },
+          });
+          function success(response)  {
+            console.log("Risultato query: " +response);
+
+            let responseParsed = JSON.parse(response);
+
+            
+
+            self.createChart(responseParsed, typeofdateValue);
+            
+          }
+    }
+
+
+
+
 
 
    
@@ -641,7 +706,29 @@ export class MainpageModel {
 
 
 
+    getAllStatsFromSensor(selectedSensor) {
+      
+      let self = this;
 
+      console.log("I'm here ", selectedSensor);
+          $.ajax({
+            url: "./src/controller/php/getAllStatsFromSensor.php",
+            type: "POST",
+            data: selectedSensor,
+            cache: false,
+      
+            success: success,
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+            },
+          });
+          function success(response)  {
+            console.log("Risultato query: " +response);
+
+            let responseParsed = JSON.parse(response);
+            self.buildCardLabelsForSensor(responseParsed);
+          }
+    }
 
 
   
@@ -812,31 +899,57 @@ export class MainpageModel {
     }
 
 
-    createChart(data){
+    createChart(data, type){
 
-      alert("Okay ora devo fare il grafico");
+      alert("Okay ora devo fare il grafico di un " + type);
       console.log("dati\n\n\n\n", data);
 
+
+
       //isolo l'array che m'interessa per il grafico
-      let soundLevels=[];
-      let hours = [];
-      for (var key in data) {
-        for (var key1 in data[key]) {
-            soundLevels.push(data[key][key1]["Noise_dBA"]);
-            hours.push(data[key][key1]["Hour"]);
-            
+      let yaxis=[];
+      let xaxis = [];
+      if (type == 'daily') {
+          
+          for (var key in data) {
+            for (var key1 in data[key]) {
+
+                yaxis.push(data[key][key1]["Noise_dBA"]);
+                xaxis.push(data[key][key1]["Hour"]);
+                
+            }
+          }
+      }
+      
+      else if (type=="monthly") {
+        for (var key in data) {
+          for (var key1 in data[key]) {
+              yaxis.push(data[key][key1]["DailyAverageNoise"]);
+              xaxis.push(data[key][key1]["Day"]);
+              
+          }
+        }
+      }
+      else if (type=="annual"){
+        for (var key in data) {
+          for (var key1 in data[key]) {
+              yaxis.push(data[key][key1]["MonthlyAverageNoise"]);
+              xaxis.push(data[key][key1]["Month"]);
+              
+          }
+
         }
       }
 
-      console.log(soundLevels);
+      console.log("Valori in ordinate: " + yaxis + "\n Valori in ascissa: " + xaxis);
 
    
       // Esepio di utilizzo
            
 
             const lineChartData = {
-                labels: hours,
-                values: soundLevels
+                labels: xaxis,
+                values: yaxis
             };
 
             const barChartData = {
@@ -857,6 +970,19 @@ export class MainpageModel {
 
     }
 
+    buildCardLabelsForSensor(data) {
+
+      $("#sensor").text(data['result'][0]['ID_device']);
+      $("#measurements").text(data['result'][0]['Total']);
+      $("#lastMeasurement").text(data['result'][0]['LastDate']);
+      $("#firstMeasurements").text(data['result'][0]['FirstDate']);
+      //$("#averageMeasurement").text(data['result'][0]['ID_device']);
+      $("#minSoundLevel").text(data['result'][0]['MinNoise']);
+      $("#maxSoundLevel").text(data['result'][0]['MaxNoise']);
+      $("#averageSoundLevel").text(data['result'][0]['AvgNoise']);
+
+    }
+
 
 
 
@@ -870,5 +996,5 @@ export class MainpageModel {
 
 
 
-  
+
 

@@ -241,20 +241,7 @@ class DatabaseHelper {
 
 
 
-   
 
-
-    public function getAllMainStatsForSensor($sensor) {
-        $query = "SELECT `ID_device`, MAX(`Noise_dBA`), MIN(`Noise_dBA`), AVG(`Noise_dBA`) FROM `readings`
-        WHERE `ID_device`=? AND `Noise_dBA` <> 0
-        GROUP BY `ID_device`;";
-
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s',$sensor);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
 
     public function getAllMeasureForDay($sensor, $day) {
         $query = "SELECT DISTINCT `GPS_Latitude` AS lati, `GPS_Longitude` as longi, `Noise_dBA` as Noise_dBA  , DATE_FORMAT(`Time`, '%H:%i:00') AS Hour   FROM `readings`
@@ -280,19 +267,67 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getAllMeasureForMonth($sensor, $month) {
+        $query =  "SELECT DATE_FORMAT(`Time`, '%Y-%m-%d') AS Day,
+        round(AVG(`Noise_dBA`), 2) AS DailyAverageNoise
+        FROM `readings`
+        WHERE DATE_FORMAT(`Time`, '%Y-%m') = ?
+        AND `ID_device` = ?
+        GROUP BY Day
+        ORDER BY Day;";
+
+
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ss',$month, $sensor);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAllMeasureForYear($sensor, $year) {
+        $query="SELECT DATE_FORMAT(`Time`, '%Y-%m') AS Month,
+            round(AVG(`Noise_dBA`), 2) AS MonthlyAverageNoise
+            FROM `readings`
+            WHERE DATE_FORMAT(`Time`, '%Y') = ?  
+            AND `ID_device` = ?
+            GROUP BY Month
+            ORDER BY Month;";
+
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ss',$year, $sensor);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+
+    /*TUTTE LE STATISTICHE SUL SENSORE*/ 
+    public function getAllStatsFromSensor($sensor) {
+        $query = "SELECT `ID_device`,
+                round(MAX(`Noise_dBA`), 2) AS MaxNoise,
+                round(MIN(`Noise_dBA`), 2) AS MinNoise,
+                round(AVG(`Noise_dBA`), 2) AS AvgNoise,
+                DATE_FORMAT(MAX(`Time`), '%d-%m-%Y') AS LastDate,
+                DATE_FORMAT(MIN(`Time`), '%d-%m-%Y') AS FirstDate,
+                COUNT(*) AS Total
+                FROM `readings`
+                WHERE `ID_device` = ? AND `Noise_dBA` <> 0
+                GROUP BY `ID_device`;";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->bind_param('s',$sensor);
+                $stmt->execute();
+                $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 
 
 
 
-    
 
-
-
-
-
-
-
-    /**/ 
 
 
     
