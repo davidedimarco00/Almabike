@@ -85,15 +85,18 @@
                           <div class="col-md-6">
                                 <input type="time" class="form-control hour-input" id='end-hour' name='endhour'  />
                           </div>
+
                       </div>
 
-                    
+                      <button id="searchChart" class="btn btn-primary mt-2 btn-block">Cerca</button>
 
-                      <div class="text-end">
-                        <button id="searchChart" class="btn btn-primary">Cerca</button>
-                      </div>
 
-                      </form>
+
+
+
+                  
+
+                  </form>
                       
                
              </div>
@@ -125,17 +128,27 @@
 
 
 
-            <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1">
+            <div class="d-flex flex-column align-items-center justify-content-center">
               <canvas id="myChart">
 
               </canvas>
              </div>
 
-             <div class="d-flex justify-content-center">
-                <button class="">A linee</button> <!-- Primo pulsante -->
-                <button>Istogramma</button> <!-- Secondo pulsante -->
-                <button>Istogramma</button> <!-- Secondo pulsante -->
-                <button>Istogramma</button> <!-- Secondo pulsante -->
+             <div class="d-flex justify-content-center flex">
+             <div class="btn-group d-flex justify-content-between" data-toggle="buttons" >
+              <label class="btn mr-2 btn-outline-primary active">
+                  <input type="radio" name="grafico" id="grafico-linee" autocomplete="off" checked>
+                  <i class="fas fa-chart-line"></i> Linee
+              </label>
+              <label class="btn mr-2 btn-outline-danger active ">
+                  <input type="radio" name="grafico" id="grafico-istogramma" autocomplete="off">
+                  <i class="fas fa-chart-bar"></i> Istogramma
+              </label>
+              <label class="btn mr-2 btn-outline-danger active ">
+                  <input type="radio" name="grafico" id="grafico-torta" autocomplete="off">
+                  <i class="fas fa-chart-pie"></i> Torta
+              </label>
+            </div>
              </div>
              
           </div>
@@ -143,6 +156,17 @@
       </div>
 
       <div class="col-md-2">
+          <div class="row"> 
+                <div class="card dashboard-card mb-3">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-center">Storico globale</h6>
+                      <div class=" max-sound-card">
+                            <p>Colonna globale rispetto a tutti i dati del sensore selezionato<p>
+                      </div>
+                    </div>
+                </div>
+           
+            </div>
             <div class="row"> 
                 <div class="card dashboard-card mb-3">
                     <div class="card-body text-center">
@@ -171,17 +195,6 @@
                       <h6 class="card-title text-center">Rilevazione Minima</h6>
                       <div class=" max-sound-card">
                       <h4><span class = "label label-default" id="minSoundLevel">12dB</span></h4>
-                      </div>
-                    </div>
-                </div>
-           
-            </div>
-            <div class="row"> 
-                <div class="card dashboard-card mb-3">
-                    <div class="card-body text-center">
-                      <h6 class="card-title text-center">Rilevazione Media</h6>
-                      <div class=" max-sound-card">
-                            <p>12 dB<p>
                       </div>
                     </div>
                 </div>

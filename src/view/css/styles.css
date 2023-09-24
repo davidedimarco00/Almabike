@@ -78,6 +78,13 @@ a {
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 }
 
+.legendCard {
+
+  border-radius: 20px;
+  padding: 5px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
 .form-check-label {
   color: #000 !important;
 }
@@ -117,8 +124,6 @@ a {
 
 
 
-
-
 /*CONTAINER/DASHBOARD CONTEXT*/
 .title {
   color: #a60a04;
@@ -133,6 +138,11 @@ a {
 #myChart{
   height: 100%;
 }
+
+.btn input[type="radio"] {
+  display: none; 
+}
+
 
 
 

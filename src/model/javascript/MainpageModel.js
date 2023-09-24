@@ -306,8 +306,68 @@ export class MainpageModel {
                 <label class="form-check-label" for="zonesToggle">Visualizzazione a zone</label>
             </div>`
         };
-
         zonesCard.addTo(map);
+        
+
+        //card della legenda della mappa
+       /* var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'infolegend');
+        labels = ['<strong>Categories</strong>'],
+        categories = ['Road Surface','Signage','Line Markings','Roadside Hazards','Other'];
+         
+        
+            this.div.innerHTML = labels.join('<br>AAA');
+        return this.div;
+        };
+
+
+        legend.addTo(map);*/
+
+        let legendCard = L.control({position: 'bottomright'});
+
+        
+
+        legendCard.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'legendCard'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        legendCard.update = function (props) {
+
+            this._div.innerHTML ='';
+
+            let labels = ['<strong>Categories</strong>'], 
+            categories = ['Road Surface','Signage','Line Markings','Roadside Hazards','Other'],
+            colors = ["red", "orange", "yellow", "green", "black"]
+
+            for (var i = 0; i < categories.length; i++) {
+       
+
+              this._div.innerHTML +=
+                  labels.push(
+                    '<i class="fas fa-circle" style="color:'+colors[i]+';"</i> ' + categories[i] + '<br>'
+                  
+                  
+                  );
+  
+            }
+
+          this._div.innerHTML = labels.join('<br>');
+            
+
+
+        };
+        legendCard.addTo(map);
+
+
+
+
+
+
+
     }
   
     applyMapLayer(mapLayer, map=this.map) {
@@ -884,11 +944,6 @@ export class MainpageModel {
 
     }
 
-
-
-
-
-
     showLoadingSpinner() {
       $('#loadingSpinner').show();
 
@@ -972,6 +1027,9 @@ export class MainpageModel {
 
     buildCardLabelsForSensor(data) {
 
+      /*QUI FACCIO UN CICLO SUI COMPONENTI E FACCIO UN CHECK PER OGNI COMPONENTE
+       CHE SE IL VALORE DEL TESTO è TOP ALLORA LA CARD DIVENTA ROSSA, ARANCIONE, GIALLA, VERDE*/
+
       $("#sensor").text(data['result'][0]['ID_device']);
       $("#measurements").text(data['result'][0]['Total']);
       $("#lastMeasurement").text(data['result'][0]['LastDate']);
@@ -983,13 +1041,6 @@ export class MainpageModel {
 
     }
 
-
-
-
-
-
-
-    
 
    
   }
