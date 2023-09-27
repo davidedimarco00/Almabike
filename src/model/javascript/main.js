@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 
     mainpageController.initializePage();
-    mainpageController.showZones();
+    //mainpageController.showZones();
 
 
     $('#zonesToggle').click(function (){
@@ -23,7 +23,7 @@ $(document).ready(function() {
         if (!$('#zonesToggle').is(':checked')) {
             //disattivo le zone
             mainpageController.hideZones();
-        }else{
+        }else {
             //attivo le zone
             mainpageController.showZones();
         }  
@@ -41,7 +41,7 @@ $(document).ready(function() {
 
         if(id=="clearLayer"){
             mainpageController.clearLayers();
-        }else{
+        }else {
    
             mainpageController.applyMapLayer(id);
         }

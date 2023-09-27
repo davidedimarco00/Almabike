@@ -1,11 +1,12 @@
 import  {ChartFactory} from "../javascript/chartFactory/chartFactory.js";
+import { HeatMapFactory } from "../javascript/heatMapFactory/HeatMapFactory.js";
 
 export class MainpageModel {
     
     constructor() {
         this.ajaxCall = []; //array che contiene le chiamate ajax da eseguire, serve per la gestione della fine
         this.map=L.map('map', {zoomControl: false}).setView([44.4992192,11.2616459], 12);
-        this.zonesAreVisible=true;
+        this.zonesAreVisible=false;
         this.selCheckbox;
         const self = this;
         this.flagHeatMap = false ;
@@ -15,6 +16,7 @@ export class MainpageModel {
         this.ajaxResponse=[];
         this.heat;
         this.chartFactory = new ChartFactory('myChart');
+        this.heatMapFactory = new HeatMapFactory(this.map);
     }
 
   
@@ -254,16 +256,9 @@ export class MainpageModel {
 
             self.createChart(responseParsed, typeofdateValue);
             
+            
           }
     }
-
-
-
-
-
-
-   
-
 
 
     /*MAP FUNCTIONS*/
@@ -349,8 +344,6 @@ export class MainpageModel {
               this._div.innerHTML +=
                   labels.push(
                     '<i class="fas fa-circle" style="color:'+colors[i]+';"</i> ' + categories[i] + '<br>'
-                  
-                  
                   );
   
             }
@@ -758,7 +751,7 @@ export class MainpageModel {
       this.applyMapLayer("streetMapLayer")
     }
 
-
+    
     //DASHBOARD FUNCTIONS
 
 
@@ -791,11 +784,12 @@ export class MainpageModel {
     }
 
 
-  
+     
     getBaseInfoFromSelectedSensor(map, selectedSensor) {
-      let flag = false;
+      let flag = true;
       let markers;
       let sensorInfo;
+      let self = this;
   
       $.ajax({
         url: "./src/controller/php/getDynamicSensorCoord.php",
@@ -808,15 +802,18 @@ export class MainpageModel {
   
           let positions = JSON.parse(response);
   
+  
           sensorInfo = positions;
   
-          if (flag) {
+          if (markers != undefined) {
             markers.clearLayers();
           }
   
           if (positions) {
             markers = L.markerClusterGroup();
             let soundLevels = [];
+            let data=[];
+            
   
             for (var key in positions) {
               for (var key1 in positions[key]) {
@@ -833,20 +830,28 @@ export class MainpageModel {
                 );
   
                 soundLevels.push(positions[key][key1]["Noise_dBA"]);
+                data.push([positions[key][key1]["lati"] / 100000, positions[key][key1]["longi"] / 100000, positions[key][key1]["Noise_dBA"]]);
   
                 marker.bindPopup(title);
                 markers.addLayer(marker);
                 //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
                 //console.log(positions[key][key1]["lati"]/1000)
               }
+              
               map.addLayer(markers);
               flag = true;
              // $("#maxSoundLevelLabel").text(Math.max.apply(Math, soundLevels));
               //qui bisogna aggiungere la media
              // $("#minSoundLevelLabel").text(Math.min.apply(Math, soundLevels));
             }
-            console.log(soundLevels);
+            //console.log(soundLevels);
+            //console.log(data);
             soundLevels = [];
+            
+            self.heatMapFactory.addData(data);
+            
+
+
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -887,6 +892,8 @@ export class MainpageModel {
         data:  data,
         cache: false,
         success: function (response) {
+
+          
 
            if (self.flagHeatMap){
                map.removeLayer(self.heat);

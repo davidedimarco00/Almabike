@@ -45,6 +45,7 @@ export class MainPageController extends Controller {
     console.log("selected Sensor: " + selectedSensor);
     this.model.getBaseInfoFromSelectedSensor(this.model.getMap(), selectedSensor);
     this.model.getAllStatsFromSensor(selectedSensor);
+    //this.model.createHeatMap();
   }
 
 
