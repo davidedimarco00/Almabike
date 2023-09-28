@@ -12,12 +12,12 @@ export class MainPageController extends Controller {
   }
 
   initializePage(){
-    this.model.initpage(this.model.getMap());
+    this.model.initpage();
   }
 
   
-  showZones(){
-    this.model.showZones(this.model.getMap());  
+  showZones() {
+    this.model.showZones();  
   }
 
   applyMapLayer(mapLayer) {
@@ -25,21 +25,12 @@ export class MainPageController extends Controller {
   }
 
   hideZones(){
-    this.model.hideZones(this.model.getMap());
+    this.model.hideZones();
   }
 
   clearLayers(){
     this.model.clearMapLayers();
   }
-
-  applyDarkMode(){
-    this.model.darkMode(this.model.getMap());
-  }
-
-  applyLightMode(map){
-    this.model.lightMode(this.model.getMap());
-  }
-
 
   getBaseInfoFromSelectedSensor(selectedSensor){
     console.log("selected Sensor: " + selectedSensor);
@@ -47,7 +38,6 @@ export class MainPageController extends Controller {
     this.model.getAllStatsFromSensor(selectedSensor);
     //this.model.createHeatMap();
   }
-
 
 
   searchButtonClick(){
@@ -62,7 +52,7 @@ export class MainPageController extends Controller {
     this.model.hideLoadingSpinner();
   }
 
-  colorZone(){
+  colorZone() { //colora le regioni (zone) in base al valore medio di noise all'interno dell'aria 
     this.model.verifyPointInsidePolygon();
   }
 

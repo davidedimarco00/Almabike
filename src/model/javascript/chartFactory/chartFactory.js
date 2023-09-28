@@ -1,3 +1,5 @@
+/*QUESTA CLASSE SERVE A CREARE UN CHART A PARTIRE DAI DATI DATI NEL PARAMETRO DATA*/
+
 export class ChartFactory {
     constructor(containerId) {
         this.containerId = containerId;
@@ -6,10 +8,6 @@ export class ChartFactory {
     }
 
     createLineChart(data) {
-
-    
-        
-
         if (this.chart!=null){
             this.chart.destroy();
         }

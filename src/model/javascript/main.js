@@ -17,6 +17,12 @@ $(document).ready(function() {
     mainpageController.initializePage();
     //mainpageController.showZones();
 
+    $('.custom-tooltip').tooltip({
+        template: '<div class="tooltip custom" role="tooltip"><div class="tooltip-inner"></div></div>',
+        trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
+        html: true // Abilita l'HTML nel tooltip personalizzato
+      });
+      
 
     $('#zonesToggle').click(function (){
         
@@ -46,21 +52,7 @@ $(document).ready(function() {
             mainpageController.applyMapLayer(id);
         }
 
-
-        
     });
-
-
-    $("#nightMapToggle").on( "click", function(e) {
-        if (this.checked){
-            $(this).prop('checked', true); 
-            mainpageController.applyDarkMode();
-        }else{
-            $(this).prop('checked', false); 
-            mainpageController.applyLightMode();
-        }
-    });
-
 
 
     /**CONTROLLI SULLA DASHBOARD*/
@@ -87,18 +79,6 @@ $(document).ready(function() {
         e.preventDefault();
          mainpageController.colorZone();
      });
-
-
-
-
-
-
-
-
-    
-
-
-    
 
 
 });
