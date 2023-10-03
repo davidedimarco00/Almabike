@@ -1,5 +1,7 @@
 import {MainPageController} from  "../../controller/javascript/MainpageController.js";
 
+
+
 let mainpageController = new MainPageController();
 
 $(document).ajaxSend(function(event, jqxhr, settings) {
@@ -17,6 +19,10 @@ $(document).ready(function() {
     mainpageController.initializePage();
     //mainpageController.showZones();
 
+   
+
+
+    
     $('.custom-tooltip').tooltip({
         template: '<div class="tooltip custom" role="tooltip"><div class="tooltip-inner"></div></div>',
         trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
@@ -35,6 +41,35 @@ $(document).ready(function() {
         }  
     });
 
+    $('#nightToggle').click(function (){
+        
+        if (!$('#nightToggle').is(':checked')) {
+            //faccio vedere il giorno
+            $('#dayToggle').prop("checked", true);
+            mainpageController.showZones();
+        } else {
+            //attivo la visualizzazione notturna
+            //mainpageController.clearLayers();
+            mainpageController.showColoredNightZone();
+
+        }
+    });
+
+    /*CLICK PER VEDERE LA DASHBOARD NELLA VISUALIZZAZIONE PRIVATA*/
+
+    $('#dashboardBtn').click(function () {
+        $(".mycontainer-private").fadeOut('fast', function () {
+            $(".mycontainer-public").fadeIn('fast');
+        });
+    });
+    
+    $('#myRouteBtn').click(function () {
+        $(".mycontainer-public").fadeOut('fast', function () {
+            $(".mycontainer-private").fadeIn('fast');
+        });
+    });
+
+    
 
     /*CONTROLLO DELLA VISUALIZZAZIONE DEI LAYERS*/
 
@@ -75,18 +110,39 @@ $(document).ready(function() {
         mainpageController.searchButtonClick();
     });
 
+    $("#barButton").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        e.preventDefault();
+         mainpageController.barChartButtonClick();
+     });
+
+     $("#lineButton").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        e.preventDefault();
+         mainpageController.lineChartButtonClick();
+     });
+
+
+
     $("#colorZone").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         e.preventDefault();
          mainpageController.colorZone();
      });
 
 
+     if ($('a#myRoutebtn').is(':visible')) { 
+        $('#loginName').text("Logout");
+        $('#loginLogout').prop("href","index.php?action=logout");
+
+    }
+
+    
+    $("#search-routes").on("keyup", function() {
+        let search = $(this).val().toLowerCase();
+        $("#routes-table tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1)
+        });
+    });
+
+
+
 });
-
-
-
-
-
-
-
 

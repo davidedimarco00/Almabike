@@ -17,7 +17,12 @@ export class MainPageController extends Controller {
 
   
   showZones() {
+    this.model.clearMapLayers();
     this.model.showZones();  
+  }
+
+  showColoredNightZone() {
+    this.model.showColoredNightZone();
   }
 
   applyMapLayer(mapLayer) {
@@ -34,7 +39,7 @@ export class MainPageController extends Controller {
 
   getBaseInfoFromSelectedSensor(selectedSensor){
     console.log("selected Sensor: " + selectedSensor);
-    this.model.getBaseInfoFromSelectedSensor(this.model.getMap(), selectedSensor);
+    this.model.getBaseInfoFromSelectedSensor(selectedSensor);
     this.model.getAllStatsFromSensor(selectedSensor);
     //this.model.createHeatMap();
   }
@@ -42,6 +47,14 @@ export class MainPageController extends Controller {
 
   searchButtonClick(){
     this.model.searchButtonClick();
+  }
+
+  barChartButtonClick() {
+    this.model.createChart(null, null, "bar");
+  }
+
+  lineChartButtonClick() {
+    this.model.createChart(null, null, "line");
   }
 
   showLoadingSpinner() {

@@ -45,38 +45,21 @@ export class MapManager {
     };
     zonesCard.update = function (div) {
       div.innerHTML = `
-        <div class="form-check form-switch">
+        <div class="custom-tooltip form-check form-switch justify-content-center" title ="Visualizza le zone sulla mappa">
           <input class="form-check-input" type="checkbox" id="zonesToggle" checked>
           <label class="form-check-label" for="zonesToggle">Visualizzazione a zone</label>
-        </div>`;
+        </div>
+
+        <div class="custom-tooltip form-check form-switch justify-content-center" title="Visualizza le statistiche dell'orario notturno dalle 18 alle 06 del giorno successivo">
+          <input class="form-check-input" type="checkbox" id="nightToggle">
+          <label class="form-check-label" for="nightToggle">Statistiche notturne</label>
+        </div>
+        
+        
+        
+        `;
     };
     zonesCard.addTo(this.map);
-
-
-
-
-    const legendCard = L.control({ position: 'bottomright' });
-    legendCard.onAdd = function () {
-      const div = L.DomUtil.create('div', 'legendCard');
-      this.update(div);
-      return div;
-    };
-    legendCard.update = function (div) {
-      div.innerHTML = '';
-
-      const labels = ['<strong>Livello del suono</strong>'];
-      const categories = [' > 95 dB', 'tra 80 dB e 95 dB', 'tra 60 dB e 80dB', ' < 60 dB '];
-      const colors = ["red", "orange", "yellow", "green"];
-
-      categories.forEach((category, index) => {
-        labels.push(`
-          <i class="fas fa-circle" style="color:${colors[index]};"></i> ${category}<br>
-        `);
-      });
-
-      div.innerHTML = labels.join('<br>');
-    };
-    legendCard.addTo(this.map);
 
 
     const infoCard = L.control({ position: 'bottomleft' });
@@ -90,41 +73,49 @@ export class MapManager {
       div.innerHTML = `
 
       <button type="button" class="btn btn-default custom-tooltip" data-toggle="tooltip"
-       data-placement="top" title="Nell'interfaccia di Almabike, troverai una mappa interattiva che ti offre una visualizzazione chiara delle informazioni rilevanti. La mappa di Almabike è progettata per fornire una panoramica completa dei dati dei sensori e delle zone di interesse. Ecco alcune delle sue caratteristiche principali:
-
-       Visualizzazione Predefinita dei Valori Globali: Quando apri la mappa, vedrai di default i valori globali dei sensori. Questi valori rappresentano una panoramica generale delle condizioni monitorate in tutto il sistema Almabike, consentendoti di avere una visione d'insieme.
-       
-       Filtraggio dei Valori Specifici: Tuttavia, hai anche la flessibilità di personalizzare la visualizzazione secondo le tue esigenze. Puoi utilizzare filtri per visualizzare specifici dati dei sensori o categorie, mettendo in risalto le informazioni che ti interessano di più.
-       
-       Zone Rappresentate in Rosso: Sulla mappa, le zone di particolare interesse sono rappresentate in rosso mediante l'uso di poligoni. Queste zone possono indicare aree con condizioni speciali o soggette a monitoraggio intensivo. Facendo clic su queste zone, è possibile ottenere ulteriori dettagli e informazioni specifiche.">
-        <i class="fas fa-info-circle" data-toggle="modal" data-target="#myModal1"></i>
+       data-placement="top" title="La mappa visualizza i dati globali del sensore selezionato.
+                                    In assenza di filtri e sensori selezionati la visualizzazione si basa sul livello medio di rumore nelle varie zona della città di Bologna.">
+        <i class="fas fa-info-circle"></i>
       </button>
 
-     
-      
       `
  
     };
     infoCard.addTo(this.map);
 
+    const loginCard = L.control({ position: 'topright' });
+    loginCard.onAdd = function () {
+      const div = L.DomUtil.create('div', 'loginCard');
+      this.update(div);
+      return div;
+    };
+
+    loginCard.update = function (div) {
+      div.innerHTML = `
+      <div class="container login">
+        <div class="row">
+            <div class="col-md-2 center-vertically center-horizontally">
+                <div class="icon-container">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+            <div class="col-md-10 center-vertically center-horizontally">
+            <button class="btn center-vertically">
+
+                <a id="loginLogout" href='loginpage.php'><span id="loginName" >Area riservata</span></a>
+
+            </button>
+            </div>
 
 
+            
+        </div>
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      `
+ 
+    };
+    loginCard.addTo(this.map);
 
 
   }
@@ -177,19 +168,34 @@ export class MapManager {
         ).addTo(this.map);
         break;
     }
-
-    if (this.zonesAreVisible) {
-      this.addZones(this.map);
+   
+    if (this.zonesAreVisible ) {
+      this.addZones();
     }
   }
 
-  addZones() { //da ragionare per il popup sulla zona
+  addZones(type="all") { //da ragionare per il popup sulla zona
+
     let allPointsOnMap = [];
-    let allPointsOnMap2 = [];
     let self = this;
 
+    let url = ""; //si basa su quale php chiamare in base al tipo di chiamata
+
+    switch (type) { //di default chiama all
+      case "all":
+        url = "./src/controller/php/getAllPointsForPolygons.php"
+        break;
+      case "night":
+        url = "./src/controller/php/getAllPointsForNightPolygons.php"
+        break;
+      case "day":
+        url = "./src/controller/php/getAllPointsForDayPolygons.php"
+        break;
+
+    }
+
     $.ajax({
-      url: "./src/controller/php/getAllPointsForPolygons.php",
+      url: url,
       cache: false,
 
       success: function (response) {
@@ -209,19 +215,14 @@ export class MapManager {
                 noise: noise
               };
 
-              var point2 = {
-                lat: lat,
-                lng: lng,
-       
-              };
 
               allPointsOnMap.push(point);
-              allPointsOnMap2.push(point2);
+     
           
             }
           }
           self.allPointsOnMap = allPointsOnMap;
-          self.allPointsOnMap2 = allPointsOnMap2;
+ 
         }
 
             let zones = fetch("./resources/json/bologna.geojson");
@@ -234,8 +235,8 @@ export class MapManager {
                 .then((data) => {
                   const polygons = L.geoJSON(data, {
                     style: {
-                      color: "red", // colore del bordo del poligono
-                      weight: 0.8,
+                      color: "white", // colore del bordo del poligono
+                      weight: 1,
                       fillColor: "black", // colore del riempimento del poligono
                       fillOpacity: 0.05, // opacità del riempimento del poligono
                     },
@@ -284,48 +285,116 @@ export class MapManager {
                   });
 
                   polygons.addTo(self.map);
+                  //console.log(allPointsOnMap2);
 
+                  // Crea un oggetto per memorizzare l'associazione tra punti e zone
+                  const pointsToZones = {};
 
+                  // Itera su ogni poligono
                   polygons.eachLayer(function (zone) {
+                    const zoneName = zone.feature.properties.name;
+                    //console.log("itero su " + zoneName );
+                    let vertices_x = zone.feature.geometry.coordinates[0].map(coord => coord[1]);
+                    let vertices_y = zone.feature.geometry.coordinates[0].map(coord => coord[0]);
+                    let points_polygon = vertices_x.length;
 
-                          let vertices_x = zone.feature.geometry.coordinates[0].map(coord => coord[1]); // longitude points of polygon
-                          console.log("PER " + zone.feature.properties.name + " abbiamo il seguente array di latitudini \n\n" + vertices_x);
-                        
-                          let vertices_y = zone.feature.geometry.coordinates[0].map(coord => coord[0]); // latitude points of polygon
-                          console.log("PER " + zone.feature.properties.name + " abbiamo il seguente array di longitudine \n\n" + vertices_y);
+                    // Itera su ciascun punto
+                    allPointsOnMap.forEach((point) => {
+                      const longitude = point.lat;
+                      const latitude = point.lng;
+                      let noise = point.noise;
 
+                   
 
-
-
-                          let points_polygon = vertices_x.length;
+                      // Verifica se il punto è all'interno del poligono
+                      if (is_in_polygon(points_polygon, vertices_x, vertices_y, longitude, latitude)) {
                       
-                          // Crea il poligono utilizzando Leaflet
-                        // const polygon = L.polygon(data.geometry.coordinates[0]).addTo(map);
-                      
-                          // Coordinata del punto da verificare
-                          let longitude = 44.5387; // latitude of point to be checked
-                          let latitude = 11.2846; // longitude of point to be checked
-                        
-                          // Verifica se il punto è all'interno del poligono
-                          if (is_in_polygon(points_polygon, vertices_x, vertices_y, longitude, latitude)) {
-                              console.log("Il punto è all'interno del poligono!");
-                              // Puoi fare altre azioni qui, ad esempio aggiungere un marker o mostrare un messaggio
-                          } else {
-                              console.log("Il punto non è all'interno del poligono");
-                          }
-
-                          function is_in_polygon(points_polygon, vertices_x, vertices_y, longitude_x, latitude_y, c) {
-                            let i, j;
-                            for (i = 0, j = points_polygon - 1; i < points_polygon; j = i++) {
-                                if ((vertices_y[i] > latitude_y !== (vertices_y[j] > latitude_y)) && (longitude_x < (vertices_x[j] - vertices_x[i]) * (latitude_y - vertices_y[i]) / (vertices_y[j] - vertices_y[i]) + vertices_x[i])) {
-                                    c = !c;
-                                }
-                            }
-                            return c;
+                        // Mappa il punto alla zona
+                        if (!pointsToZones[zoneName]) {
+                          pointsToZones[zoneName] = [];
                         }
+                        pointsToZones[zoneName].push(point);
+                      }
 
 
-          })
+                      function is_in_polygon(points_polygon, vertices_x, vertices_y, longitude_x, latitude_y, c) {
+                        let i, j;
+                        for (i = 0, j = points_polygon - 1; i < points_polygon; j = i++) {
+                     
+                            if ((vertices_y[i] > latitude_y !== (vertices_y[j] > latitude_y)) && (longitude_x < (vertices_x[j] - vertices_x[i]) * (latitude_y - vertices_y[i]) / (vertices_y[j] - vertices_y[i]) + vertices_x[i])) {
+                            
+                              c = !c;
+                            }
+                        }
+                        return c;
+                      }
+
+                       //COLORO LA ZONA
+
+                    });
+
+                    //console.log(pointsToZones);
+
+                    // Verifica se c'è un array di punti associati alla zona
+                    if (pointsToZones[zoneName]) {
+                      // Calcola un valore medio o qualsiasi logica per determinare il colore
+                      let averageValue = averageValueInZone(pointsToZones[zoneName]);
+                      
+                      // Modifica lo stile del poligono in base al valore
+                      zone.setStyle({
+                        fillColor: getColorValue(averageValue),
+                        color: getColorValue(averageValue),
+                        fillOpacity: 0.3,
+                        
+                      });
+                    }
+       
+                  
+                  function averageValueInZone(points) {
+
+                    if (points.length === 0) {
+                      return 0; // Restituisci 0 se l'array è vuoto
+                    }
+                  
+                    let sum = 0;
+                    for (let i = 0; i < points.length; i++) {
+                      sum += points[i].noise; // Supponendo che il valore "noise" sia nella terza posizione di ciascun elemento dell'array
+                    }
+
+                    //console.log(sum);
+
+                    let average = sum / points.length;
+          
+                    return average;
+                  }
+                  
+                  function getColorValue(value) {
+                    
+                    if (value < 60) {
+                      return "green";
+                    } else if (value >= 60 && value <=80 ){
+                      return "yellow";
+                    } else if (value > 80 && value <=95 ){
+                      return "orange";
+                    } else if (value > 95 ){
+                      return "red";
+                    }
+                  }
+
+
+
+                  });
+
+                  // Ora pointsToZones contiene l'associazione tra zone e punti
+                  
+
+
+                 
+
+
+
+
+                  
 
 
                /** 
@@ -430,18 +499,11 @@ export class MapManager {
       },
     });
 
+  }
 
 
-
-
-
-
-
-    
-
-
-
-
+  showColoredNightZone() {
+    this.addZones("night");
   }
 
   showZones() {

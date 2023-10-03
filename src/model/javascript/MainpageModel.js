@@ -22,6 +22,9 @@ export class MainpageModel {
         this.mapManager = new MapManager(this.map);
     }
 
+
+   
+
   
     initpage() {
 
@@ -79,8 +82,11 @@ export class MainpageModel {
       this.mapManager.applyMapLayer("streetMapLayer");
       this.mapManager.addMapControls();
       this.mapManager.showZones();
+      this.chartFactory.createEmptyChart(); //inizializza il grafico vuoto
 
     }
+
+
 
 
 
@@ -101,6 +107,10 @@ export class MainpageModel {
       this.mapManager.hideZones();
     }
 
+    showColoredNightZone() {
+      this.mapManager.showColoredNightZone();
+    }
+
     clearMapLayers(){
       this.mapManager.clearMapLayers();
     }
@@ -110,6 +120,13 @@ export class MainpageModel {
     getZoneInfo(zone, map) {
       return 1;
     }
+
+    getMap() {
+      return this.mapManager.getMap();
+    }
+
+
+
 
 
 
@@ -177,11 +194,6 @@ export class MainpageModel {
     }
 
 
-
-
-
-
-
     getAllStatsFromSensor(selectedSensor) {
       
       let self = this;
@@ -208,7 +220,7 @@ export class MainpageModel {
 
 
      
-    getBaseInfoFromSelectedSensor(map, selectedSensor) {
+    getBaseInfoFromSelectedSensor(selectedSensor) {
       let flag = true;
       let markers;
       let sensorInfo;
@@ -261,7 +273,7 @@ export class MainpageModel {
                 //console.log(positions[key][key1]["lati"]/1000)
               }
               
-              map.addLayer(markers);
+              self.map.addLayer(markers);
               flag = true;
              // $("#maxSoundLevelLabel").text(Math.max.apply(Math, soundLevels));
               //qui bisogna aggiungere la media
@@ -272,6 +284,9 @@ export class MainpageModel {
             soundLevels = [];
             
             self.heatMapFactory.addData(data);
+
+
+            /*TODO: QUI POTREI FARE VOLENDO IL GRAFICO CON LA MEDIA GLOBALE*/
             
 
 
@@ -379,7 +394,7 @@ export class MainpageModel {
     }
 
 
-    createChart(data, type){
+    createChart(data, type, design) {
 
       alert("Okay ora devo fare il grafico di un " + type);
       console.log("dati\n\n\n\n", data);
@@ -423,28 +438,21 @@ export class MainpageModel {
 
       console.log("Valori in ordinate: " + yaxis + "\n Valori in ascissa: " + xaxis);
 
-   
-      // Esepio di utilizzo
-           
+      const chartData = {
+          labels: xaxis,
+          values: yaxis
+      };
 
-            const lineChartData = {
-                labels: xaxis,
-                values: yaxis
-            };
-
-            const barChartData = {
-                labels: ['Label A', 'Label B', 'Label C'],
-                values: [50, 40, 60]
-            };
-
-            const pieChartData = {
-                labels: ['Slice 1', 'Slice 2', 'Slice 3'],
-                values: [30, 25, 45]
-            };
-
-            this.chartFactory.createLineChart(lineChartData);
-            //chartFactory.createBarChart(barChartData);
-            //chartFactory.createPieChart(pieChartData);
+      if (data == null){
+        alert ("IL DESIGN è: " + design);
+        this.chartFactory.createChart(null, design);
+      }else {
+        this.chartFactory.createChart(chartData, design);
+      }
+          
+      
+      //chartFactory.createBarChart(barChartData);
+      //chartFactory.createPieChart(pieChartData);
 
 
 
@@ -488,7 +496,7 @@ export class MainpageModel {
 
             let responseParsed = JSON.parse(response);
 
-            self.createChart(responseParsed,typeofdateValue);
+            self.createChart(responseParsed,typeofdateValue, "line");
             
           }
     }
@@ -520,7 +528,7 @@ export class MainpageModel {
 
             let responseParsed = JSON.parse(response);
 
-            self.createChart(responseParsed, typeofdateValue);
+            self.createChart(responseParsed, typeofdateValue, "line");
             
           }
 
@@ -549,7 +557,7 @@ export class MainpageModel {
 
             
 
-            self.createChart(responseParsed, typeofdateValue);
+            self.createChart(responseParsed, typeofdateValue, "line");
             
           }
     }
@@ -577,7 +585,7 @@ export class MainpageModel {
 
             
 
-            self.createChart(responseParsed, typeofdateValue);
+            self.createChart(responseParsed, typeofdateValue, "line");
             
             
           }

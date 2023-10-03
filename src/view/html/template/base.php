@@ -42,17 +42,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
-    <!-- Leaflet point inside polygons-->  
-    <script src="https://cdn.rawgit.com/hayeswise/Leaflet.PointInPolygon/v1.0.0/wise-leaflet-pip.js"></script>
-
+   
       
 
    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-    
 
 
   </head>
@@ -62,15 +57,16 @@
   <div class="wrapper d-flex align-items-stretch">
       <nav id="sidebar" class="active">
       <div class="custom-menu">
-          <button type="button" id="sidebarCollapse" class="btn btnMenuToggle">
-          <i class="fa fa-bars"  aria-hidden="true"></i>
+          <button type="button " id="sidebarCollapse" class="btn btnMenuToggle custom-tooltip" title="Apri/Chiudi il menu" >
+            <i class="fa fa-bars"  aria-hidden="true"></i>
           </button>
       </div>
       <div class="img bg-wrap text-center py-4">
           <div class="user-logo">
             <div class="img logo"></div>
             <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]): ?>
-              <?php echo "<h3>".$_SESSION["Nome"]." ".$_SESSION["Cognome"]."</h3>" ?>
+              <?php echo "<h3 class='text-dark'>".$_SESSION["Nome"]." ".$_SESSION["Cognome"]."</h3>" ?>
+              <?php echo "<h3 class='text-dark'>".$_SESSION["Email"]."</h3>" ?>
               <?php else: ?>
               <?php endif; ?>
               
@@ -80,34 +76,34 @@
       </div>
       <ul class="list-unstyled">
           <li class="active">
-            <a href="index.php"><span class="fa fa-map mr-3"></span>Vai alla Mappa</a>
+            <a class="sidebar-link" href="index.php"><span class="fa fa-map mr-3"></span>Vai alla Mappa</a>
           </li>
 
 
           <li>
-            <a href="https://site.unibo.it/multicampus-sostenibile/it/mobilita/almabike"><span class="fa fa-bicycle mr-3"></span>Vai al sito Almabike</a>
+            <a class="sidebar-link"  href="https://site.unibo.it/multicampus-sostenibile/it/mobilita/almabike"><span class="fa fa-bicycle mr-3"></span>Vai al sito Almabike</a>
           </li>
           <li>
-            <a href="#"><span class="fa fa-envelope mr-3 notif"></span>Contatti</a>
+            <a class="sidebar-link"  href="#"><span class="fa fa-envelope mr-3 notif"></span>Contatti</a>
           </li>
           <li>
 
           <?php if(isset($_SESSION["Nome"]) && isset($_SESSION["Cognome"])): ?>
-            <?php echo "<li><a href='#'><span class='fa fa-road mr-3'></span> I miei percorsi</a></li>"?>
+            <?php echo "<li><a class='sidebar-link' href='#' id='myRoutebtn'><span class='fa fa-road mr-3'></span>I miei percorsi</a></li>"?>
               
               <?php else: ?>
                 
-                <?php echo "<li><a href='loginpage.php'><span class='fa fa-lock mr-3'></span>Area riservata</a></li>"?>
+                <?php echo "<li><a class='sidebar-link' href='loginpage.php'><span class='fa fa-lock mr-3'></span>Area riservata</a></li>"?>
               <?php endif; ?>
            
 
             
           </li>
           <li>
-            <a href="#"><span class="fa fa-cog mr-3"></span>Impostazioni</a>
+            <a class="sidebar-link"  href="#"><span class="fa fa-cog mr-3"></span>Impostazioni</a>
           </li>
           <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]): ?>
-              <?php echo "<li><a href='index.php?action=logout'><span class='fa fa-sign-out mr-3'></span> Log out</a></li>"?>
+              <?php echo "<li><a class='sidebar-link' href='index.php?action=logout'><span class='fa fa-sign-out mr-3'></span>Log out</a></li>"?>
               
               <?php else: ?>
               <?php endif; ?>

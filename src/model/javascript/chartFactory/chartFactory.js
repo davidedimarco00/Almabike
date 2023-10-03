@@ -4,8 +4,50 @@ export class ChartFactory {
     constructor(containerId) {
         this.containerId = containerId;
         this.chart=null;
+        this.storedData = null;
         this.ctx = document.getElementById(this.containerId).getContext('2d');
     }
+
+
+    createEmptyChart() {
+        const canvas = document.getElementById('myChart');
+        const message = 'Seleziona un sensore per visualizzare il grafico';
+        
+       
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = 'black';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+
+    }
+
+
+
+    createChart(data, design) {
+
+        if (data != null ){
+            this.storedData = data;
+        }
+
+        if (data == null) {
+            data = this.storedData;
+        }
+
+        switch(design) {
+            case "line":
+                this.createLineChart(data);
+                break;
+            case "bar":
+                alert("SONO QUI");
+                this.createBarChart(data);
+                break;
+        }
+
+
+    }
+
+
 
     createLineChart(data) {
         if (this.chart!=null){
@@ -52,8 +94,6 @@ export class ChartFactory {
                     
                 }
             
-            
-            
     
             ]
             }
@@ -61,31 +101,34 @@ export class ChartFactory {
     }
 
     createBarChart(data) {
-        const ctx = document.getElementById(this.containerId).getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Bar Chart',
-                    data: data.values,
-                    backgroundColor: 'green'
-                }]
-            }
+        if (this.chart != null) {
+          this.chart.destroy();
+        }
+      
+        // faccio un array che associa ad ogni valore del suono il suo colore
+        const barColors = data.values.map(value => {
+            if (value < 60) {
+              return 'green';
+            } else if (value >= 60 && value < 80) {
+              return 'yellow';
+            } else if (value >= 80 && value <= 95)  {
+              return 'orange';
+            } else if (value > 95)  {
+                return 'red';
+              }
+          });
+      
+        this.chart = new Chart(this.ctx, {
+          type: 'bar',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              label: 'Livello del suono',
+              data: data.values,
+              backgroundColor: barColors, // Usa l'array di colori per le barre
+              borderColor: 'blue'
+            }]
+          }
         });
-    }
-
-    createPieChart(data) {
-        const ctx = document.getElementById(this.containerId).getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    data: data.values,
-                    backgroundColor: ['red', 'blue', 'green']
-                }]
-            }
-        });
-    }
+      }
 }

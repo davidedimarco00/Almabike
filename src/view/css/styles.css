@@ -18,7 +18,7 @@ html, body {
 
 
 .img.logo {
-  background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Seal_of_the_University_of_Bologna.svg/800px-Seal_of_the_University_of_Bologna.svg.png);
+  background-image: url('../../../resources/images/LOGO/AlmaBike.png');
 }
 
 
@@ -28,7 +28,9 @@ html, body {
 
 
 
-#sidebar #sidebarRight {
+
+
+#sidebar {
   z-index: 1000;
 }
 
@@ -36,11 +38,10 @@ i.fa-bars {
   color: white;
 }
 
-a {
-  color: white !important;
-  text-decoration: none !important;
-  
+a.sidebar-link {
+  text-decoration: none;
 }
+
 
 #content{
   display: flex;
@@ -49,14 +50,9 @@ a {
 
 
 
-
-
-
-
-
 /*MAP CONTEXT*/
 #map {
-  height: 1000px;
+  height: 600px;
   width: 100%;
 }
 
@@ -79,19 +75,49 @@ a {
 }
 
 .legendCard {
-
-  border-radius: 20px;
   padding: 5px;
   background: rgba(255,255,255,0.8);
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 }
 
+.loginCard {
+  padding: 5px;
+  background: #a60a04;
+  color: #f8f9fa;
+  border-radius: 20px;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+#loginName{
+  color: white;
+}
+
+#loginName:hover {
+  cursor: pointer;
+}
+
+
+.center-vertically {
+  display: flex;
+  align-items: center;
+}
+
+.center-horizontally {
+  display: flex;
+  justify-content: center;
+}
+
+
+
 .infoCard {
   margin-left: 20% !important;
   border-radius: 20px;
-  background: rgba(255,255,255,0.8);
+  
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 }
+
+
+
 
 
 
@@ -148,6 +174,7 @@ a {
 
 #myChart{
   height: 100%;
+  width: 100%;
 }
 
 .btn input[type="radio"] {
@@ -179,9 +206,17 @@ a {
   cursor: pointer;
 }
 
+.dashboard-selector {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.selectorbtn:hover {
+  background-color: #a60a04 !important;
+  color: white !important;
+}
+
 .mycontainer-public {
   width: 100%;
-  height: 100%;
   padding: 30px;
   border-radius: 20px ;
   background-color: #f8f9fa;
@@ -189,10 +224,10 @@ a {
 
 .mycontainer-private{
   width: 100%;
-  height: 100%;
   padding: 30px;
   border-radius: 20px ;
   background-color: #f8f9fa;
+  display: none;
 }
 
 .title-container {

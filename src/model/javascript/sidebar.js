@@ -8,7 +8,3 @@ $('#sidebarCollapse').on('click', function () {
 $('#sidebar').toggleClass('active');
 
 });
-
-$('#sidebarCollapseRight').on('click', function () {
-	$('#sidebarRight').toggleClass('active');
-});

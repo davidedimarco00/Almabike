@@ -137,21 +137,7 @@ class DatabaseHelper {
         
         
     }
-
-    /*Come si fa?*/ /*TODO*/
-    public function getDataByWeek($week) {
-        $query = "SELECT `Time`, `ID_device`, `Noise_dBA` from readings where DATE(`Time`) = ?;";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s',$week);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     
-
-
-
 
     /*SENSORS POSITION QUERY*/
 
@@ -187,6 +173,22 @@ class DatabaseHelper {
         $query = "SELECT DISTINCT ID_Device, CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi, `Noise_dBA` 
         FROM `readings` 
         GROUP BY lati, longi";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getNightPositions() {
+        $query = "SELECT DISTINCT `Time`,ID_Device, CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi, `Noise_dBA` 
+        FROM `readings`
+        WHERE TIME(`Time`) BETWEEN '18:00' AND '00:00'
+        OR  TIME(`Time`) BETWEEN '00:00' AND '06:00'
+        AND `Noise_dBA` <> 0 
+        AND `GPS_Latitude` <> 0
+        and `GPS_Longitude` <> 0
+        GROUP BY lati, longi, `Noise_dBA` ;";
 
         $stmt = $this->db->prepare($query);
         $stmt->execute();

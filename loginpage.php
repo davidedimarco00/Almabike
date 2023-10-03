@@ -8,12 +8,10 @@
     if(isSet($_POST["emailOrUsername"]) && isSet($_POST["password"]) && !isSet($_POST["name"])) {
 
         $login_result = $dbh->checkLogin($_POST["emailOrUsername"], hash("md5", $_POST["password"]));
-        
-
-    
 
         if(count($login_result)!=0 ){
             registerLoggedUser($login_result[0]);
+            $templateParams["email"]=$_POST["emailOrUsername"];
             $templateParams["formmsg"] = "Login Avvenuto Con Successo.";
         }else{
             $templateParams["formmsg"] = "Login Fallito";
@@ -24,12 +22,6 @@
     if(isUserLoggedIn() && !empty($login_result)){
         header("location: index.php?formmsg=".$templateParams["formmsg"]);
     }
-
-
-
-
-
-
 
 
     //Base Template
