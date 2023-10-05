@@ -305,6 +305,24 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getAllValuesFromSensor($sensor) {
+        $query = "SELECT `ID_device`,
+                            `Time`,
+                            `Noise_dBA`,`GPS_Latitude`, `GPS_Longitude`
+                
+                FROM `readings`
+                WHERE `ID_device` = ? AND `Noise_dBA` <> 0 and `GPS_Latitude` <> 0 and `GPS_Longitude` <> 0;";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->bind_param('s',$sensor);
+                $stmt->execute();
+                $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+
+
 
     public function getNightSoundLevelSensor($sensorName) { //la notte va dalle 18 alle 06
         $query = "SELECT * FROM `readings` 

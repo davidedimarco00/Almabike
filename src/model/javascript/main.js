@@ -55,19 +55,7 @@ $(document).ready(function() {
         }
     });
 
-    /*CLICK PER VEDERE LA DASHBOARD NELLA VISUALIZZAZIONE PRIVATA*/
 
-    $('#dashboardBtn').click(function () {
-        $(".mycontainer-private").fadeOut('fast', function () {
-            $(".mycontainer-public").fadeIn('fast');
-        });
-    });
-    
-    $('#myRouteBtn').click(function () {
-        $(".mycontainer-public").fadeOut('fast', function () {
-            $(".mycontainer-private").fadeIn('fast');
-        });
-    });
 
     
 
@@ -128,6 +116,7 @@ $(document).ready(function() {
      });
 
 
+
      if ($('a#myRoutebtn').is(':visible')) { 
         $('#loginName').text("Logout");
         $('#loginLogout').prop("href","index.php?action=logout");
@@ -135,12 +124,47 @@ $(document).ready(function() {
     }
 
     
+
+
+
+    /*PRIVATE DASHBOARD*/ 
+
+    /*CLICK PER VEDERE LA DASHBOARD NELLA VISUALIZZAZIONE PRIVATA*/
+
+    $('#dashboardBtn').click(function () {
+        $(".mycontainer-private").fadeOut('fast', function () {
+            $(".mycontainer-public").fadeIn('fast');
+        });
+    });
+    
+    $('#myRouteBtn').click(function () {
+        $(".mycontainer-public").fadeOut('fast', function () {
+            $(".mycontainer-private").fadeIn('fast');    
+        });
+        mainpageController.getAllInfoFromSensor($('#sensorNameLbl').text()); //chiama ajax per scaricare i dati relativi al sensore
+            
+    });
+
+
     $("#search-routes").on("keyup", function() {
         let search = $(this).val().toLowerCase();
         $("#routes-table tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1)
         });
     });
+
+    $(".tablerow").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        e.preventDefault();
+        this.mainpageController.clickOnTableRow();
+     });
+
+
+
+
+
+
+
+
 
 
 

@@ -69,5 +69,20 @@ export class MainPageController extends Controller {
     this.model.verifyPointInsidePolygon();
   }
 
+
+  /*AREA RISERVATA*/
+
+  getAllInfoFromSensor(sensor) {
+    this.model.getAllInfoFromSensor(sensor);
+  }
+
+
+  clickOnTableRow(){
+    this.model.clickOnTableRow();
+  }
+
+
+
+
 }
 

@@ -7,7 +7,7 @@
         <div class="col-md-11 text-left">
             <h4>Ciao, <?php echo $_SESSION["Nome"].' '.$_SESSION["Cognome"]?></h4>
             <a class="text-dark" href='index.php?action=logout'>Logout</a>
-            <p><strong>Sensore equipaggiato: </strong><strong><?php echo $dbh->getSensorAssociatedWithUser($_SESSION['Nome'].".".$_SESSION["Cognome"])[0]['deviceName'] ?></strong>
+            <p><strong>Sensore equipaggiato: </strong><strong id="sensorNameLbl"><?php echo $dbh->getSensorAssociatedWithUser($_SESSION['Nome'].".".$_SESSION["Cognome"])[0]['deviceName'] ?></strong>
         </div>
     </div>
 </div>

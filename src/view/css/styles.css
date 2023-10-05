@@ -116,6 +116,16 @@ a.sidebar-link {
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 }
 
+.tablerow{
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.tablerow:hover {
+  background: #a60a04;
+  color: white;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+
+}
 
 
 

@@ -592,6 +592,102 @@ export class MainpageModel {
     }
 
 
+
+
+
+    /*AREA PERSONALE*/
+
+    getAllInfoFromSensor(sensor)  { //faccio chiamata ajax per prendere tutti i valori del sensore
+      let self = this;
+      $.ajax({
+        url: "./src/controller/php/getAllInfoFromSensor.php",
+        type: "POST",
+        data: {"sensorName":sensor},
+        cache: false,
+  
+        success: success,
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.log(textStatus, errorThrown);
+        },
+      });
+      function success(response)  {
+
+
+        
+
+    let data = JSON.parse(response);
+        //console.log(data);
+
+        let currentPath = [];
+let paths = [];
+let lastTimestamp = null;
+
+
+
+for (var key in data) {
+  for (var key1 in data[key]) {
+    if (lastTimestamp !== null) {
+      const timeDifference = (new Date(data[key][key1]['Time']) - new Date(lastTimestamp)) / 1000; // Differenza di tempo in secondi
+      //console.log(timeDifference);
+
+      // Se il tempo trascorso tra le misurazioni è superiore a 5 secondi, considera un nuovo percorso
+      if (timeDifference >= 60) {
+        paths.push([...currentPath]); // Copia il percorso corrente in 'paths'
+        currentPath = [];
+      }
+      currentPath.push({
+        latitude: data[key][key1]['GPS_Latitude'], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
+        longitude: data[key][key1]['GPS_Longitude'], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
+        time: data[key][key1]['Time'],
+        diff: timeDifference,
+        
+      });
+    }
+
+    
+
+    lastTimestamp = data[key][key1]['Time'];
+  }
+}
+
+// Aggiungi l'ultimo percorso
+if (currentPath.length > 0) {
+  paths.push([...currentPath]); // Copia l'ultimo percorso in 'paths'
+}
+paths = paths.filter(function (path) {
+  return path.length > 1;
+});
+        console.log(paths);
+
+
+
+        // Estrai il primo percorso dall'array 'paths'
+        var firstPath = paths[16]; // Assumi che 'paths' sia definito altrove nel tuo codice
+
+        // Crea un array di coordinate per il percorso
+        var coordinates = firstPath.map(function (point) {
+            return [point.latitude, point.longitude];
+        });
+
+        // Crea un percorso sulla mappa
+        var path = L.polyline(coordinates, { color: 'blue' }).addTo(self.map);
+
+        // Centra la mappa sul percorso*/
+      
+
+      }
+    }
+
+
+
+    
+    clickOnTableRow() {
+     
+    }
+
+
+
+
    
   }
 
