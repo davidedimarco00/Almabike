@@ -41,6 +41,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://pagination.js.org/dist/2.6.0/pagination.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+  
+    
+
+    
 
    
       
@@ -52,15 +59,18 @@
 
   </head>
   <body>
-
+ 
 		
   <div class="wrapper d-flex align-items-stretch">
+
+  
       <nav id="sidebar" class="active">
       <div class="custom-menu">
           <button type="button " id="sidebarCollapse" class="btn btnMenuToggle custom-tooltip" title="Apri/Chiudi il menu" >
-            <i class="fa fa-bars"  aria-hidden="true"></i>
+            <i class="fa fa-bars" id="breadButton"  aria-hidden="true"></i>
           </button>
       </div>
+
       <div class="img bg-wrap text-center py-4">
           <div class="user-logo">
             <div class="img logo"></div>
@@ -83,9 +93,7 @@
           <li>
             <a class="sidebar-link"  href="https://site.unibo.it/multicampus-sostenibile/it/mobilita/almabike"><span class="fa fa-bicycle mr-3"></span>Vai al sito Almabike</a>
           </li>
-          <li>
-            <a class="sidebar-link"  href="#"><span class="fa fa-envelope mr-3 notif"></span>Contatti</a>
-          </li>
+
           <li>
 
           <?php if(isset($_SESSION["Nome"]) && isset($_SESSION["Cognome"])): ?>
@@ -98,9 +106,6 @@
            
 
             
-          </li>
-          <li>
-            <a class="sidebar-link"  href="#"><span class="fa fa-cog mr-3"></span>Impostazioni</a>
           </li>
           <?php if(isset($_SESSION["Nome"]) && $_SESSION["Cognome"]): ?>
               <?php echo "<li><a class='sidebar-link' href='index.php?action=logout'><span class='fa fa-sign-out mr-3'></span>Log out</a></li>"?>
@@ -115,6 +120,19 @@
 
 
     <div id="content">
+    <div class="container fluid-container mt-3 align-items-start ">
+    <div class="row">
+        <div class="col-md-6 align-items-start justify-content-start"> <!-- Colonna sinistra per il titolo della dashboard -->
+            <h1 class="title">Dashboard di Almabike</h1>
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-end"> <!-- Colonna destra per il div della login -->
+            <i class="fa-solid fa-user mr-2"></i> <!-- Icona utente con margine a destra -->
+            <button class="btn btn-primary">
+                <a id="loginLogout" href='loginpage.php' class="text-white"><span id="loginName">Area riservata</span></a>
+            </button>
+        </div>
+    </div>
+</div>
         <?php
               if(isset($templateParams["pagereq"])){
                 require($templateParams["pagereq"]);
@@ -228,17 +246,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
 </script>
+
+
  
 
 <script type="module" src="src/model/javascript/main.js"></script>
 
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-  
-
-
-
+<!---jquery --->
 
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -246,34 +260,7 @@
     <script src="plugin/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script  type="text/javascript" src="src/model/javascript/sidebar.js"></script>
     <script src="plugin/leaflet/leaflet-heat.js" type="text/javascript"></script>
-
-
-
-    
-
-<!--- <script>
-let ctx = document.getElementById('myChart');
-
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['09:00', '12:00', '15:00', '18:00', '21:00', '00:00'],
-        datasets: [{
-            label: 'Livelli del suono in dB',
-            data: [60, 90, 85, 80, 55, 55],
-            borderWidth: 1,
-            tension: 0.2,
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-
-            }
-        }
-    }
-});
-</script> ---->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+              
     
 </html>

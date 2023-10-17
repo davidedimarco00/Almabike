@@ -6,13 +6,21 @@
 
   
 <?php
-include 'mapContext.php'; // Include il file HTML private
+
 if(isset($_SESSION["Nome"]) && isset($_SESSION["Cognome"])) { //se ho fatto l'accesso
     include 'privateContext.php'; 
     include 'publicContext.php';
     include 'myRoutes.php'; 
+    include 'mapContext.php';
+   
+    
+    include 'graphContext.php';
+    
 }
 else {
    include 'publicContext.php';
+   include 'mapContext.php';
+   include 'graphContext.php';
 }
+
 ?>

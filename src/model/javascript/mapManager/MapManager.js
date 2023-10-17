@@ -90,33 +90,6 @@ export class MapManager {
       return div;
     };
 
-    loginCard.update = function (div) {
-      div.innerHTML = `
-      <div class="container login">
-        <div class="row">
-            <div class="col-md-2 center-vertically center-horizontally">
-                <div class="icon-container">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-            </div>
-            <div class="col-md-10 center-vertically center-horizontally">
-            <button class="btn center-vertically">
-
-                <a id="loginLogout" href='loginpage.php'><span id="loginName" >Area riservata</span></a>
-
-            </button>
-            </div>
-
-
-            
-        </div>
-    </div>
-
-      `
- 
-    };
-    loginCard.addTo(this.map);
-
 
   }
 

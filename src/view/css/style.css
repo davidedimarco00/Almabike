@@ -8201,11 +8201,19 @@ h1, h2, h3, h4, h5,
   #sidebar.active {
     margin-left: -300px; }
     #sidebar.active .custom-menu {
-      margin-left: 0px; }
+      left: -200px;
+       }
+       
+
+       #sidebar .custom-menu {
+        margin-left: 220px;
+       }
+
     #sidebar.active .btn.btn-primary:before {
       content: "\f053";
       font-family: "FontAwesome";
-      right: 2px !important; }
+      margin-left: 20px ;
+     }
     #sidebar.active .btn.btn-primary:after {
       display: none; }
   #sidebar h1 {
@@ -8297,7 +8305,6 @@ h1, h2, h3, h4, h5,
       #sidebar .custom-menu .btn.btn-primary:after, #sidebar .custom-menu .btn.btn-primary:before {
         position: absolute;
         top: 2px;
-        left: 0;
         right: 0;
         bottom: 0;
         font-family: "FontAwesome";

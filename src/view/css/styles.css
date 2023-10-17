@@ -52,8 +52,12 @@ a.sidebar-link {
 
 /*MAP CONTEXT*/
 #map {
-  height: 600px;
+  
+  height: 800px;
   width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+
 }
 
 .levelsCard {
@@ -78,6 +82,7 @@ a.sidebar-link {
   padding: 5px;
   background: rgba(255,255,255,0.8);
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  
 }
 
 .loginCard {
@@ -116,16 +121,6 @@ a.sidebar-link {
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 }
 
-.tablerow{
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-.tablerow:hover {
-  background: #a60a04;
-  color: white;
-  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-
-}
 
 
 
@@ -171,9 +166,10 @@ a.sidebar-link {
 
 
 
+
 /*CONTAINER/DASHBOARD CONTEXT*/
 .title {
-  color: #a60a04;
+  color: #a60a04 ;
   margin-right: 1%;
 }
 
@@ -228,14 +224,13 @@ a.sidebar-link {
 .mycontainer-public {
   width: 100%;
   padding: 30px;
-  border-radius: 20px ;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);;
   background-color: #f8f9fa;
 }
 
 .mycontainer-private{
   width: 100%;
   padding: 30px;
-  border-radius: 20px ;
   background-color: #f8f9fa;
   display: none;
 }

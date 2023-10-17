@@ -1,12 +1,8 @@
-<div id="map">
-
-</div>
-  <div class="legend-container">
+<div class="legend-container mt-2 mb-1">
   <div class="row">
     <div class="col-12">
       <div class="legendCard d-flex justify-content-center">
         <div class="d-flex">
-          <span>Legenda:&nbsp&nbsp</span>
           <div class="legend-item">
             <i class="fas fa-circle" style="color:red;"></i> > 95 dB, rischio elevato&nbsp&nbsp&nbsp
           </div>
@@ -24,3 +20,13 @@
     </div>
   </div>
 </div>
+
+
+
+  <div id="map">
+
+  </div>
+
+
+
+  

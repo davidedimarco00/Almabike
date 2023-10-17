@@ -598,6 +598,7 @@ export class MainpageModel {
     /*AREA PERSONALE*/
 
     getAllInfoFromSensor(sensor)  { //faccio chiamata ajax per prendere tutti i valori del sensore
+
       let self = this;
       $.ajax({
         url: "./src/controller/php/getAllInfoFromSensor.php",
@@ -631,7 +632,7 @@ for (var key in data) {
       //console.log(timeDifference);
 
       // Se il tempo trascorso tra le misurazioni è superiore a 5 secondi, considera un nuovo percorso
-      if (timeDifference >= 60) {
+      if (timeDifference > 20) {
         paths.push([...currentPath]); // Copia il percorso corrente in 'paths'
         currentPath = [];
       }
@@ -639,6 +640,7 @@ for (var key in data) {
         latitude: data[key][key1]['GPS_Latitude'], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
         longitude: data[key][key1]['GPS_Longitude'], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
         time: data[key][key1]['Time'],
+        noise: data[key][key1]['Noise_dBA'],
         diff: timeDifference,
         
       });
@@ -651,7 +653,8 @@ for (var key in data) {
 }
 
 // Aggiungi l'ultimo percorso
-if (currentPath.length > 0) {
+if (currentPath.length > 0) { //qui bisogna visualizzare solo quelli effettuati in un determinato giorno
+                              //oppure quello selezionato
   paths.push([...currentPath]); // Copia l'ultimo percorso in 'paths'
 }
 paths = paths.filter(function (path) {
@@ -662,17 +665,42 @@ paths = paths.filter(function (path) {
 
 
         // Estrai il primo percorso dall'array 'paths'
-        var firstPath = paths[16]; // Assumi che 'paths' sia definito altrove nel tuo codice
+        //let firstPath = paths[0]; // Assumi che 'paths' sia definito altrove nel tuo codice
 
-        // Crea un array di coordinate per il percorso
-        var coordinates = firstPath.map(function (point) {
+        //console.log(firstPath);
+        const table = new DataTable('#routes-table');
+
+        for (let i = 0;i < paths.length;i++) {
+          var coordinates = paths[i].map(function (point) {
             return [point.latitude, point.longitude];
-        });
+          });
+
+          table.row.add([ /*Qui devo riempire la tabella*/ 
+            '.1',
+          '.3',
+          'a',
+          "a",
+          "<a href='http://www.google.it/'>ciao</a>"
+        ])
+        .draw(false);
+
+          
+          /*var newRow = table.insertRow(-1); // Inserisci una nuova riga alla fine della tabella
+          var cellDate = newRow.insertCell(0); // Inserisci una cella nella nuova riga
+          var cellStartHour = newRow.insertCell(1);
+          var cellEndHour = newRow.insertCell(2);
+          let avgSound = newRow.insertCell(3);
+          let routeStatus = newRow.insertCell(3);
+
+          // Popola le celle con dati relativi al percorso
+          cellDate.innerHTML = paths[i][0].time; // Sostituisci con il nome del percorso desiderato
+          //cell2.innerHTML = 'Distanza del percorso'; // Sostituisci con la distanza del percorso desiderata*/
 
         // Crea un percorso sulla mappa
-        var path = L.polyline(coordinates, { color: 'blue' }).addTo(self.map);
+        var path = L.polyline(coordinates, { color: 'red' }).addTo(self.map);
+        }
 
-        // Centra la mappa sul percorso*/
+       
       
 
       }

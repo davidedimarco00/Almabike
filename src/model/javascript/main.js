@@ -156,7 +156,20 @@ $(document).ready(function() {
     $(".tablerow").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         e.preventDefault();
         this.mainpageController.clickOnTableRow();
-     });
+    });
+
+    $('#routes-table').DataTable();
+
+
+
+
+
+
+
+
+
+
+
 
 
 
