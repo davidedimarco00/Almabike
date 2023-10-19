@@ -81,6 +81,10 @@ export class MainPageController extends Controller {
     this.model.clickOnTableRow();
   }
 
+  viewRouteOnMap() {
+    this.model.viewRouteOnMap();
+  }
+
 
 
 

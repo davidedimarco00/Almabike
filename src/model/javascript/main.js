@@ -161,6 +161,10 @@ $(document).ready(function() {
     $('#routes-table').DataTable();
 
 
+    $("[class^='viewOnMapLink']").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        e.preventDefault();
+        this.mainpageController.viewRouteOnMap();
+    });
 
 
 

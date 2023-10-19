@@ -88,10 +88,6 @@ export class MainpageModel {
 
 
 
-
-
-
-
     /*MAP FUNCTIONS calling MapManager*/
   
     applyMapLayer(mapLayer) {
@@ -669,18 +665,21 @@ paths = paths.filter(function (path) {
 
         //console.log(firstPath);
         const table = new DataTable('#routes-table');
+       
 
         for (let i = 0;i < paths.length;i++) {
           var coordinates = paths[i].map(function (point) {
             return [point.latitude, point.longitude];
           });
 
+          
+
           table.row.add([ /*Qui devo riempire la tabella*/ 
             '.1',
           '.3',
           'a',
           "a",
-          "<a href='http://www.google.it/'>ciao</a>"
+          "<i class='fas fa-circle text-danger'></i><a href='#' class='viewOnMapLink"+i+"'> Vedi sulla mappa</a>"
         ])
         .draw(false);
 
@@ -711,6 +710,10 @@ paths = paths.filter(function (path) {
     
     clickOnTableRow() {
      
+    }
+
+    viewRouteOnMap() {
+      alert("CIAO");
     }
 
 
