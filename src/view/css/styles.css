@@ -1,0 +1,336 @@
+
+/*BASE CONTEXT*/
+html, body {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  flex-direction: column;
+  
+  
+}
+
+
+
+
+.img.bg-wrap {
+  background-color: white;
+  opacity: 1;
+}
+
+
+.img.logo {
+  background-image: url('../../../resources/images/LOGO/AlmaBike.png');
+}
+
+
+.btn.btnMenuToggle {
+  background-color: #a60a04;
+}
+
+
+
+
+
+#sidebar {
+  z-index: 1000;
+}
+
+i.fa-bars {
+  color: white;
+}
+
+a.sidebar-link {
+  text-decoration: none;
+}
+
+
+#content{
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/*MAP CONTEXT*/
+#map {
+  
+  height: 800px;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+
+}
+
+.levelsCard {
+  margin-left: 20% !important;
+  margin-top: 5px !important;
+  border-radius: 20px;
+  display: flex;
+  padding: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+.zonesCard {
+  margin-left: 20% !important;
+  border-radius: 20px;
+  padding: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+.legendCard {
+  padding: 5px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  
+}
+
+.loginCard {
+  padding: 5px;
+  background: #a60a04;
+  color: #f8f9fa;
+  border-radius: 20px;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+#loginName{
+  color: white;
+}
+
+#loginName:hover {
+  cursor: pointer;
+}
+
+
+.center-vertically {
+  display: flex;
+  align-items: center;
+}
+
+.center-horizontally {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.infoCard {
+  margin-left: 20% !important;
+  border-radius: 20px;
+  
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+
+
+
+
+
+
+.form-check-label {
+  color: #000 !important;
+}
+
+.form-check-label:focus{
+  outline: none !important;
+  box-shadow: none !important;
+
+}
+
+.btn-default:hover{
+  transform: scale(1.2);
+  transition: transform .2s;
+}
+
+.btn-default{
+  padding: 5px !important;
+  border-color: red;
+}
+
+.btn-default:focus{
+  outline: none !important;
+  box-shadow: none !important;
+
+}
+
+.layerImages {
+  border: 0px solid #000;
+  object-fit: cover;
+  transition: transform .2s;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+}
+
+.layerGroup{
+  display: flex;
+}
+
+
+
+
+/*CONTAINER/DASHBOARD CONTEXT*/
+.title {
+  color: #a60a04 ;
+  margin-right: 1%;
+}
+
+
+.hour-input {
+
+}
+
+#myChart{
+  height: 100%;
+  width: 100%;
+}
+
+.btn input[type="radio"] {
+  display: none; 
+}
+
+
+
+
+
+
+.card.dashboard-card:hover {
+  /*transform: scale(1.02);*/
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.35s;
+  
+}
+
+.nav-tabs {
+  border: none !important;
+}
+
+.recordLink {
+  color: #a60a04 !important;
+}
+
+
+.info-icon:hover {
+  cursor: pointer;
+}
+
+.dashboard-selector {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.selectorbtn:hover {
+  background-color: #a60a04 !important;
+  color: white !important;
+}
+
+.mycontainer-public {
+  width: 100%;
+  padding: 30px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);;
+  background-color: #f8f9fa;
+}
+
+.mycontainer-private{
+  width: 100%;
+  padding: 30px;
+  background-color: #f8f9fa;
+  display: none;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
+
+
+.recordLabel {
+  text-align: end;
+  font-size: large;
+  font-weight: bold;
+}
+
+.info-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.nav-link {
+  color: #000 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Modal Context*/
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+

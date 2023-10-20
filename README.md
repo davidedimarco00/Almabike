@@ -1,2 +1,13 @@
 # Almabike
-Progetto Almabike tesi
+Progetto Almabike per Tesi Davide Di marco
+
+
+
+## Folders TODO
+
+-
+-
+-
+-
+-
+-
