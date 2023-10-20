@@ -208,8 +208,8 @@ export class MapManager {
                 .then((data) => {
                   const polygons = L.geoJSON(data, {
                     style: {
-                      color: "white", // colore del bordo del poligono
-                      weight: 1,
+                      color: "black", // colore del bordo del poligono
+                      weight: 0.5,
                       fillColor: "black", // colore del riempimento del poligono
                       fillOpacity: 0.05, // opacità del riempimento del poligono
                     },
