@@ -2,19 +2,15 @@
 
 import  {MainpageModel} from "../../model/javascript/MainpageModel.js";
 
-import  {Controller} from "../../controller/javascript/controller.js";
-
-export class MainPageController extends Controller {
+export class MainPageController {
 
   constructor() {
-    super();
     this.model = new MainpageModel();
   }
 
   initializePage(){
     this.model.initpage();
   }
-
   
   showZones() {
     this.model.clearMapLayers();
@@ -70,7 +66,7 @@ export class MainPageController extends Controller {
   }
 
 
-  /*AREA RISERVATA*/
+  /*Reserved Area*/ 
 
   getAllInfoFromSensor(sensor) {
     this.model.getAllInfoFromSensor(sensor);
@@ -84,9 +80,6 @@ export class MainPageController extends Controller {
   viewRouteOnMap() {
     this.model.viewRouteOnMap();
   }
-
-
-
 
 }
 

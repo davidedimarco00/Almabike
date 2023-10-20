@@ -1,4 +1,4 @@
-import {MainPageController} from  "../../controller/javascript/MainpageController.js";
+import {MainPageController} from  "../controller/javascript/MainpageController.js";
 
 
 
@@ -14,15 +14,13 @@ $(document).ajaxComplete(function () {
 
 $(document).ready(function() {
 
+    console.log(mainpageController.toString());
+
 
 
     mainpageController.initializePage();
     //mainpageController.showZones();
 
-   
-
-
-    
     $('.custom-tooltip').tooltip({
         template: '<div class="tooltip custom" role="tooltip"><div class="tooltip-inner"></div></div>',
         trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
@@ -54,10 +52,6 @@ $(document).ready(function() {
 
         }
     });
-
-
-
-    
 
     /*CONTROLLO DELLA VISUALIZZAZIONE DEI LAYERS*/
 
@@ -165,21 +159,6 @@ $(document).ready(function() {
         e.preventDefault();
         this.mainpageController.viewRouteOnMap();
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

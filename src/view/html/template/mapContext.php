@@ -13,20 +13,16 @@
             <i class="fas fa-circle" style="color:yellow;"></i> tra 60 dB e 80dB, rischio lieve&nbsp&nbsp&nbsp
           </div>
           <div class="legend-item">
-            <i class="fas fa-circle" style="color:green;"></i> < 60 dB, nessun rischio&nbsp&nbsp&nbsp
+            <i class="fas fa-circle" style="color:green;"></i>
+            < 60 dB, nessun rischio&nbsp&nbsp&nbsp </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
 
   <div id="map">
 
   </div>
-
-
-
-  
