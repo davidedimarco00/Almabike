@@ -1,6 +1,5 @@
 import { ChartFactory } from "../javascript/chartFactory/chartFactory.js";
 import { HeatMapFactory } from "../javascript/heatMapFactory/HeatMapFactory.js";
-
 import { MapManager } from "../javascript/mapManager/MapManager.js";
 
 export class MainpageModel {

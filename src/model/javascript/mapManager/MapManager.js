@@ -1,15 +1,14 @@
-/*Questa classe è il maanger della mappa stessa*/ 
+/*Questa classe è il maanger della mappa stessa*/
 
 export class MapManager {
   constructor(map) {
     this.map = map;
     this.zonesAreVisible = false;
     this.allPointsOnMap = [];
-    this.allPointsOnMap2 = [];
   }
 
   addMapControls() {
-    
+
     const levelsCard = L.control({ position: 'bottomleft' });
     levelsCard.onAdd = function () {
       const div = L.DomUtil.create('div', 'levelsCard');
@@ -35,8 +34,8 @@ export class MapManager {
     };
     levelsCard.addTo(this.map);
 
-    
-    
+
+
     const zonesCard = L.control({ position: 'bottomleft' });
     zonesCard.onAdd = function () {
       const div = L.DomUtil.create('div', 'zonesCard');
@@ -54,9 +53,7 @@ export class MapManager {
           <input class="form-check-input" type="checkbox" id="nightToggle">
           <label class="form-check-label" for="nightToggle">Statistiche notturne</label>
         </div>
-        
-        
-        
+
         `;
     };
     zonesCard.addTo(this.map);
@@ -74,12 +71,12 @@ export class MapManager {
 
       <button type="button" class="btn btn-default custom-tooltip" data-toggle="tooltip"
        data-placement="top" title="La mappa visualizza i dati globali del sensore selezionato.
-                                    In assenza di filtri e sensori selezionati la visualizzazione si basa sul livello medio di rumore nelle varie zona della città di Bologna.">
+                                    In assenza di filtri e sensori selezionati la visualizzazione si basa sul livello medio di rumore nelle letie zona della città di Bologna.">
         <i class="fas fa-info-circle"></i>
       </button>
 
       `
- 
+
     };
     infoCard.addTo(this.map);
 
@@ -141,13 +138,13 @@ export class MapManager {
         ).addTo(this.map);
         break;
     }
-   
-    if (this.zonesAreVisible ) {
+
+    if (this.zonesAreVisible) {
       this.addZones();
     }
   }
 
-  addZones(type="all") { //da ragionare per il popup sulla zona
+  addZones(type = "all") { //da ragionare per il popup sulla zona
 
     let allPointsOnMap = [];
     let self = this;
@@ -172,300 +169,205 @@ export class MapManager {
       cache: false,
 
       success: function (response) {
-        // alert(response);
         let vertex = JSON.parse(response);
-
         if (vertex) {
-          for (var key in vertex) {
-            for (var key1 in vertex[key]) {
-              var lat = vertex[key][key1]["lati"] / 100000;
-              var lng = vertex[key][key1]["longi"] / 100000;
-              var noise = vertex[key][key1]["Noise_dBA"];
+          for (let key in vertex) {
+            for (let key1 in vertex[key]) {
+              let lat = vertex[key][key1]["lati"] / 100000;
+              let lng = vertex[key][key1]["longi"] / 100000;
+              let noise = vertex[key][key1]["Noise_dBA"];
 
-              var point = {
+              let point = {
                 lat: lat,
                 lng: lng,
                 noise: noise
               };
-
-
               allPointsOnMap.push(point);
-     
-          
             }
           }
           self.allPointsOnMap = allPointsOnMap;
- 
         }
 
-            let zones = fetch("./resources/json/bologna.geojson");
+        let zones = fetch("./resources/json/bologna.geojson");
+        zones
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            const polygons = L.geoJSON(data, {
+              style: {
+                color: "black", // colore del bordo del poligono
+                weight: 0.5,
+                fillColor: "black", // colore del riempimento del poligono
+                fillOpacity: 0.05, // opacità del riempimento del poligono
+              },
+              onEachFeature: function (feature, layer) { //per ogni poligono
+                layer.bindPopup("<h6>Nessuna info sulla zona</h6>");
 
-        
-              zones
-                .then((response) => {
-                  return response.json();
-                })
-                .then((data) => {
-                  const polygons = L.geoJSON(data, {
-                    style: {
-                      color: "black", // colore del bordo del poligono
-                      weight: 0.5,
-                      fillColor: "black", // colore del riempimento del poligono
-                      fillOpacity: 0.05, // opacità del riempimento del poligono
-                    },
-          
-                    onEachFeature: function (feature, layer) { //per ogni poligono
+              }
+            });
+            polygons.addTo(self.map);
 
-                                       let popupHTML =
-                                ` <table>
+
+
+
+
+
+            // Crea un oggetto per memorizzare l'associazione tra punti e zone
+            const pointsToZones = {};
+            // Itera su ogni poligono
+            polygons.eachLayer(function (zone) {
+              const zoneName = zone.feature.properties.name;
+              let vertices_x = zone.feature.geometry.coordinates[0].map(coord => coord[1]);
+              let vertices_y = zone.feature.geometry.coordinates[0].map(coord => coord[0]);
+              let points_polygon = vertices_x.length;
+
+              // Itera su ciascun punto
+              allPointsOnMap.forEach((point) => { //cicla su tutti i punti
+                const longitude = point.lat;
+                const latitude = point.lng;
+                let noise = point.noise;
+
+                // Verifica se il punto è all'interno del poligono
+                if (is_in_polygon(points_polygon, vertices_x, vertices_y, longitude, latitude)) {
+
+                  // Mappa il punto alla zona
+                  if (!pointsToZones[zoneName]) {
+                    pointsToZones[zoneName] = [];
+                  }
+                  pointsToZones[zoneName].push(point);
+                }
+
+                function is_in_polygon(points_polygon, vertices_x, vertices_y, longitude_x, latitude_y, c) {
+                  let i, j;
+                  for (i = 0, j = points_polygon - 1; i < points_polygon; j = i++) {
+                    if ((vertices_y[i] > latitude_y !== (vertices_y[j] > latitude_y)) &&
+                      (longitude_x < (vertices_x[j] - vertices_x[i]) * (latitude_y - vertices_y[i]) / (vertices_y[j] - vertices_y[i]) + vertices_x[i])) {
+                      c = !c;
+                    }
+                  }
+                  return c;
+                }
+              });
+
+              console.log(pointsToZones);
+
+              
+
+              // Verifica se c'è un array di punti associati alla zona
+              if (pointsToZones[zoneName]) {
+                // Calcola un valore medio o qualsiasi logica per determinare il colore
+                let averageValue = averageValueInZone(pointsToZones[zoneName]);
+                let numberOfMeasure = numberOfMeasureInZone(pointsToZones[zoneName]);
+                let maxNoise = getMaxNoise(pointsToZones[zoneName]);
+                let minNoise = getMinNoise(pointsToZones[zoneName]);
+
+                // Modifica lo stile del poligono in base al valore
+                zone.setStyle({
+                  fillColor: getColorValue(averageValue),
+                  color: getColorValue(averageValue),
+                  fillOpacity: 0.3,
+
+                });
+
+                //riempio il popup che referenzia la zona
+                let statusIcon ="";
+                if (averageValue < 60) {
+                  statusIcon = "resources/images/svg/checkFill.svg";
+                } else if (averageValue > 60 && averageValue < 95) {
+                  statusIcon ="resources/images/svg/mediumStatus.svg";
+                }
+                else {
+                  statusIcon ="resources/images/svg/exclamationcircle.svg";
+                }
+
+                let popupHTML =
+                  ` <table>
                                                           <thead>
                                                               <tr>
                                                                   <th colspan="2">` +
-                                feature.properties.name +
-                                `</th>
+                  zone.feature.properties.name +
+                  `</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td><small class="text-muted">Rumore medio:</small></td>
-                                                <td>80db</td>
+                                                <td id="zonePopupAverage">`+ averageValue + ` dB</td>
                                             </tr>
                                             <tr>
                                                 <td><small class="text-muted">Numero di rilevazioni:</small></td>
-                                                <td>88</td>
+                                                <td id="zonePopupMeasure">`+numberOfMeasure+`</td>
                                             </tr>
                                             <tr>
-                                                <td><small class="text-muted">Soglia massima registrata:</small></td>
-                                                <td>91db</td>
+                                                <td id="zonePopupMaxSound"><small class="text-muted">Soglia massima registrata:</small></td>
+                                                <td>`+maxNoise+` dB</td>
                                             </tr>
                                             <tr>
-                                                <td><small class="text-muted">Soglia minima registrata:</small></td>
-                                                <td>22db</td>
+                                                <td id="zonePopupMinSound"><small class="text-muted">Soglia minima registrata:</small></td>
+                                                <td>`+minNoise+` dB</td>
                                             </tr>
                                             <tr>
                                                 <td><small class="text-muted">Stato zona:</small></td>
                                                 <td>
-                                                    <img src="images/svg/exclamationcircle.svg"></img>
+                                                    <img src="`+statusIcon+`"></img>
                                                 </td>
                                             </tr>
                                         </tbody>
                                  </table>`;
 
-                                layer.bindPopup(popupHTML);
 
-                    }
+                //SPARO IL POPUP SULLA ZONA
+                zone.setPopupContent(popupHTML);
 
-                  });
-
-                  polygons.addTo(self.map);
-                  //console.log(allPointsOnMap2);
-
-                  // Crea un oggetto per memorizzare l'associazione tra punti e zone
-                  const pointsToZones = {};
-
-                  // Itera su ogni poligono
-                  polygons.eachLayer(function (zone) {
-                    const zoneName = zone.feature.properties.name;
-                    //console.log("itero su " + zoneName );
-                    let vertices_x = zone.feature.geometry.coordinates[0].map(coord => coord[1]);
-                    let vertices_y = zone.feature.geometry.coordinates[0].map(coord => coord[0]);
-                    let points_polygon = vertices_x.length;
-
-                    // Itera su ciascun punto
-                    allPointsOnMap.forEach((point) => {
-                      const longitude = point.lat;
-                      const latitude = point.lng;
-                      let noise = point.noise;
-
-                   
-
-                      // Verifica se il punto è all'interno del poligono
-                      if (is_in_polygon(points_polygon, vertices_x, vertices_y, longitude, latitude)) {
-                      
-                        // Mappa il punto alla zona
-                        if (!pointsToZones[zoneName]) {
-                          pointsToZones[zoneName] = [];
-                        }
-                        pointsToZones[zoneName].push(point);
-                      }
-
-
-                      function is_in_polygon(points_polygon, vertices_x, vertices_y, longitude_x, latitude_y, c) {
-                        let i, j;
-                        for (i = 0, j = points_polygon - 1; i < points_polygon; j = i++) {
-                     
-                            if ((vertices_y[i] > latitude_y !== (vertices_y[j] > latitude_y)) && (longitude_x < (vertices_x[j] - vertices_x[i]) * (latitude_y - vertices_y[i]) / (vertices_y[j] - vertices_y[i]) + vertices_x[i])) {
-                            
-                              c = !c;
-                            }
-                        }
-                        return c;
-                      }
-
-                       //COLORO LA ZONA
-
-                    });
-
-                    //console.log(pointsToZones);
-
-                    // Verifica se c'è un array di punti associati alla zona
-                    if (pointsToZones[zoneName]) {
-                      // Calcola un valore medio o qualsiasi logica per determinare il colore
-                      let averageValue = averageValueInZone(pointsToZones[zoneName]);
-                      
-                      // Modifica lo stile del poligono in base al valore
-                      zone.setStyle({
-                        fillColor: getColorValue(averageValue),
-                        color: getColorValue(averageValue),
-                        fillOpacity: 0.3,
-                        
-                      });
-                    }
-       
-                  
-                  function averageValueInZone(points) {
-
-                    if (points.length === 0) {
-                      return 0; // Restituisci 0 se l'array è vuoto
-                    }
-                  
-                    let sum = 0;
-                    for (let i = 0; i < points.length; i++) {
-                      sum += points[i].noise; // Supponendo che il valore "noise" sia nella terza posizione di ciascun elemento dell'array
-                    }
-
-                    //console.log(sum);
-
-                    let average = sum / points.length;
-          
-                    return average;
-                  }
-                  
-                  function getColorValue(value) {
-                    
-                    if (value < 60) {
-                      return "green";
-                    } else if (value >= 60 && value <=80 ){
-                      return "yellow";
-                    } else if (value > 80 && value <=95 ){
-                      return "orange";
-                    } else if (value > 95 ){
-                      return "red";
-                    }
-                  }
+              }
 
 
 
-                  });
+              function numberOfMeasureInZone(points) { 
+                return points.length;
+              }
 
-                  // Ora pointsToZones contiene l'associazione tra zone e punti
-                  
+              function getMaxNoise(points) { 
+                return Math.max(...points.map(point => point.noise));
+              }
+
+              function getMinNoise(points) { 
+                return Math.min(...points.map(point => point.noise));
+              }
 
 
-                 
+              function averageValueInZone(points) {
+                if (points.length === 0) {
+                  return 0; // Restituisci 0 se l'array è vuoto
+                }
 
+                let sum = 0;
+                for (const element of points) {
+                  sum += element.noise; // Supponendo che il valore "noise" sia nella terza posizione di ciascun elemento dell'array
+                }
 
-
-
-                  
-
-
-               /** 
-                  let zonesToPointInside = {};
-                  
-                  polygons.eachLayer(function (zone) {
-                    var zoneBounds = zone.getBounds(); // Ottieni i limiti della zona
-
-                   // Itera attraverso gli oggetti dei punti nell'array
-                   self.allPointsOnMap2.forEach(function (point) {
-                    var pointCoords = [point.lat, point.lng]; // Coordinate del punto
-            
-                    // Verifica se il punto è all'interno dei limiti della zona
-                    if (zoneBounds.contains(L.latLng(pointCoords[0], pointCoords[1]))) {
-                        // Crea un marker per il punto e aggiungilo al gruppo dei marker dei punti
-                       /* var marker = L.marker(pointCoords);
-                        pointMarkers.addLayer(marker);*/
-
-                      /*  if (!zonesToPointInside.hasOwnProperty(zone.feature.properties.name) ){
-                          zonesToPointInside[zone.feature.properties.name] = [pointCoords]
-                        }else {
-                          zonesToPointInside[zone.feature.properties.name].push(pointCoords);
-                        }*/
-
-                        
-                        //console.log("Il punto (" + point.lat + " " + point.lng + ") si trova dentro la zona: " + zone.feature.properties.name );
-                    //}
-          //});
-                    
-                  });
+                let average = sum / points.length;
+                return parseFloat(average.toFixed(2)); //approssimo a due cifre decimali
+              }
 
 
 
+              function getColorValue(value) {
 
-                  //console.log(zonesToPointInside);
-                    //questo va ma è impreciso
+                if (value < 60) {
+                  return "green";
+                } else if (value >= 60 && value <= 80) {
+                  return "yellow";
+                } else if (value > 80 && value <= 95) {
+                  return "orange";
+                } else if (value > 95) {
+                  return "red";
+                }
+              }
 
-                 /* for (const zona in zonesToPointInside) {
-                    if (zona === "AEROPORTO") {
-                        const punti = zonesToPointInside[zona];
-                        for (const punto of punti) {
-                            const lat = punto[0]; // Latitudine
-                            const lng = punto[1]; // Longitudine
-                            
-                            // Crea un marker Leaflet e aggiungilo alla mappa
-                            L.marker([lat, lng]).addTo(map)
-                                .bindPopup(`Zona: ${zona}<br>Lat: ${lat}<br>Lng: ${lng}`);
-                        }
-                    }
-                }*/
-                
-
-          
-                 /*   let mappa = {};
-                  
-                    for (let feature of data.features) {
-
-                        mappa[feature.properties.name] = feature.geometry.coordinates;
-                        
-                         //console.log("Per " + feature.properties.name + " abbiamo l'array di coordinate\n " + feature.geometry);
-                    }
-
-                    
-                    
-
-                    for (let nome in mappa) {
-                      
-                      let array_poligono = mappa[nome];
-
-                      
-
-                      for (let point of self.allPointsOnMap2) {
-                       
-
-                       // console.log("Considero " + nome + " Col punto: " + point.lat + " "+point.lng);
-
-
-                        let leafletPolygon = L.polygon(array_poligono);
-                        console.log(array_poligono);
-
-                        if(point.lat !=0) {
-
-                          if (leafletPolygon.contains(new L.LatLng(point.lat, point.lng))){
-                            console.log("Il punto " + point.lat + " " + point.lng + "è contenuto dentro " + nome );
-                          }else{
-
-                          }
-
-                        }
-
-                       
-                        
-                      }*/
-
-
-                  
-                  //alert(polygonsVertex.toString());
-
+            });
+          });
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log(textStatus, errorThrown);
@@ -473,7 +375,6 @@ export class MapManager {
     });
 
   }
-
 
   showColoredNightZone() {
     this.addZones("night");

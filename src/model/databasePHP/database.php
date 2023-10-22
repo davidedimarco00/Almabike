@@ -157,8 +157,11 @@ class DatabaseHelper
     public function getPositions()
     {
         $query = "SELECT DISTINCT ID_Device, CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi, `Noise_dBA` 
-        FROM `readings` 
-        GROUP BY lati, longi";
+        FROM `readings`
+        WHERE `Noise_dBA` <> 0
+        AND `GPS_Latitude` <> 0
+        AND `GPS_Longitude` <> 0
+        GROUP BY lati, longi, `Noise_dBA`;";
 
         $stmt = $this->db->prepare($query);
         $stmt->execute();

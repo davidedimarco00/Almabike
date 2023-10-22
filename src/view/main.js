@@ -16,8 +16,6 @@ $(document).ready(function() {
 
     console.log(mainpageController.toString());
 
-
-
     mainpageController.initializePage();
     //mainpageController.showZones();
 
