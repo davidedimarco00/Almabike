@@ -33,7 +33,7 @@
               </select>
             </form>
 
-            <p> Stai scegliendo i filtri per il sensore: </p>
+            <p> Disponibilità dati:<span id ="status-message"></span></p>
 
             <h6>Tipo:</h6>
 
@@ -92,18 +92,18 @@
           <div class="row">
             <?php
             $ids = array('sensor', 'measurements', 'lastMeasurement', 'firstMeasurements', 'averageMeasurement', 'prova', 'maxSoundLevel', 'averageSoundLevel', 'minSoundLevel');
-            $labels = array('Sensore', 'Numero di rilevazioni', 'Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova', 'aaa', 'aaaa', 'aaaaa');
+            $labels = array('Sensore', 'Numero di rilevazioni', 'Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova', 'Misurazione massima', 'Misurazione media', 'Misurazione minima');
 
             for ($i = 0; $i < 9; $i++): ?>
               <div class="col-md-4 <?php if ($i > 2) {
                 echo 'mt-2';
               } ?>">
-                <div class="card dashboard-card w-100 h-100 p-2 ">
+                <div class="card dashboard-card w-100 h-100 p-2">
                   <div class="card-body w-100 d-flex flex-column align-items-center justify-content-center text-center">
                     <h6 class="card-title">
                       <?php echo $labels[$i] ?>
                     </h6>
-                    <h4 class="label label-default my-auto" id="<?php echo $ids[$i] ?>">12dB</h4>
+                    <h4 class="label label-default my-auto" id="<?php echo $ids[$i] ?>">Scegli un sensore</h4>
                   </div>
                 </div>
               </div>

@@ -33,7 +33,7 @@
           <th>Ora di Partenza</th>
           <th>Ora di Arrivo</th>
           <th>Rumore Medio</th>
-          <th>Stato del Viaggio</th>
+          <th>Stato viaggio</th>
         </tr>
       </thead>
       <!-- da qui in giu ci deve essere del codice PHP che mi riempie le righe della tabella affinche questa  si riempia in base alla situazione dei dati raccolti dal sensore e dai relativi percorsi raccolti--->

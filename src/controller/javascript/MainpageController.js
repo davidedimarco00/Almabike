@@ -37,7 +37,6 @@ export class MainPageController {
     console.log("selected Sensor: " + selectedSensor);
     this.model.getBaseInfoFromSelectedSensor(selectedSensor);
     this.model.getAllStatsFromSensor(selectedSensor);
-    //this.model.createHeatMap();
   }
 
 
@@ -69,6 +68,7 @@ export class MainPageController {
   /*Reserved Area*/ 
 
   getAllInfoFromSensor(sensor) {
+
     this.model.getAllInfoFromSensor(sensor);
   }
 
@@ -78,6 +78,7 @@ export class MainPageController {
   }
 
   viewRouteOnMap() {
+    alert("ciao");
     this.model.viewRouteOnMap();
   }
 

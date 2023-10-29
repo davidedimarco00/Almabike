@@ -46,9 +46,9 @@ export class HeatMapFactory {
 
       
       this.updateHeatmaps();
-  
-      
     }
+
+    
   
     updateHeatmaps(map) {
 

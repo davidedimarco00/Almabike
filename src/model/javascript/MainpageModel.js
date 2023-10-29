@@ -72,12 +72,6 @@ export class MainpageModel {
 
     $('#loadingSpinner').hide();
 
-    //SOLO PER FARE TESTING
-    this.map.on('click', function (e) {
-      console.log(e.latlng.lat, e.latlng.lng);
-
-    });
-
     this.mapManager.applyMapLayer("streetMapLayer");
     this.mapManager.addMapControls();
     this.mapManager.showZones();
@@ -128,15 +122,14 @@ export class MainpageModel {
 
   //DASHBOARD FUNCTIONS
   searchButtonClick() {
+    
     var $form = $("#chartForm");
     //alert("#datepicker, #input"+ selTab);
     // Let's select and cache all the fields
     var $inputs = $form.find("#datepicker, #" + self.selCheckbox + ", .hour-input");
     // Serialize the data in the form
     var serializedData = $inputs.serialize();
-
-
-    //alert(serializedData);
+  
 
     alert("A post passo i valori\n" + serializedData);
 
@@ -160,15 +153,11 @@ export class MainpageModel {
 
         console.log("Sensore attualmente selezionato=", $('#selectSensor').val());
         this.getValuesForDailyChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
-        //console.log(this.ajaxResponse);
-
-
-        //ed anche il grafico con la media
 
       } else {
         starthour = starthour + ":00"; //preparo la formattazione dei due parametri
         endhour = endhour + ":00";
-        alert(starthour + " " + endhour);
+        //alert(starthour + " " + endhour);
         this.getValuesForDailyChartBetweenHours($('#selectSensor').val(), datePickerValue, starthour, endhour, typeofdateValue);
 
       }
@@ -177,23 +166,15 @@ export class MainpageModel {
     } else if (typeofdateValue == "annual") {
       this.getValuesForAnnualChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
     }
-
-
-    //OTTENGO I VALORI CHE MI SERVONO
-    /*values = this.getValuesForChart(serializedData);
-    this.createChart(values);*/
-
-    //COLORO LA MAPPA?
-
-    //this.applyHeatMapLayerForSensor(serializedData, this.map);
   }
 
 
   getAllStatsFromSensor(selectedSensor) {
+    $("#status-message").text("carico i dati");
 
     let self = this;
 
-    console.log("I'm here ", selectedSensor);
+    //console.log("I'm here ", selectedSensor);
     $.ajax({
       url: "./src/controller/php/getAllStatsFromSensor.php",
       type: "POST",
@@ -209,6 +190,7 @@ export class MainpageModel {
       console.log("Risultato query: " + response);
 
       let responseParsed = JSON.parse(response);
+    
       self.buildCardLabelsForSensor(responseParsed);
     }
   }
@@ -216,35 +198,27 @@ export class MainpageModel {
 
 
   getBaseInfoFromSelectedSensor(selectedSensor) {
-    let flag = true;
+    $("#status-message").text("carico i dati");
     let markers;
-    let sensorInfo;
     let self = this;
+    if (!this.zonesAreVisible) {
+      this.hideZones();
+      this.mapManager.clearClusterGroup();
+    }
 
     $.ajax({
       url: "./src/controller/php/getDynamicSensorCoord.php",
       type: "post",
       data: selectedSensor,
       cache: false,
-
       success: function (response) {
-        //alert(response);
-
+        
         let positions = JSON.parse(response);
-
-
-        sensorInfo = positions;
-
-        if (markers != undefined) {
-          markers.clearLayers();
-        }
-
+        console.log(positions);
         if (positions) {
           markers = L.markerClusterGroup();
           let soundLevels = [];
           let data = [];
-
-
           for (var key in positions) {
             for (var key1 in positions[key]) {
               var title =
@@ -258,33 +232,15 @@ export class MainpageModel {
                   title: title,
                 },
               );
-
               soundLevels.push(positions[key][key1]["Noise_dBA"]);
               data.push([positions[key][key1]["lati"] / 100000, positions[key][key1]["longi"] / 100000, positions[key][key1]["Noise_dBA"]]);
-
               marker.bindPopup(title);
               markers.addLayer(marker);
-              //L.marker([ positions[key][key1]["lati"]/100000, positions[key][key1]["longi"]/100000 ]).addTo(map);
-              //console.log(positions[key][key1]["lati"]/1000)
             }
-
             self.map.addLayer(markers);
-            flag = true;
-            // $("#maxSoundLevelLabel").text(Math.max.apply(Math, soundLevels));
-            //qui bisogna aggiungere la media
-            // $("#minSoundLevelLabel").text(Math.min.apply(Math, soundLevels));
           }
-          //console.log(soundLevels);
-          //console.log(data);
           soundLevels = [];
-
           self.heatMapFactory.addData(data);
-
-
-          /*TODO: QUI POTREI FARE VOLENDO IL GRAFICO CON LA MEDIA GLOBALE*/
-
-
-
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -292,9 +248,6 @@ export class MainpageModel {
       },
     });
   }
-
-
-
   getSensorAssociatedWithUser(username) {
 
     $.ajax({
@@ -319,17 +272,10 @@ export class MainpageModel {
       data: data,
       cache: false,
       success: function (response) {
-
-
-
         if (self.flagHeatMap) {
           map.removeLayer(self.heat);
         }
-
         let data = JSON.parse(response);
-
-
-        console.log(data);
         let heatPoints = [];
 
         for (var key in data) {
@@ -349,25 +295,6 @@ export class MainpageModel {
 
 
         self.flagHeatMap = true;
-
-
-
-
-        /*for(var key in data) {
-            for (var key1 in data[key]) {
-
-            var marker = L.circleMarker([data[key][key1]["lati"]/100000, data[key][key1]["longi"]/100000], {
-                color: getColor(data[key][key1]["Noise_dBA"]/100),
-                fillOpacity: 0.5,
-                radius: 15,
-            }).addTo(map);
-
-
-            
-            
-            marker.bindPopup("Livello di inquinamento: " + data[key][key1]["Noise_dBA"]);
-        }
-    }*/
 
       },
 
@@ -432,7 +359,7 @@ export class MainpageModel {
       }
     }
 
-    console.log("Valori in ordinate: " + yaxis + "\n Valori in ascissa: " + xaxis);
+    //console.log("Valori in ordinate: " + yaxis + "\n Valori in ascissa: " + xaxis);
 
     const chartData = {
       labels: xaxis,
@@ -440,7 +367,7 @@ export class MainpageModel {
     };
 
     if (data == null) {
-      alert("IL DESIGN è: " + design);
+      //alert("IL DESIGN è: " + design);
       this.chartFactory.createChart(null, design);
     } else {
       this.chartFactory.createChart(chartData, design);
@@ -455,10 +382,7 @@ export class MainpageModel {
   }
 
   buildCardLabelsForSensor(data) {
-
-    /*QUI FACCIO UN CICLO SUI COMPONENTI E FACCIO UN CHECK PER OGNI COMPONENTE
-     CHE SE IL VALORE DEL TESTO è TOP ALLORA LA CARD DIVENTA ROSSA, ARANCIONE, GIALLA, VERDE*/
-
+    if (data['result'].length != 0) { //se i dati non sono disponibili esco da questa funzione altrimenti da errore e non si capisce perche
     $("#sensor").text(data['result'][0]['ID_device']);
     $("#measurements").text(data['result'][0]['Total']);
     $("#lastMeasurement").text(data['result'][0]['LastDate']);
@@ -467,6 +391,10 @@ export class MainpageModel {
     $("#minSoundLevel").text(data['result'][0]['MinNoise']);
     $("#maxSoundLevel").text(data['result'][0]['MaxNoise']);
     $("#averageSoundLevel").text(data['result'][0]['AvgNoise']);
+    $("#status-message").text(" Si");
+    } else {
+      $("#status-message").text(" Nessun dato disponibile");
+    }
 
   }
 
@@ -591,6 +519,17 @@ export class MainpageModel {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
   /*AREA PERSONALE*/
 
   getAllInfoFromSensor(sensor) { //faccio chiamata ajax per prendere tutti i valori del sensore
@@ -609,11 +548,9 @@ export class MainpageModel {
     });
     function success(response) {
 
-
-
-
+      //console.log(response);
       let data = JSON.parse(response);
-      //console.log(data);
+      
 
       let currentPath = [];
       let paths = [];
@@ -656,7 +593,6 @@ export class MainpageModel {
       paths = paths.filter(function (path) {
         return path.length > 1;
       });
-      console.log(paths);
 
 
 
@@ -664,7 +600,20 @@ export class MainpageModel {
       //let firstPath = paths[0]; // Assumi che 'paths' sia definito altrove nel tuo codice
 
       //console.log(firstPath);
-      const table = new DataTable('#routes-table');
+      const table = new DataTable('#routes-table', {
+        searching: false,
+        lengthChange: false,
+        language: {
+          "paginate": {
+            "previous": "Precedente",
+            "next": "Successivo",
+          },
+          "info": "Visualizzi _START_ to _END_ di _TOTAL_ elementi"
+        }
+
+      });
+
+      let paths_list = [];
 
 
       for (let i = 0; i < paths.length; i++) {
@@ -672,53 +621,71 @@ export class MainpageModel {
           return [point.latitude, point.longitude];
         });
 
+        paths_list.push(coordinates);
+      }
+      for (let t = 0; t<paths.length-1;t++) {
+        
+        //ora iniziale
+        let dateAndHour =  paths[t][0].time.split(" ");
+        let date = dateAndHour[0];
+        let hour = dateAndHour[1];
+        //ora finale
+        let dateAndHourF =  paths[t][paths[t].length - 1 ].time.split(" ");
+        let hourF = dateAndHourF[1];
 
+        //rumore medio
+
+        const sumNoise = paths[t].reduce((accumulator, current) => accumulator + current.noise, 0);
+        const average = (sumNoise / paths[t].length).toFixed(2);
+        let stateCell = "";
+       
+          if (average <= 60) {
+            stateCell = "<i class='fas fa-circle text-success'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+          } else if (average>60 && average <=80){
+            stateCell = "<i class='fas fa-circle text-warning'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+          } else if (average>80 && average <=95) {
+            stateCell = "<i class='fas fa-circle' style='color: #ff8f33;'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route'> </i> </a>";
+          }else{
+            stateCell = "<i class='fas fa-circle text-danger'> </i><a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+          }
 
         table.row.add([ /*Qui devo riempire la tabella*/
-          '.1',
-          '.3',
-          'a',
-          "a",
-          "<i class='fas fa-circle text-danger'></i><a href='#' class='viewOnMapLink" + i + "'> Vedi sulla mappa</a>"
+          date,
+          hour,
+          hourF,
+          average + " dB",
+          stateCell,
         ])
           .draw(false);
-
-
-        /*var newRow = table.insertRow(-1); // Inserisci una nuova riga alla fine della tabella
-        var cellDate = newRow.insertCell(0); // Inserisci una cella nella nuova riga
-        var cellStartHour = newRow.insertCell(1);
-        var cellEndHour = newRow.insertCell(2);
-        let avgSound = newRow.insertCell(3);
-        let routeStatus = newRow.insertCell(3);
-
-        // Popola le celle con dati relativi al percorso
-        cellDate.innerHTML = paths[i][0].time; // Sostituisci con il nome del percorso desiderato
-        //cell2.innerHTML = 'Distanza del percorso'; // Sostituisci con la distanza del percorso desiderata*/
-
-        // Crea un percorso sulla mappa
-        var path = L.polyline(coordinates, { color: 'red' }).addTo(self.map);
       }
 
+      // Assegna la gestione dei link
+      $(document).on("click", "a[class^='viewOnMapLink']", function (event) {
+        event.preventDefault();
+        
+        // Estrarre l'indice dalla classe del link
+        var linkClass = $(this).attr("class");
+        var index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
 
+        viewRouteOnMap(index, paths_list);
+        
+    });
+
+    let routesOnMap = [];
+  
+    
+    function viewRouteOnMap(index, paths) {
+      console.log(paths[index]);
+      routesOnMap.forEach(function (polyline) {
+        self.map.removeLayer(polyline);
+      });
+      let route = L.polyline(paths[index], { color: "red" }).addTo(self.map);
+      routesOnMap.push(route);
 
 
     }
+    }
   }
-
-
-
-
-  clickOnTableRow() {
-
-  }
-
-  viewRouteOnMap() {
-    alert("CIAO");
-  }
-
-
-
-
 
 }
 

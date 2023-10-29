@@ -250,7 +250,7 @@ export class MapManager {
                 }
               });
 
-              console.log(pointsToZones);
+              //console.log(pointsToZones);
 
               
 
@@ -377,6 +377,7 @@ export class MapManager {
   }
 
   showColoredNightZone() {
+   
     this.addZones("night");
   }
 
@@ -394,6 +395,19 @@ export class MapManager {
         layer.remove();
       }
     });
+    $("#zonesToggle").prop("checked", false);
+  }
+
+
+  clearClusterGroup() {
+    let self = this;
+    self.map.eachLayer(function (layer) {
+      if (layer instanceof L.MarkerClusterGroup) {
+        self.map.removeLayer(layer); // Rimuovi il markerClusterGroup dalla mappa
+        layer.clearLayers(); // Rimuovi tutti i marker dal markerClusterGroup
+      }  
+    });
+
   }
 
   clearMapLayers() {

@@ -39,7 +39,6 @@ export class ChartFactory {
                 this.createLineChart(data);
                 break;
             case "bar":
-                alert("SONO QUI");
                 this.createBarChart(data);
                 break;
         }
@@ -105,30 +104,53 @@ export class ChartFactory {
           this.chart.destroy();
         }
       
-        // faccio un array che associa ad ogni valore del suono il suo colore
         const barColors = data.values.map(value => {
-            if (value < 60) {
-              return 'green';
-            } else if (value >= 60 && value < 80) {
-              return 'yellow';
-            } else if (value >= 80 && value <= 95)  {
-              return 'orange';
-            } else if (value > 95)  {
-                return 'red';
-              }
-          });
+          if (value < 60) {
+            return 'green';
+          } else if (value >= 60 && value < 80) {
+            return 'yellow';
+          } else if (value >= 80 && value <= 95) {
+            return 'orange';
+          } else if (value > 95) {
+            return 'red';
+          }
+        });
+      
+        // Creare una legenda personalizzata
+        const legendLabels = ['Rischio basso', 'Rischio medio', 'Rischio alto', 'Rischio molto alto'];
+        const legendColors = ['green', 'yellow', 'orange', 'red'];
       
         this.chart = new Chart(this.ctx, {
           type: 'bar',
           data: {
             labels: data.labels,
             datasets: [{
-              label: 'Livello del suono',
+              label: 'Livello del suono medio',
               data: data.values,
-              backgroundColor: barColors, // Usa l'array di colori per le barre
-              borderColor: 'blue'
-            }]
-          }
+              backgroundColor: barColors,
+              borderColor: 'blue',
+            }],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: true, // Mostra la legenda
+                labels: {
+                  generateLabels: function (chart) {
+                    const legendItems = [];
+                    legendLabels.forEach((label, index) => {
+                      legendItems.push({
+                        text: label,
+                        fillStyle: legendColors[index],
+                      });
+                    });
+                    return legendItems;
+                  },
+                },
+              },
+            },
+          },
         });
       }
+      
 }

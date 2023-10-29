@@ -130,10 +130,13 @@ $(document).ready(function() {
     });
     
     $('#myRouteBtn').click(function () {
+
         $(".mycontainer-public").fadeOut('fast', function () {
             $(".mycontainer-private").fadeIn('fast');    
         });
-        mainpageController.getAllInfoFromSensor($('#sensorNameLbl').text()); //chiama ajax per scaricare i dati relativi al sensore
+       
+   
+        mainpageController.getAllInfoFromSensor($('#sensorNameLbl').text().replace(/\s/g, '')); //chiama ajax per scaricare i dati relativi al sensore
             
     });
 
@@ -150,17 +153,12 @@ $(document).ready(function() {
         this.mainpageController.clickOnTableRow();
     });
 
-    $('#routes-table').DataTable();
-
-
-    $("[class^='viewOnMapLink']").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
-        e.preventDefault();
-        this.mainpageController.viewRouteOnMap();
-    });
-
+    
 
 
 
 
 });
+
+
 

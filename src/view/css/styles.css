@@ -174,9 +174,6 @@ a.sidebar-link {
 }
 
 
-.hour-input {
-
-}
 
 #myChart{
   height: 100%;
@@ -186,6 +183,7 @@ a.sidebar-link {
 .btn input[type="radio"] {
   display: none; 
 }
+
 
 
 
