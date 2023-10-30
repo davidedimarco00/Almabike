@@ -144,7 +144,7 @@ export class MapManager {
     }
   }
 
-  addZones(type = "all") { //da ragionare per il popup sulla zona
+  addZones(type="all") { 
 
     let allPointsOnMap = [];
     let self = this;
@@ -167,7 +167,6 @@ export class MapManager {
     $.ajax({
       url: url,
       cache: false,
-
       success: function (response) {
         let vertex = JSON.parse(response);
         if (vertex) {
@@ -211,7 +210,7 @@ export class MapManager {
 
 
 
-
+            
 
             // Crea un oggetto per memorizzare l'associazione tra punti e zone
             const pointsToZones = {};

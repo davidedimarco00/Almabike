@@ -113,27 +113,31 @@
 
       </ul>
     </nav>
+
     <div id="content">
-      <div class="container fluid-container mt-3 align-items-start ">
-        <div class="row">
+      <div class="fluid-container mt-3 pl-5 ml-3 mr-3">
+        <div class="row title-row align-items-start">
           <div class="col-md-6 align-items-start justify-content-start">
             <!-- Colonna sinistra per il titolo della dashboard -->
-            <h1 class="title">Dashboard di Almabike</h1>
+            <h1 class="title">Dashboard di Almabike <span id="loadingSpinner"><img src="resources/images/svg/loadingSpinner.svg"></span> </h1>
           </div>
           <div class="col-md-6 d-flex align-items-center justify-content-end">
             <!-- Colonna destra per il div della login -->
-            <i class="fa-solid fa-user mr-2"></i> <!-- Icona utente con margine a destra -->
             <button class="btn btn-primary">
-              <a id="loginLogout" href='loginpage.php' class="text-white"><span id="loginName">Area riservata</span></a>
+            <i class="fa-solid fa-user mr-2"></i><a id="loginLogout" href='loginpage.php' class="text-white"><span id="loginName">Area riservata</span></a>
             </button>
           </div>
         </div>
       </div>
+
+
       <?php
+
       if (isset($templateParams["pagereq"])) {
         require($templateParams["pagereq"]);
       }
       ?>
+
     </div>
 
   </div>

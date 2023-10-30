@@ -3,10 +3,12 @@ import { HeatMapFactory } from "../javascript/heatMapFactory/HeatMapFactory.js";
 import { MapManager } from "../javascript/mapManager/MapManager.js";
 
 export class MainpageModel {
-
   constructor() {
     this.ajaxCall = []; //array che contiene le chiamate ajax da eseguire, serve per la gestione della fine
-    this.map = L.map('map', { zoomControl: false }).setView([44.4992192, 11.2616459], 12);
+    this.map = L.map("map", { zoomControl: false }).setView(
+      [44.4992192, 11.2616459],
+      12
+    );
     this.zonesAreVisible = false;
     this.selCheckbox;
     const self = this;
@@ -16,77 +18,67 @@ export class MainpageModel {
     this.allPointsOnMap2 = [];
     this.ajaxResponse = [];
     this.heat;
-    this.chartFactory = new ChartFactory('myChart');
+    this.chartFactory = new ChartFactory("myChart");
     this.heatMapFactory = new HeatMapFactory(this.map);
     this.mapManager = new MapManager(this.map);
   }
 
-
-
-
-
   initpage() {
-
-    //INITIALIZING PAGE
-    //Disable the default style of chart to customize it
-    $('#myChart').removeAttr("style");
+    $("#myChart").removeAttr("style");
     //Graph tab click change status to active
-    let checkboxes = 'input#inputdaily,input#inputmonthly,input#inputweekly,input#inputannual';
+    let checkboxes =
+      "input#inputdaily,input#inputmonthly,input#inputweekly,input#inputannual";
 
-    self.selCheckbox = $('input#inputdaily').attr("id");
+    self.selCheckbox = $("input#inputdaily").attr("id");
 
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
     var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var today = now.getFullYear() + "-" + (month) + "-" + (day);
-    $('#datepicker').attr("value", today);
+    var today = now.getFullYear() + "-" + month + "-" + day;
+    $("#datepicker").attr("value", today);
 
-    $(checkboxes).on("click", function () { //quando clicco su una bisogna lanciare un ajax che mi carica il chart corretto in live
-      $(checkboxes).prop('checked', false);
+    $(checkboxes).on("click", function () {
+      //quando clicco su una bisogna lanciare un ajax che mi carica il chart corretto in live
+      $(checkboxes).prop("checked", false);
 
-      $(this).prop('checked', true);
+      $(this).prop("checked", true);
 
       let selectedCheckbox = $(this).attr("id");
 
       self.selCheckbox = selectedCheckbox;
 
-
       switch (selectedCheckbox) {
         case "inputdaily":
-          $('#datepicker').attr("type", "date");
-          $('#dateLabel').text("Scegli un giorno");
+          $("#datepicker").attr("type", "date");
+          $("#dateLabel").text("Scegli un giorno");
           $(".hour-input").prop("disabled", false);
           break;
         case "inputmonthly":
-          $('#datepicker').attr("type", "month");
-          $('#dateLabel').text("Scegli un mese");
+          $("#datepicker").attr("type", "month");
+          $("#dateLabel").text("Scegli un mese");
           $(".hour-input").prop("disabled", true);
           break;
         case "inputannual":
-          $('#datepicker').attr("type", "number");
-          $('#dateLabel').text("Scegli un anno");
+          $("#datepicker").attr("type", "number");
+          $("#dateLabel").text("Scegli un anno");
           $(".hour-input").prop("disabled", true);
           break;
       }
     });
 
-    $('#loadingSpinner').hide();
+    $("#loadingSpinner").hide();
 
     this.mapManager.applyMapLayer("streetMapLayer");
     this.mapManager.addMapControls();
     this.mapManager.showZones();
     this.chartFactory.createEmptyChart(); //inizializza il grafico vuoto
-
   }
-
-
 
   /*MAP FUNCTIONS calling MapManager*/
 
   applyMapLayer(mapLayer) {
     this.mapManager.applyMapLayer(mapLayer);
   }
-
 
   showZones() {
     this.mapManager.addZones();
@@ -104,8 +96,6 @@ export class MainpageModel {
     this.mapManager.clearMapLayers();
   }
 
-
-
   getZoneInfo(zone, map) {
     return 1;
   }
@@ -114,60 +104,77 @@ export class MainpageModel {
     return this.mapManager.getMap();
   }
 
-
-
-
-
-
-
   //DASHBOARD FUNCTIONS
   searchButtonClick() {
-    
     var $form = $("#chartForm");
     //alert("#datepicker, #input"+ selTab);
     // Let's select and cache all the fields
-    var $inputs = $form.find("#datepicker, #" + self.selCheckbox + ", .hour-input");
+    var $inputs = $form.find(
+      "#datepicker, #" + self.selCheckbox + ", .hour-input"
+    );
     // Serialize the data in the form
     var serializedData = $inputs.serialize();
-  
 
-    alert("A post passo i valori\n" + serializedData);
+    //alert("A post passo i valori\n" + serializedData);
 
     //FACCIO IL GRAFICO
 
     var formData = new URLSearchParams(serializedData);
     // Accedi al valore di un campo specifico, ad esempio 'typeofdate'
-    let typeofdateValue = formData.get('typeofdate');
-    let datePickerValue = formData.get('datepicker');
-
+    let typeofdateValue = formData.get("typeofdate");
+    let datePickerValue = formData.get("datepicker");
 
     console.log("ho selezionato: " + typeofdateValue);
 
-    if (typeofdateValue == "daily") { //se h oselezionato il giorno
-      let starthour = formData.get('starthour');
-      let endhour = formData.get('endhour');
+    if (typeofdateValue == "daily") {
+      //se h oselezionato il giorno
+      let starthour = formData.get("starthour");
+      let endhour = formData.get("endhour");
 
-      if (starthour === null || starthour.trim() === '' || endhour === null || endhour.trim() === '') {
+      if (
+        starthour === null ||
+        starthour.trim() === "" ||
+        endhour === null ||
+        endhour.trim() === ""
+      ) {
         //alert("i campi sono vuoti");
         //allora voglio il grafico giornaliero con tutte le misurazioni del giorno
 
-        console.log("Sensore attualmente selezionato=", $('#selectSensor').val());
-        this.getValuesForDailyChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
-
+        console.log(
+          "Sensore attualmente selezionato=",
+          $("#selectSensor").val()
+        );
+        this.getValuesForDailyChart(
+          $("#selectSensor").val(),
+          datePickerValue,
+          typeofdateValue
+        );
       } else {
         starthour = starthour + ":00"; //preparo la formattazione dei due parametri
         endhour = endhour + ":00";
         //alert(starthour + " " + endhour);
-        this.getValuesForDailyChartBetweenHours($('#selectSensor').val(), datePickerValue, starthour, endhour, typeofdateValue);
-
+        this.getValuesForDailyChartBetweenHours(
+          $("#selectSensor").val(),
+          datePickerValue,
+          starthour,
+          endhour,
+          typeofdateValue
+        );
       }
     } else if (typeofdateValue == "monthly") {
-      this.getValuesForMonthlyChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
+      this.getValuesForMonthlyChart(
+        $("#selectSensor").val(),
+        datePickerValue,
+        typeofdateValue
+      );
     } else if (typeofdateValue == "annual") {
-      this.getValuesForAnnualChart($('#selectSensor').val(), datePickerValue, typeofdateValue);
+      this.getValuesForAnnualChart(
+        $("#selectSensor").val(),
+        datePickerValue,
+        typeofdateValue
+      );
     }
   }
-
 
   getAllStatsFromSensor(selectedSensor) {
     $("#status-message").text("carico i dati");
@@ -190,12 +197,10 @@ export class MainpageModel {
       console.log("Risultato query: " + response);
 
       let responseParsed = JSON.parse(response);
-    
+
       self.buildCardLabelsForSensor(responseParsed);
     }
   }
-
-
 
   getBaseInfoFromSelectedSensor(selectedSensor) {
     $("#status-message").text("carico i dati");
@@ -212,7 +217,6 @@ export class MainpageModel {
       data: selectedSensor,
       cache: false,
       success: function (response) {
-        
         let positions = JSON.parse(response);
         console.log(positions);
         if (positions) {
@@ -226,14 +230,18 @@ export class MainpageModel {
               var marker = L.marker(
                 new L.LatLng(
                   positions[key][key1]["lati"] / 100000,
-                  positions[key][key1]["longi"] / 100000,
+                  positions[key][key1]["longi"] / 100000
                 ),
                 {
                   title: title,
-                },
+                }
               );
               soundLevels.push(positions[key][key1]["Noise_dBA"]);
-              data.push([positions[key][key1]["lati"] / 100000, positions[key][key1]["longi"] / 100000, positions[key][key1]["Noise_dBA"]]);
+              data.push([
+                positions[key][key1]["lati"] / 100000,
+                positions[key][key1]["longi"] / 100000,
+                positions[key][key1]["Noise_dBA"],
+              ]);
               marker.bindPopup(title);
               markers.addLayer(marker);
             }
@@ -249,23 +257,19 @@ export class MainpageModel {
     });
   }
   getSensorAssociatedWithUser(username) {
-
     $.ajax({
       url: "./src/controller/php/getSensorAssociatedWithUser.php",
       cache: false,
       type: "post",
       data: username,
       success: function (response) {
-        alert(response)
+        //alert(response);
         let result = JSON.parse(response);
-      }
+      },
     });
   }
 
-
   applyHeatMapLayerForSensor(data, map) {
-
-
     $.ajax({
       url: "./src/controller/php/getDynamicSoundLevelChart.php",
       type: "POST",
@@ -280,7 +284,11 @@ export class MainpageModel {
 
         for (var key in data) {
           for (var key1 in data[key]) {
-            let heatPoint = [data[key][key1]["lati"] / 100000, data[key][key1]["longi"] / 100000, data[key][key1]["Noise_dBA"] / 100];
+            let heatPoint = [
+              data[key][key1]["lati"] / 100000,
+              data[key][key1]["longi"] / 100000,
+              data[key][key1]["Noise_dBA"] / 100,
+            ];
             heatPoints.push(heatPoint);
           }
         }
@@ -290,117 +298,87 @@ export class MainpageModel {
           blur: 1,
 
           //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
-          gradient: { 0: 'green', 0.6: 'yellow', 0.80: 'orange', 0.95: 'red' }
+          gradient: { 0: "green", 0.6: "yellow", 0.8: "orange", 0.95: "red" },
         }).addTo(map);
 
-
         self.flagHeatMap = true;
-
       },
 
       error: function (jqXHR, textStatus, errorThrown) {
-        alert("Chiamata fallita");
+        //alert("Chiamata fallita");
         console.log(textStatus, errorThrown);
-      }
+      },
     });
-
   }
 
-
-
   showLoadingSpinner() {
-    $('#loadingSpinner').show();
+    $("#loadingSpinner").show();
   }
 
   hideLoadingSpinner() {
-    $('#loadingSpinner').hide();
+    $("#loadingSpinner").hide();
   }
 
-
   createChart(data, type, design) {
-
-    alert("Okay ora devo fare il grafico di un " + type);
-    console.log("dati\n\n\n\n", data);
-
-
+    //alert("Okay ora devo fare il grafico di un " + type);
+    //console.log("dati\n\n\n\n", data);
 
     //isolo l'array che m'interessa per il grafico
     let yaxis = [];
     let xaxis = [];
-    if (type == 'daily') {
-
+    if (type == "daily") {
       for (var key in data) {
         for (var key1 in data[key]) {
-
           yaxis.push(data[key][key1]["Noise_dBA"]);
           xaxis.push(data[key][key1]["Hour"]);
-
         }
       }
-    }
-
-    else if (type == "monthly") {
+    } else if (type == "monthly") {
       for (var key in data) {
         for (var key1 in data[key]) {
           yaxis.push(data[key][key1]["DailyAverageNoise"]);
           xaxis.push(data[key][key1]["Day"]);
-
         }
       }
-    }
-    else if (type == "annual") {
+    } else if (type == "annual") {
       for (var key in data) {
         for (var key1 in data[key]) {
           yaxis.push(data[key][key1]["MonthlyAverageNoise"]);
           xaxis.push(data[key][key1]["Month"]);
-
         }
-
       }
     }
-
-    //console.log("Valori in ordinate: " + yaxis + "\n Valori in ascissa: " + xaxis);
-
     const chartData = {
       labels: xaxis,
-      values: yaxis
+      values: yaxis,
     };
 
     if (data == null) {
-      //alert("IL DESIGN è: " + design);
       this.chartFactory.createChart(null, design);
     } else {
       this.chartFactory.createChart(chartData, design);
     }
-
-
-    //chartFactory.createBarChart(barChartData);
-    //chartFactory.createPieChart(pieChartData);
-
-
-
   }
 
   buildCardLabelsForSensor(data) {
-    if (data['result'].length != 0) { //se i dati non sono disponibili esco da questa funzione altrimenti da errore e non si capisce perche
-    $("#sensor").text(data['result'][0]['ID_device']);
-    $("#measurements").text(data['result'][0]['Total']);
-    $("#lastMeasurement").text(data['result'][0]['LastDate']);
-    $("#firstMeasurements").text(data['result'][0]['FirstDate']);
-    //$("#averageMeasurement").text(data['result'][0]['ID_device']);
-    $("#minSoundLevel").text(data['result'][0]['MinNoise']);
-    $("#maxSoundLevel").text(data['result'][0]['MaxNoise']);
-    $("#averageSoundLevel").text(data['result'][0]['AvgNoise']);
-    $("#status-message").text(" Si");
+    if (data["result"].length != 0) {
+      //se i dati non sono disponibili esco da questa funzione altrimenti da errore e non si capisce perche
+      $("#sensor").text(data["result"][0]["ID_device"]);
+      $("#measurements").text(data["result"][0]["Total"]);
+      $("#lastMeasurement").text(data["result"][0]["LastDate"]);
+      $("#firstMeasurements").text(data["result"][0]["FirstDate"]);
+      //$("#averageMeasurement").text(data['result'][0]['ID_device']);
+      $("#minSoundLevel").text(data["result"][0]["MinNoise"]);
+      $("#maxSoundLevel").text(data["result"][0]["MaxNoise"]);
+      $("#averageSoundLevel").text(data["result"][0]["AvgNoise"]);
+      $("#status-message").text(" Si");
     } else {
       $("#status-message").text(" Nessun dato disponibile");
     }
-
   }
 
-
-
-  getValuesForDailyChart(selectedSensor, date, typeofdateValue) { //giornalieri
+  getValuesForDailyChart(selectedSensor, date, typeofdateValue) {
+    //giornalieri
 
     let self = this;
 
@@ -408,7 +386,7 @@ export class MainpageModel {
     $.ajax({
       url: "./src/controller/php/getAllMeasureForDay.php",
       type: "POST",
-      data: { "selectedSensor": selectedSensor, "date": date },
+      data: { selectedSensor: selectedSensor, date: date },
       cache: false,
 
       success: success,
@@ -417,26 +395,34 @@ export class MainpageModel {
       },
     });
     function success(response) {
-
       let responseParsed = JSON.parse(response);
 
       self.createChart(responseParsed, typeofdateValue, "line");
-
     }
   }
 
-
-  getValuesForDailyChartBetweenHours(selectedSensor, date, startHour, endHour, typeofdateValue) { //giornalieri nelle ore...
+  getValuesForDailyChartBetweenHours(
+    selectedSensor,
+    date,
+    startHour,
+    endHour,
+    typeofdateValue
+  ) {
+    //giornalieri nelle ore...
 
     let self = this;
 
     console.log("I'm here ", selectedSensor, date);
 
-
     $.ajax({
       url: "./src/controller/php/getAllMeasureForDayBetweenHours.php",
       type: "POST",
-      data: { "selectedSensor": selectedSensor, "date": date, "starthour": startHour, "endhour": endHour },
+      data: {
+        selectedSensor: selectedSensor,
+        date: date,
+        starthour: startHour,
+        endhour: endHour,
+      },
       cache: false,
 
       success: success,
@@ -445,20 +431,17 @@ export class MainpageModel {
       },
     });
 
-
     function success(response) {
-
       console.log(response);
 
       let responseParsed = JSON.parse(response);
 
       self.createChart(responseParsed, typeofdateValue, "line");
-
     }
-
   }
 
-  getValuesForMonthlyChart(selectedSensor, month, typeofdateValue) { //mensili
+  getValuesForMonthlyChart(selectedSensor, month, typeofdateValue) {
+    //mensili
 
     let self = this;
 
@@ -466,7 +449,7 @@ export class MainpageModel {
     $.ajax({
       url: "./src/controller/php/getAllMeasureForMonth.php",
       type: "POST",
-      data: { "selectedSensor": selectedSensor, "month": month },
+      data: { selectedSensor: selectedSensor, month: month },
       cache: false,
 
       success: success,
@@ -479,14 +462,12 @@ export class MainpageModel {
 
       let responseParsed = JSON.parse(response);
 
-
-
       self.createChart(responseParsed, typeofdateValue, "line");
-
     }
   }
 
-  getValuesForAnnualChart(selectedSensor, year, typeofdateValue) { //annuale
+  getValuesForAnnualChart(selectedSensor, year, typeofdateValue) {
+    //annuale
 
     let self = this;
 
@@ -494,7 +475,7 @@ export class MainpageModel {
     $.ajax({
       url: "./src/controller/php/getAllMeasureForYear.php",
       type: "POST",
-      data: { "selectedSensor": selectedSensor, "year": year },
+      data: { selectedSensor: selectedSensor, year: year },
       cache: false,
 
       success: success,
@@ -507,38 +488,20 @@ export class MainpageModel {
 
       let responseParsed = JSON.parse(response);
 
-
-
       self.createChart(responseParsed, typeofdateValue, "line");
-
-
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   /*AREA PERSONALE*/
 
-  getAllInfoFromSensor(sensor) { //faccio chiamata ajax per prendere tutti i valori del sensore
+  getAllInfoFromSensor(sensor) {
+    //faccio chiamata ajax per prendere tutti i valori del sensore
 
     let self = this;
     $.ajax({
       url: "./src/controller/php/getAllInfoFromSensor.php",
       type: "POST",
-      data: { "sensorName": sensor },
+      data: { sensorName: sensor },
       cache: false,
 
       success: success,
@@ -547,21 +510,19 @@ export class MainpageModel {
       },
     });
     function success(response) {
-
       //console.log(response);
       let data = JSON.parse(response);
-      
 
       let currentPath = [];
       let paths = [];
       let lastTimestamp = null;
 
-
-
       for (var key in data) {
         for (var key1 in data[key]) {
           if (lastTimestamp !== null) {
-            const timeDifference = (new Date(data[key][key1]['Time']) - new Date(lastTimestamp)) / 1000; // Differenza di tempo in secondi
+            const timeDifference =
+              (new Date(data[key][key1]["Time"]) - new Date(lastTimestamp)) /
+              1000; // Differenza di tempo in secondi
             //console.log(timeDifference);
 
             // Se il tempo trascorso tra le misurazioni è superiore a 5 secondi, considera un nuovo percorso
@@ -570,23 +531,21 @@ export class MainpageModel {
               currentPath = [];
             }
             currentPath.push({
-              latitude: data[key][key1]['GPS_Latitude'], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
-              longitude: data[key][key1]['GPS_Longitude'], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
-              time: data[key][key1]['Time'],
-              noise: data[key][key1]['Noise_dBA'],
+              latitude: data[key][key1]["GPS_Latitude"], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
+              longitude: data[key][key1]["GPS_Longitude"], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
+              time: data[key][key1]["Time"],
+              noise: data[key][key1]["Noise_dBA"],
               diff: timeDifference,
-
             });
           }
 
-
-
-          lastTimestamp = data[key][key1]['Time'];
+          lastTimestamp = data[key][key1]["Time"];
         }
       }
 
       // Aggiungi l'ultimo percorso
-      if (currentPath.length > 0) { //qui bisogna visualizzare solo quelli effettuati in un determinato giorno
+      if (currentPath.length > 0) {
+        //qui bisogna visualizzare solo quelli effettuati in un determinato giorno
         //oppure quello selezionato
         paths.push([...currentPath]); // Copia l'ultimo percorso in 'paths'
       }
@@ -594,27 +553,23 @@ export class MainpageModel {
         return path.length > 1;
       });
 
-
-
       // Estrai il primo percorso dall'array 'paths'
       //let firstPath = paths[0]; // Assumi che 'paths' sia definito altrove nel tuo codice
 
       //console.log(firstPath);
-      const table = new DataTable('#routes-table', {
+      const table = new DataTable("#routes-table", {
         searching: false,
         lengthChange: false,
         language: {
-          "paginate": {
-            "previous": "Precedente",
-            "next": "Successivo",
+          paginate: {
+            previous: "Precedente",
+            next: "Successivo",
           },
-          "info": "Visualizzi _START_ to _END_ di _TOTAL_ elementi"
-        }
-
+          info: "Visualizzi _START_ di _END_ su _TOTAL_ elementi",
+        },
       });
 
       let paths_list = [];
-
 
       for (let i = 0; i < paths.length; i++) {
         var coordinates = paths[i].map(function (point) {
@@ -623,73 +578,79 @@ export class MainpageModel {
 
         paths_list.push(coordinates);
       }
-      for (let t = 0; t<paths.length-1;t++) {
-        
+      for (let t = 0; t < paths.length - 1; t++) {
         //ora iniziale
-        let dateAndHour =  paths[t][0].time.split(" ");
+        let dateAndHour = paths[t][0].time.split(" ");
         let date = dateAndHour[0];
         let hour = dateAndHour[1];
         //ora finale
-        let dateAndHourF =  paths[t][paths[t].length - 1 ].time.split(" ");
+        let dateAndHourF = paths[t][paths[t].length - 1].time.split(" ");
         let hourF = dateAndHourF[1];
 
         //rumore medio
 
-        const sumNoise = paths[t].reduce((accumulator, current) => accumulator + current.noise, 0);
+        const sumNoise = paths[t].reduce(
+          (accumulator, current) => accumulator + current.noise,
+          0
+        );
         const average = (sumNoise / paths[t].length).toFixed(2);
         let stateCell = "";
-       
-          if (average <= 60) {
-            stateCell = "<i class='fas fa-circle text-success'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
-          } else if (average>60 && average <=80){
-            stateCell = "<i class='fas fa-circle text-warning'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
-          } else if (average>80 && average <=95) {
-            stateCell = "<i class='fas fa-circle' style='color: #ff8f33;'></i> <a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route'> </i> </a>";
-          }else{
-            stateCell = "<i class='fas fa-circle text-danger'> </i><a href='#' class='viewOnMapLink" +t+ "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
-          }
 
-        table.row.add([ /*Qui devo riempire la tabella*/
-          date,
-          hour,
-          hourF,
-          average + " dB",
-          stateCell,
-        ])
+        if (average <= 60) {
+          stateCell =
+            "<i class='fas fa-circle text-success'></i> <a href='#' class='viewOnMapLink" +
+            t +
+            "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+        } else if (average > 60 && average <= 80) {
+          stateCell =
+            "<i class='fas fa-circle text-warning'></i> <a href='#' class='viewOnMapLink" +
+            t +
+            "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+        } else if (average > 80 && average <= 95) {
+          stateCell =
+            "<i class='fas fa-circle' style='color: #ff8f33;'></i> <a href='#' class='viewOnMapLink" +
+            t +
+            "'> Vedi sulla mappa<i class='fa-solid fa-route'> </i> </a>";
+        } else {
+          stateCell =
+            "<i class='fas fa-circle text-danger'> </i><a href='#map' class='viewOnMapLink" +
+            t +
+            "'> Vedi sulla mappa<i class='fa-solid fa-route' > </i> </a>";
+        }
+
+        table.row
+          .add([
+            /*Qui devo riempire la tabella*/ date,
+            hour,
+            hourF,
+            average + " dB",
+            stateCell,
+          ])
           .draw(false);
       }
 
       // Assegna la gestione dei link
       $(document).on("click", "a[class^='viewOnMapLink']", function (event) {
         event.preventDefault();
-        
+
         // Estrarre l'indice dalla classe del link
         var linkClass = $(this).attr("class");
         var index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
 
         viewRouteOnMap(index, paths_list);
-        
-    });
-
-    let routesOnMap = [];
-  
-    
-    function viewRouteOnMap(index, paths) {
-      console.log(paths[index]);
-      routesOnMap.forEach(function (polyline) {
-        self.map.removeLayer(polyline);
       });
-      let route = L.polyline(paths[index], { color: "red" }).addTo(self.map);
-      routesOnMap.push(route);
 
+      let routesOnMap = [];
 
-    }
+      function viewRouteOnMap(index, paths) {
+        console.log(paths[index]);
+        routesOnMap.forEach(function (polyline) {
+          self.map.removeLayer(polyline);
+        });
+        let route = L.polyline(paths[index], { color: "red" }).addTo(self.map);
+        self.map.fitBounds(route.getBounds());
+        routesOnMap.push(route);
+      }
     }
   }
-
 }
-
-
-
-
-

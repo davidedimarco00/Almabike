@@ -30,7 +30,7 @@
     //page's title
     $templateParams["titolo"] = "Login page";
     //page request
-    $templateParams["pagereq"] = "src/view/html/template/loginPageTemplate.php";
+    $templateParams["pagereq"] = "src/view/html/template/loginPage.php";
 
     //require all css of the site and the specific page array contains all the css to implement
     $templateParams["css"] = array("src/view/css/styles.css", "src/view/css/style.css", "src/view/css/loginPage.css", "src/view/css/header.css", "src/view/css/footer.css" );  //, "css/header.css", "css/footer.css");

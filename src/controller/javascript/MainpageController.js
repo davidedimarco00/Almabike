@@ -18,6 +18,7 @@ export class MainPageController {
   }
 
   showColoredNightZone() {
+    this.model.clearMapLayers();
     this.model.showColoredNightZone();
   }
 

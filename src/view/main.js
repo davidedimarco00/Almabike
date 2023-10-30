@@ -13,12 +13,7 @@ $(document).ajaxComplete(function () {
 });
 
 $(document).ready(function() {
-
-    console.log(mainpageController.toString());
-
     mainpageController.initializePage();
-    //mainpageController.showZones();
-
     $('.custom-tooltip').tooltip({
         template: '<div class="tooltip custom" role="tooltip"><div class="tooltip-inner"></div></div>',
         trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
@@ -34,6 +29,7 @@ $(document).ready(function() {
         }else {
             //attivo le zone
             mainpageController.showZones();
+            
         }  
     });
 
@@ -42,10 +38,13 @@ $(document).ready(function() {
         if (!$('#nightToggle').is(':checked')) {
             //faccio vedere il giorno
             $('#dayToggle').prop("checked", true);
-            mainpageController.showZones();
+            mainpageController.hideZones();
+           // mainpageController.showZones();
         } else {
             //attivo la visualizzazione notturna
             //mainpageController.clearLayers();
+            console.log("Visualizzo la mappa notturna");
+            mainpageController.hideZones();
             mainpageController.showColoredNightZone();
 
         }
