@@ -31,10 +31,10 @@ export class MainpageModel {
 
     self.selCheckbox = $("input#inputdaily").attr("id");
 
-    var now = new Date();
-    var day = ("0" + now.getDate()).slice(-2);
-    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var today = now.getFullYear() + "-" + month + "-" + day;
+    let now = new Date();
+    let day = ("0" + now.getDate()).slice(-2);
+    let month = ("0" + (now.getMonth() + 1)).slice(-2);
+    let today = now.getFullYear() + "-" + month + "-" + day;
     $("#datepicker").attr("value", today);
 
     $(checkboxes).on("click", function () {
@@ -106,20 +106,20 @@ export class MainpageModel {
 
   //DASHBOARD FUNCTIONS
   searchButtonClick() {
-    var $form = $("#chartForm");
+    let $form = $("#chartForm");
     //alert("#datepicker, #input"+ selTab);
     // Let's select and cache all the fields
-    var $inputs = $form.find(
+    let $inputs = $form.find(
       "#datepicker, #" + self.selCheckbox + ", .hour-input"
     );
     // Serialize the data in the form
-    var serializedData = $inputs.serialize();
+    let serializedData = $inputs.serialize();
 
     //alert("A post passo i valori\n" + serializedData);
 
     //FACCIO IL GRAFICO
 
-    var formData = new URLSearchParams(serializedData);
+    let formData = new URLSearchParams(serializedData);
     // Accedi al valore di un campo specifico, ad esempio 'typeofdate'
     let typeofdateValue = formData.get("typeofdate");
     let datePickerValue = formData.get("datepicker");
@@ -181,7 +181,6 @@ export class MainpageModel {
 
     let self = this;
 
-    //console.log("I'm here ", selectedSensor);
     $.ajax({
       url: "./src/controller/php/getAllStatsFromSensor.php",
       type: "POST",
@@ -223,11 +222,11 @@ export class MainpageModel {
           markers = L.markerClusterGroup();
           let soundLevels = [];
           let data = [];
-          for (var key in positions) {
-            for (var key1 in positions[key]) {
-              var title =
+          for (let key in positions) {
+            for (let key1 in positions[key]) {
+              let title =
                 "Livello sonoro:" + positions[key][key1]["Noise_dBA"] + "dB";
-              var marker = L.marker(
+              let marker = L.marker(
                 new L.LatLng(
                   positions[key][key1]["lati"] / 100000,
                   positions[key][key1]["longi"] / 100000
@@ -247,7 +246,7 @@ export class MainpageModel {
             }
             self.map.addLayer(markers);
           }
-          soundLevels = [];
+         
           self.heatMapFactory.addData(data);
         }
       },
@@ -263,7 +262,6 @@ export class MainpageModel {
       type: "post",
       data: username,
       success: function (response) {
-        //alert(response);
         let result = JSON.parse(response);
       },
     });
@@ -282,8 +280,8 @@ export class MainpageModel {
         let data = JSON.parse(response);
         let heatPoints = [];
 
-        for (var key in data) {
-          for (var key1 in data[key]) {
+        for (let key in data) {
+          for (let key1 in data[key]) {
             let heatPoint = [
               data[key][key1]["lati"] / 100000,
               data[key][key1]["longi"] / 100000,
@@ -327,22 +325,22 @@ export class MainpageModel {
     let yaxis = [];
     let xaxis = [];
     if (type == "daily") {
-      for (var key in data) {
-        for (var key1 in data[key]) {
+      for (let key in data) {
+        for (let key1 in data[key]) {
           yaxis.push(data[key][key1]["Noise_dBA"]);
           xaxis.push(data[key][key1]["Hour"]);
         }
       }
     } else if (type == "monthly") {
-      for (var key in data) {
-        for (var key1 in data[key]) {
+      for (let key in data) {
+        for (let key1 in data[key]) {
           yaxis.push(data[key][key1]["DailyAverageNoise"]);
           xaxis.push(data[key][key1]["Day"]);
         }
       }
     } else if (type == "annual") {
-      for (var key in data) {
-        for (var key1 in data[key]) {
+      for (let key in data) {
+        for (let key1 in data[key]) {
           yaxis.push(data[key][key1]["MonthlyAverageNoise"]);
           xaxis.push(data[key][key1]["Month"]);
         }
@@ -367,7 +365,6 @@ export class MainpageModel {
       $("#measurements").text(data["result"][0]["Total"]);
       $("#lastMeasurement").text(data["result"][0]["LastDate"]);
       $("#firstMeasurements").text(data["result"][0]["FirstDate"]);
-      //$("#averageMeasurement").text(data['result'][0]['ID_device']);
       $("#minSoundLevel").text(data["result"][0]["MinNoise"]);
       $("#maxSoundLevel").text(data["result"][0]["MaxNoise"]);
       $("#averageSoundLevel").text(data["result"][0]["AvgNoise"]);
@@ -517,8 +514,8 @@ export class MainpageModel {
       let paths = [];
       let lastTimestamp = null;
 
-      for (var key in data) {
-        for (var key1 in data[key]) {
+      for (let key in data) {
+        for (let key1 in data[key]) {
           if (lastTimestamp !== null) {
             const timeDifference =
               (new Date(data[key][key1]["Time"]) - new Date(lastTimestamp)) /
@@ -553,10 +550,7 @@ export class MainpageModel {
         return path.length > 1;
       });
 
-      // Estrai il primo percorso dall'array 'paths'
-      //let firstPath = paths[0]; // Assumi che 'paths' sia definito altrove nel tuo codice
-
-      //console.log(firstPath);
+    
       const table = new DataTable("#routes-table", {
         searching: false,
         lengthChange: false,
@@ -572,7 +566,7 @@ export class MainpageModel {
       let paths_list = [];
 
       for (let i = 0; i < paths.length; i++) {
-        var coordinates = paths[i].map(function (point) {
+        let coordinates = paths[i].map(function (point) {
           return [point.latitude, point.longitude];
         });
 
@@ -634,8 +628,8 @@ export class MainpageModel {
         event.preventDefault();
 
         // Estrarre l'indice dalla classe del link
-        var linkClass = $(this).attr("class");
-        var index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
+        let linkClass = $(this).attr("class");
+        let index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
 
         viewRouteOnMap(index, paths_list);
       });
@@ -647,7 +641,7 @@ export class MainpageModel {
         routesOnMap.forEach(function (polyline) {
           self.map.removeLayer(polyline);
         });
-        let route = L.polyline(paths[index], { color: "red" }).addTo(self.map);
+        let route = L.polyline(paths[index], { color: "#00B0FF", weight: 5}).addTo(self.map);
         self.map.fitBounds(route.getBounds());
         routesOnMap.push(route);
       }

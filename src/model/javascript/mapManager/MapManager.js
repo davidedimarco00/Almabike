@@ -249,9 +249,13 @@ export class MapManager {
                 }
               });
 
-              //console.log(pointsToZones);
+  
 
-              
+
+
+
+              /**
+               * TODO: questo pezzo è da spostare in una funziona apparte */ 
 
               // Verifica se c'è un array di punti associati alla zona
               if (pointsToZones[zoneName]) {
@@ -418,13 +422,21 @@ export class MapManager {
     this.applyMapLayer("streetMapLayer");
   }
 
+  addRouteToMap(route) { //gli passo l'array di punti calcolato e questa funzione disegna la route sulla mappa
+
+  }
+
+
+
   getMap() {
     return this.map;
   }
 
   getZoneInfo(zone, map) {
-    // Implementazione del metodo getZoneInfo
+    // Implementazione del metodo getZoneInfo per visualizzare le label sulle zone
     // ...
   }
+
+
 
 }

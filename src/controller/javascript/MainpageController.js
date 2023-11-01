@@ -61,7 +61,7 @@ export class MainPageController {
     this.model.hideLoadingSpinner();
   }
 
-  colorZone() { //colora le regioni (zone) in base al valore medio di noise all'interno dell'aria 
+  colorZone() { 
     this.model.verifyPointInsidePolygon();
   }
 

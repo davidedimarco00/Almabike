@@ -79,7 +79,7 @@ $(document).ready(function() {
         let inputs = form.find("select");
         selectedSensor = form.serialize();
         inputs.prop("disabled", true);
-        mainpageController.getBaseInfoFromSelectedSensor(selectedSensor);
+        mainpageController.getBaseInfoFromSelectedSensor(selectedSensor);   /*DA APPLICARE AI DATI DELL'UTENTE SUL SENSORE*/
       
         inputs.prop("disabled", false);
     });
