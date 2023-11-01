@@ -1,7 +1,6 @@
 import {MainPageController} from  "../controller/javascript/MainpageController.js";
 
 
-
 let mainpageController = new MainPageController();
 
 $(document).ajaxSend(function(event, jqxhr, settings) {
@@ -19,7 +18,6 @@ $(document).ready(function() {
         trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
         html: true // Abilita l'HTML nel tooltip personalizzato
       });
-      
 
     $('#zonesToggle').click(function (){
         
@@ -71,7 +69,6 @@ $(document).ready(function() {
 
     /**CONTROLLI SULLA DASHBOARD*/
     let selectedSensor;
-    let maxSoundLevel = $('#maxSoundLevelLabel').text();
 
     
     $('#selectSensor').on('change', function() {
@@ -79,8 +76,7 @@ $(document).ready(function() {
         let inputs = form.find("select");
         selectedSensor = form.serialize();
         inputs.prop("disabled", true);
-        mainpageController.getBaseInfoFromSelectedSensor(selectedSensor);   /*DA APPLICARE AI DATI DELL'UTENTE SUL SENSORE*/
-      
+        mainpageController.getBaseInfoFromSelectedSensor(selectedSensor);
         inputs.prop("disabled", false);
     });
 
@@ -99,9 +95,7 @@ $(document).ready(function() {
          mainpageController.lineChartButtonClick();
      });
 
-
-
-    $("#colorZone").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+    $("#colorZone").on("click",function(e) {
         e.preventDefault();
          mainpageController.colorZone();
      });

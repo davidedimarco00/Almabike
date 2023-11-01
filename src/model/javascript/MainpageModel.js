@@ -12,11 +12,8 @@ export class MainpageModel {
     this.zonesAreVisible = false;
     this.selCheckbox;
     const self = this;
-    this.flagHeatMap = false;
     this.allPointsOnMap = [];
     this.allPolygonsOnMap = [];
-    this.allPointsOnMap2 = [];
-    this.ajaxResponse = [];
     this.heat;
     this.chartFactory = new ChartFactory("myChart");
     this.heatMapFactory = new HeatMapFactory(this.map);
@@ -71,7 +68,30 @@ export class MainpageModel {
     this.mapManager.applyMapLayer("streetMapLayer");
     this.mapManager.addMapControls();
     this.mapManager.showZones();
-    this.chartFactory.createEmptyChart(); //inizializza il grafico vuoto
+
+    
+    if ($("#sensorNameLbl").length > 0) {
+
+      let sensorName = "sensorName=" + $('#sensorNameLbl').text().replace(/\s/g, '');
+      //this.getAllStatsFromSensor($('#sensorNameLbl').text().replace(/\s/g, ''));
+      this.getAllStatsFromSensor(sensorName);
+
+      //prendo i dati del sensore relativo all'utente
+
+
+      
+      //costruisco il grafico
+      this.getValuesForAnnualChart(
+        sensorName.split("=")[1],
+        "2022", //BISOGNEREBBE VISUALIZZARE L'ANNATA CORRENTE, MA NON CI SONO DATI, SONO PRESENTI SOLO DATI DEL 2022
+        "annual"
+      );
+      
+    }
+    else {
+      this.chartFactory.createEmptyChart();
+    }
+
   }
 
   /*MAP FUNCTIONS calling MapManager*/
@@ -123,9 +143,6 @@ export class MainpageModel {
     // Accedi al valore di un campo specifico, ad esempio 'typeofdate'
     let typeofdateValue = formData.get("typeofdate");
     let datePickerValue = formData.get("datepicker");
-
-    console.log("ho selezionato: " + typeofdateValue);
-
     if (typeofdateValue == "daily") {
       //se h oselezionato il giorno
       let starthour = formData.get("starthour");
@@ -173,11 +190,17 @@ export class MainpageModel {
         datePickerValue,
         typeofdateValue
       );
+
+
+     
+
+
+    
     }
   }
 
   getAllStatsFromSensor(selectedSensor) {
-    $("#status-message").text("carico i dati");
+    $("#status-message").text(" Carico i dati");
 
     let self = this;
 
@@ -193,7 +216,7 @@ export class MainpageModel {
       },
     });
     function success(response) {
-      console.log("Risultato query: " + response);
+      //console.log("Risultato query: " + response);
 
       let responseParsed = JSON.parse(response);
 
@@ -202,7 +225,7 @@ export class MainpageModel {
   }
 
   getBaseInfoFromSelectedSensor(selectedSensor) {
-    $("#status-message").text("carico i dati");
+    $("#status-message").text("Carico i dati");
     let markers;
     let self = this;
     if (!this.zonesAreVisible) {
@@ -246,7 +269,6 @@ export class MainpageModel {
             }
             self.map.addLayer(markers);
           }
-         
           self.heatMapFactory.addData(data);
         }
       },
@@ -255,6 +277,8 @@ export class MainpageModel {
       },
     });
   }
+
+
   getSensorAssociatedWithUser(username) {
     $.ajax({
       url: "./src/controller/php/getSensorAssociatedWithUser.php",
@@ -365,9 +389,9 @@ export class MainpageModel {
       $("#measurements").text(data["result"][0]["Total"]);
       $("#lastMeasurement").text(data["result"][0]["LastDate"]);
       $("#firstMeasurements").text(data["result"][0]["FirstDate"]);
-      $("#minSoundLevel").text(data["result"][0]["MinNoise"]);
-      $("#maxSoundLevel").text(data["result"][0]["MaxNoise"]);
-      $("#averageSoundLevel").text(data["result"][0]["AvgNoise"]);
+      $("#minSoundLevel").text(data["result"][0]["MinNoise"] + " dB");
+      $("#maxSoundLevel").text(data["result"][0]["MaxNoise"] + " dB");
+      $("#averageSoundLevel").text(data["result"][0]["AvgNoise"] + " dB");
       $("#status-message").text(" Si");
     } else {
       $("#status-message").text(" Nessun dato disponibile");
@@ -464,6 +488,9 @@ export class MainpageModel {
   }
 
   getValuesForAnnualChart(selectedSensor, year, typeofdateValue) {
+
+
+    console.log(selectedSensor + " " + year + " " + typeofdateValue);
     //annuale
 
     let self = this;
@@ -626,11 +653,9 @@ export class MainpageModel {
       // Assegna la gestione dei link
       $(document).on("click", "a[class^='viewOnMapLink']", function (event) {
         event.preventDefault();
-
         // Estrarre l'indice dalla classe del link
         let linkClass = $(this).attr("class");
         let index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
-
         viewRouteOnMap(index, paths_list);
       });
 

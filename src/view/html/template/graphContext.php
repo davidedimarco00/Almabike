@@ -56,11 +56,12 @@
 
         <div class="col-md-12 d-flex   align-content-stretch">
           <div class="row">
-            <?php
-            $ids = array('sensor', 'measurements', 'lastMeasurement', 'firstMeasurements', 'averageMeasurement', 'prova', 'maxSoundLevel', 'averageSoundLevel', 'minSoundLevel');
-            $labels = array('Sensore', 'Numero di rilevazioni', 'Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova', 'Misurazione massima', 'Misurazione media', 'Misurazione minima');
 
-            for ($i = 0; $i < 9; $i++): ?>
+            <?php
+            $ids = array('sensor', 'measurements', 'lastMeasurement', 'firstMeasurements', 'maxSoundLevel', 'averageSoundLevel', 'minSoundLevel');
+            $labels = array('Sensore', 'Numero di rilevazioni', 'Ultima Rilevazione', 'Prima Rilevazione', 'Misurazione massima', 'Misurazione media', 'Misurazione minima');
+
+            for ($i = 0; $i < count($labels); $i++): ?>
               <div class="col-md-4 <?php if ($i > 2) {
                 echo 'mt-2';
               } ?>">
