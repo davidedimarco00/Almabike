@@ -243,7 +243,6 @@ export class MainpageModel {
         console.log(positions);
         if (positions) {
           markers = L.markerClusterGroup();
-          let soundLevels = [];
           let data = [];
           for (let key in positions) {
             for (let key1 in positions[key]) {
@@ -258,7 +257,6 @@ export class MainpageModel {
                   title: title,
                 }
               );
-              soundLevels.push(positions[key][key1]["Noise_dBA"]);
               data.push([
                 positions[key][key1]["lati"] / 100000,
                 positions[key][key1]["longi"] / 100000,
@@ -279,59 +277,6 @@ export class MainpageModel {
   }
 
 
-  getSensorAssociatedWithUser(username) {
-    $.ajax({
-      url: "./src/controller/php/getSensorAssociatedWithUser.php",
-      cache: false,
-      type: "post",
-      data: username,
-      success: function (response) {
-        let result = JSON.parse(response);
-      },
-    });
-  }
-
-  applyHeatMapLayerForSensor(data, map) {
-    $.ajax({
-      url: "./src/controller/php/getDynamicSoundLevelChart.php",
-      type: "POST",
-      data: data,
-      cache: false,
-      success: function (response) {
-        if (self.flagHeatMap) {
-          map.removeLayer(self.heat);
-        }
-        let data = JSON.parse(response);
-        let heatPoints = [];
-
-        for (let key in data) {
-          for (let key1 in data[key]) {
-            let heatPoint = [
-              data[key][key1]["lati"] / 100000,
-              data[key][key1]["longi"] / 100000,
-              data[key][key1]["Noise_dBA"] / 100,
-            ];
-            heatPoints.push(heatPoint);
-          }
-        }
-
-        self.heat = L.heatLayer(heatPoints, {
-          radius: 25,
-          blur: 1,
-
-          //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
-          gradient: { 0: "green", 0.6: "yellow", 0.8: "orange", 0.95: "red" },
-        }).addTo(map);
-
-        self.flagHeatMap = true;
-      },
-
-      error: function (jqXHR, textStatus, errorThrown) {
-        //alert("Chiamata fallita");
-        console.log(textStatus, errorThrown);
-      },
-    });
-  }
 
   showLoadingSpinner() {
     $("#loadingSpinner").show();
@@ -534,27 +479,25 @@ export class MainpageModel {
       },
     });
     function success(response) {
-      //console.log(response);
+
       let data = JSON.parse(response);
 
-      let currentPath = [];
-      let paths = [];
+
+
+      let currentRoute = [];
+      let routes = [];
       let lastTimestamp = null;
 
       for (let key in data) {
         for (let key1 in data[key]) {
           if (lastTimestamp !== null) {
             const timeDifference =
-              (new Date(data[key][key1]["Time"]) - new Date(lastTimestamp)) /
-              1000; // Differenza di tempo in secondi
-            //console.log(timeDifference);
-
-            // Se il tempo trascorso tra le misurazioni è superiore a 5 secondi, considera un nuovo percorso
+              (new Date(data[key][key1]["Time"]) - new Date(lastTimestamp)) / 1000;
             if (timeDifference > 20) {
-              paths.push([...currentPath]); // Copia il percorso corrente in 'paths'
-              currentPath = [];
+              routes.push([...currentRoute]); 
+              currentRoute = [];
             }
-            currentPath.push({
+            currentRoute.push({
               latitude: data[key][key1]["GPS_Latitude"], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
               longitude: data[key][key1]["GPS_Longitude"], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
               time: data[key][key1]["Time"],
@@ -562,19 +505,16 @@ export class MainpageModel {
               diff: timeDifference,
             });
           }
-
           lastTimestamp = data[key][key1]["Time"];
         }
       }
 
       // Aggiungi l'ultimo percorso
-      if (currentPath.length > 0) {
-        //qui bisogna visualizzare solo quelli effettuati in un determinato giorno
-        //oppure quello selezionato
-        paths.push([...currentPath]); // Copia l'ultimo percorso in 'paths'
+      if (currentRoute.length > 0) {
+        routes.push([...currentRoute]);
       }
-      paths = paths.filter(function (path) {
-        return path.length > 1;
+      routes = routes.filter(function (route) {
+        return route.length > 1;
       });
 
     
@@ -590,33 +530,27 @@ export class MainpageModel {
         },
       });
 
-      let paths_list = [];
+      let routesList = [];
 
-      for (let i = 0; i < paths.length; i++) {
-        let coordinates = paths[i].map(function (point) {
+      for (let i = 0; i < routes.length; i++) {
+        let coordinates = routes[i].map(function (point) {
           return [point.latitude, point.longitude];
         });
 
-        paths_list.push(coordinates);
+        routesList.push(coordinates);
       }
-      for (let t = 0; t < paths.length - 1; t++) {
-        //ora iniziale
-        let dateAndHour = paths[t][0].time.split(" ");
+      for (let t = 0; t < routes.length - 1; t++) {
+        let dateAndHour = routes[t][0].time.split(" ");
         let date = dateAndHour[0];
         let hour = dateAndHour[1];
-        //ora finale
-        let dateAndHourF = paths[t][paths[t].length - 1].time.split(" ");
+        let dateAndHourF = routes[t][routes[t].length - 1].time.split(" ");
         let hourF = dateAndHourF[1];
-
-        //rumore medio
-
-        const sumNoise = paths[t].reduce(
+        const sumNoise = routes[t].reduce(
           (accumulator, current) => accumulator + current.noise,
           0
         );
-        const average = (sumNoise / paths[t].length).toFixed(2);
+        const average = (sumNoise / routes[t].length).toFixed(2);
         let stateCell = "";
-
         if (average <= 60) {
           stateCell =
             "<i class='fas fa-circle text-success'></i> <a href='#' class='viewOnMapLink" +
@@ -641,7 +575,7 @@ export class MainpageModel {
 
         table.row
           .add([
-            /*Qui devo riempire la tabella*/ date,
+            date,
             hour,
             hourF,
             average + " dB",
@@ -653,20 +587,18 @@ export class MainpageModel {
       // Assegna la gestione dei link
       $(document).on("click", "a[class^='viewOnMapLink']", function (event) {
         event.preventDefault();
-        // Estrarre l'indice dalla classe del link
         let linkClass = $(this).attr("class");
         let index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
-        viewRouteOnMap(index, paths_list);
+        viewRouteOnMap(index, routesList);
       });
 
       let routesOnMap = [];
-
-      function viewRouteOnMap(index, paths) {
-        console.log(paths[index]);
+      function viewRouteOnMap(index, routes) {
+        console.log(routes[index]);
         routesOnMap.forEach(function (polyline) {
           self.map.removeLayer(polyline);
         });
-        let route = L.polyline(paths[index], { color: "#00B0FF", weight: 5}).addTo(self.map);
+        let route = L.polyline(routes[index], { color: "#00B0FF", weight: 5}).addTo(self.map);
         self.map.fitBounds(route.getBounds());
         routesOnMap.push(route);
       }

@@ -10,5 +10,4 @@
         }
     echo json_encode(['result' => $returnResult]);
     exit;
-
 ?>

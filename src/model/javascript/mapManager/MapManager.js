@@ -207,11 +207,6 @@ export class MapManager {
             });
             polygons.addTo(self.map);
 
-
-
-
-            
-
             // Crea un oggetto per memorizzare l'associazione tra punti e zone
             const pointsToZones = {};
             // Itera su ogni poligono
@@ -248,11 +243,6 @@ export class MapManager {
                   return c;
                 }
               });
-
-  
-
-
-
 
               /**
                * TODO: questo pezzo è da spostare in una funziona apparte */ 
@@ -339,7 +329,6 @@ export class MapManager {
                 return Math.min(...points.map(point => point.noise));
               }
 
-
               function averageValueInZone(points) {
                 if (points.length === 0) {
                   return 0; // Restituisci 0 se l'array è vuoto
@@ -353,8 +342,6 @@ export class MapManager {
                 let average = sum / points.length;
                 return parseFloat(average.toFixed(2)); //approssimo a due cifre decimali
               }
-
-
 
               function getColorValue(value) {
 

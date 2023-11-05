@@ -1,11 +1,4 @@
 <?php
-
-/*
-This class contains all the functions for require data from sensors' database
-Database must be connect on 3306 port and its name is "almabikedatabase".
-Database is a local database.
-*/
-
 class DatabaseHelper
 {
     private $db;
@@ -30,15 +23,7 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getInitialYear()
-    {
-        $query = "SELECT YEAR(MIN(`Time`)) as initialYear FROM `readings`;";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $res = json_encode($result);
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
+
 
     public function checkLogin($user, $pass)
     {

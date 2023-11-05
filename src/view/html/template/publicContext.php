@@ -12,8 +12,7 @@
       <div class="card dashboard-card">
         <div class="card-body">
           <h5 class="card-title">Scegli il sensore e i filtri</h5>
-          <small text="muted">Scegli il sensore per isolare le informazioni riguardanti il sensore, altrimenti scegli i
-            filtri per visualizzare le informazioni globali di tutti i sensori nell'intervallo specificato</small>
+         
 
 
           <div class="d-flex flex-column justify-content-center">
