@@ -1,11 +1,4 @@
 <?php
-
-/*
-This class contains all the functions for require data from sensors' database
-Database must be connect on 3306 port and its name is "almabikedatabase".
-Database is a local database.
-*/
-
 class DatabaseHelper
 {
     private $db;
@@ -117,8 +110,6 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
 
 
-
-
     }
 
 
@@ -157,8 +148,11 @@ class DatabaseHelper
     public function getPositions()
     {
         $query = "SELECT DISTINCT ID_Device, CAST(`GPS_Latitude`*100000 as DECIMAL) AS lati, CAST(`GPS_Longitude`*100000 as DECIMAL) as longi, `Noise_dBA` 
-        FROM `readings` 
-        GROUP BY lati, longi";
+        FROM `readings`
+        WHERE `Noise_dBA` <> 0
+        AND `GPS_Latitude` <> 0
+        AND `GPS_Longitude` <> 0
+        GROUP BY lati, longi, `Noise_dBA`;";
 
         $stmt = $this->db->prepare($query);
         $stmt->execute();
@@ -198,13 +192,6 @@ class DatabaseHelper
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-
-
-    /* LA QUERY CORRETTA DA APPLICARE PER I FILTRI ORARI E DI DATA èLA SEGUENTE:
-    
-            SELECT * FROM `readings` WHERE `ID_device`='A080' AND Time between '2022-06-06 16:00:00' and '2022-06-06 17:00:00';
-    
-    */
 
 
 
@@ -313,41 +300,6 @@ class DatabaseHelper
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-
-
-
-
-
-    public function getNightSoundLevelSensor($sensorName)
-    { //la notte va dalle 18 alle 06
-        $query = "SELECT * FROM `readings` 
-        WHERE `ID_device`=? 
-        AND (TIME_FORMAT(`Time`, '%H:%i') >= '18:00' OR TIME_FORMAT(`Time`, '%H:%i') <= '06:00');";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $sensorName);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getDaySoundLevelSensor($sensorName)
-    { //il giorno va dalle 06 alle 18
-        $query = "SELECT * FROM `readings` 
-        WHERE `ID_device`=? 
-        AND (TIME_FORMAT(`Time`, '%H:%i') >= '06:00' OR TIME_FORMAT(`Time`, '%H:%i') <= '18:00');";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $sensorName);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-
-
-
-
-
-
 
 }
 

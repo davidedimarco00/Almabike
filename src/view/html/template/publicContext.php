@@ -4,16 +4,15 @@
 
 
 
-  <small text="muted">Nella seguente dashboard puoi selezionare i filtri di tuo interesse da visualizzare sulla mappa.
-    Clicca su una zona per visualizzare la dashboard relativa all'area selezionata</small>
+  <small text="muted">Nella seguente dashboard puoi selezionare i filtri di tuo interesse da visualizzare sulla mappa. La mappa visualizza i dati globali del sensore senza tenere in considerazione i filtri.
+    Puoi cliccare su una zona per visualizzare la dashboard relativa all'area selezionata. Nella parte inferiore della pagina sono presenti i dati globali del sensore scelto e il grafico con i dati opportunamente filtrati.</small>
 
   <div class="row mt-4">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <div class="card dashboard-card">
         <div class="card-body">
           <h5 class="card-title">Scegli il sensore e i filtri</h5>
-          <small text="muted">Scegli il sensore per isolare le informazioni riguardanti il sensore, altrimenti scegli i
-            filtri per visualizzare le informazioni globali di tutti i sensori nell'intervallo specificato</small>
+         
 
 
           <div class="d-flex flex-column justify-content-center">
@@ -33,7 +32,7 @@
               </select>
             </form>
 
-            <p> Stai scegliendo i filtri per il sensore: </p>
+            <p> Disponibilità dati:<span id ="status-message"></span></p>
 
             <h6>Tipo:</h6>
 
@@ -86,70 +85,8 @@
 
 
 
-    <div class="col-md-6">
-      <div class="row h-100">
-        <div class="col-md-12 d-flex flex-wrap align-content-stretch">
-          <div class="row">
-            <?php
-            $ids = array('sensor', 'measurements', 'lastMeasurement', 'firstMeasurements', 'averageMeasurement', 'prova', 'maxSoundLevel', 'averageSoundLevel', 'minSoundLevel');
-            $labels = array('Sensore', 'Numero di rilevazioni', 'Ultima Rilevazione', 'Prima Rilevazione', 'Misurazioni medie intervallo', 'Prova', 'aaa', 'aaaa', 'aaaaa');
-
-            for ($i = 0; $i < 9; $i++): ?>
-              <div class="col-md-4 <?php if ($i > 2) {
-                echo 'mt-2';
-              } ?>">
-                <div class="card dashboard-card w-100 h-100 p-2 ">
-                  <div class="card-body w-100 d-flex flex-column align-items-center justify-content-center text-center">
-                    <h6 class="card-title">
-                      <?php echo $labels[$i] ?>
-                    </h6>
-                    <h4 class="label label-default my-auto" id="<?php echo $ids[$i] ?>">12dB</h4>
-                  </div>
-                </div>
-              </div>
-
-            <?php endfor; ?>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
-  <!-- terza riga 
-
     
-    <div class="row">
-      <div class="col-md-8">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Contenuto Principale</h5>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Sidebar</h5>
-            <ul>
-              <li>Elemento 1</li>
-              <li>Elemento 2</li>
-              <li>Elemento 3</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>---->
+  </div>
 
 
 </div>

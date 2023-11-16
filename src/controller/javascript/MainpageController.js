@@ -1,6 +1,6 @@
 /*This class contains the basic class for controller*/
 
-import  {MainpageModel} from "../../model/javascript/MainpageModel.js";
+import { MainpageModel } from "../../model/javascript/MainpageModel.js";
 
 export class MainPageController {
 
@@ -8,16 +8,17 @@ export class MainPageController {
     this.model = new MainpageModel();
   }
 
-  initializePage(){
+  initializePage() {
     this.model.initpage();
   }
-  
+
   showZones() {
     this.model.clearMapLayers();
-    this.model.showZones();  
+    this.model.showZones();
   }
 
   showColoredNightZone() {
+    this.model.clearMapLayers();
     this.model.showColoredNightZone();
   }
 
@@ -25,24 +26,31 @@ export class MainPageController {
     this.model.applyMapLayer(mapLayer);
   }
 
-  hideZones(){
+  hideZones() {
     this.model.hideZones();
   }
 
-  clearLayers(){
+  clearLayers() {
     this.model.clearMapLayers();
   }
 
-  getBaseInfoFromSelectedSensor(selectedSensor){
+  getBaseInfoFromSelectedSensor(selectedSensor) {
     console.log("selected Sensor: " + selectedSensor);
     this.model.getBaseInfoFromSelectedSensor(selectedSensor);
     this.model.getAllStatsFromSensor(selectedSensor);
-    //this.model.createHeatMap();
   }
 
 
-  searchButtonClick(){
+  searchButtonClick() {
     this.model.searchButtonClick();
+  }
+
+  dayChart() {
+
+  }
+
+  nightChart() {
+
   }
 
   barChartButtonClick() {
@@ -53,6 +61,7 @@ export class MainPageController {
     this.model.createChart(null, null, "line");
   }
 
+
   showLoadingSpinner() {
     this.model.showLoadingSpinner();
   }
@@ -61,23 +70,25 @@ export class MainPageController {
     this.model.hideLoadingSpinner();
   }
 
-  colorZone() { //colora le regioni (zone) in base al valore medio di noise all'interno dell'aria 
+  colorZone() {
     this.model.verifyPointInsidePolygon();
   }
 
 
-  /*Reserved Area*/ 
+  /*Reserved Area*/
 
   getAllInfoFromSensor(sensor) {
+
     this.model.getAllInfoFromSensor(sensor);
   }
 
 
-  clickOnTableRow(){
+  clickOnTableRow() {
     this.model.clickOnTableRow();
   }
 
   viewRouteOnMap() {
+    alert("ciao");
     this.model.viewRouteOnMap();
   }
 

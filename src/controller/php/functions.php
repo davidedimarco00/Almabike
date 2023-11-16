@@ -1,24 +1,24 @@
-<?php //error_reporting(E_ALL); ini_set('display_errors', 1);
+<?php
+function registerLoggedUser($logininfo)
+{
 
-    function registerLoggedUser($logininfo) {
-    
-            $_SESSION["Email"] = $logininfo["Email"];
-            $_SESSION["Nome"] = $logininfo["Nome"];
-            $_SESSION["Cognome"] = $logininfo["Cognome"];
-            $_SESSION["Username"] = $logininfo["Username"];
-    }
+    $_SESSION["Email"] = $logininfo["Email"];
+    $_SESSION["Nome"] = $logininfo["Nome"];
+    $_SESSION["Cognome"] = $logininfo["Cognome"];
+    $_SESSION["Username"] = $logininfo["Username"];
+}
 
-    function isUserLoggedIn(){
-        return isSet($_SESSION["Cognome"]) && isSet($_SESSION["Username"]) && isSet($_SESSION["Nome"]) && isSet($_SESSION["Email"]);
-    }
+function isUserLoggedIn()
+{
+    return isset($_SESSION["Cognome"]) && isset($_SESSION["Username"]) && isset($_SESSION["Nome"]) && isset($_SESSION["Email"]);
+}
 
-    function logUserOut(){
-        $_SESSION["Email"] = NULL;
-        $_SESSION["Nome"] = NULL;
-        $_SESSION["Cognome"] = NULL;
-        $_SESSION["Username"] = NULL;
-        session_destroy();
-    }
-
-    
+function logUserOut()
+{
+    $_SESSION["Email"] = NULL;
+    $_SESSION["Nome"] = NULL;
+    $_SESSION["Cognome"] = NULL;
+    $_SESSION["Username"] = NULL;
+    session_destroy();
+}
 ?>

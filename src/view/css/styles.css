@@ -55,7 +55,6 @@ a.sidebar-link {
   
   height: 800px;
   width: 100%;
-  border-radius: 20px;
   box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 
 }
@@ -174,9 +173,6 @@ a.sidebar-link {
 }
 
 
-.hour-input {
-
-}
 
 #myChart{
   height: 100%;
@@ -186,6 +182,7 @@ a.sidebar-link {
 .btn input[type="radio"] {
   display: none; 
 }
+
 
 
 
