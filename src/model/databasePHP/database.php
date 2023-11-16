@@ -301,34 +301,6 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-
-
-
-
-    public function getNightSoundLevelSensor($sensorName)
-    { //la notte va dalle 18 alle 06
-        $query = "SELECT * FROM `readings` 
-        WHERE `ID_device`=? 
-        AND (TIME_FORMAT(`Time`, '%H:%i') >= '18:00' OR TIME_FORMAT(`Time`, '%H:%i') <= '06:00');";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $sensorName);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getDaySoundLevelSensor($sensorName)
-    { //il giorno va dalle 06 alle 18
-        $query = "SELECT * FROM `readings` 
-        WHERE `ID_device`=? 
-        AND (TIME_FORMAT(`Time`, '%H:%i') >= '06:00' OR TIME_FORMAT(`Time`, '%H:%i') <= '18:00');";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $sensorName);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
 }
 
 ?>

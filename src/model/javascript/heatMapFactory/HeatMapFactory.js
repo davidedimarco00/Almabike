@@ -76,7 +76,6 @@ export class HeatMapFactory {
       gradient: { 0.95: "red" },
     }).addTo(this.map);
 
-    //this.heatMapLayers.push(greenheat, yellowheat, orangeheat, redheat);
     this.isEmpty = false;
   }
 }

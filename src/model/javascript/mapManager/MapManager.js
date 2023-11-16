@@ -149,7 +149,7 @@ export class MapManager {
     let url = ""; //si basa su quale php chiamare in base al tipo di chiamata
 
     switch (
-      type //di default chiama all
+    type //di default chiama all
     ) {
       case "all":
         url = "./src/controller/php/getAllPointsForPolygons.php";
@@ -258,12 +258,12 @@ export class MapManager {
                   ) {
                     if (
                       vertices_y[i] > latitude_y !==
-                        vertices_y[j] > latitude_y &&
+                      vertices_y[j] > latitude_y &&
                       longitude_x <
-                        ((vertices_x[j] - vertices_x[i]) *
-                          (latitude_y - vertices_y[i])) /
-                          (vertices_y[j] - vertices_y[i]) +
-                          vertices_x[i]
+                      ((vertices_x[j] - vertices_x[i]) *
+                        (latitude_y - vertices_y[i])) /
+                      (vertices_y[j] - vertices_y[i]) +
+                      vertices_x[i]
                     ) {
                       c = !c;
                     }
@@ -271,9 +271,6 @@ export class MapManager {
                   return c;
                 }
               });
-
-              /**
-               * TODO: questo pezzo è da spostare in una funziona apparte */
 
               // Verifica se c'è un array di punti associati alla zona
               if (pointsToZones[zoneName]) {

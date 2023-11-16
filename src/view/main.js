@@ -1,9 +1,9 @@
-import {MainPageController} from  "../controller/javascript/MainpageController.js";
+import { MainPageController } from "../controller/javascript/MainpageController.js";
 
 
 let mainpageController = new MainPageController();
 
-$(document).ajaxSend(function(event, jqxhr, settings) {
+$(document).ajaxSend(function (event, jqxhr, settings) {
     mainpageController.showLoadingSpinner();
 });
 
@@ -11,28 +11,28 @@ $(document).ajaxComplete(function () {
     mainpageController.hideLoadingSpinner();
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     mainpageController.initializePage();
     $('.custom-tooltip').tooltip({
         template: '<div class="tooltip custom" role="tooltip"><div class="tooltip-inner"></div></div>',
         trigger: 'hover', // Mostra il tooltip quando si passa il mouse sopra il div
         html: true // Abilita l'HTML nel tooltip personalizzato
-      });
+    });
 
-    $('#zonesToggle').click(function (){
-        
+    $('#zonesToggle').click(function () {
+
         if (!$('#zonesToggle').is(':checked')) {
             //disattivo le zone
             mainpageController.hideZones();
-        }else {
+        } else {
             //attivo le zone
             mainpageController.showZones();
-            
-        }  
+
+        }
     });
 
-    $('#nightToggle').click(function (){
-        
+    $('#nightToggle').click(function () {
+
         if (!$('#nightToggle').is(':checked')) {
             //faccio vedere il giorno
             $('#dayToggle').prop("checked", true);
@@ -47,17 +47,17 @@ $(document).ready(function() {
 
     /*CONTROLLO DELLA VISUALIZZAZIONE DEI LAYERS*/
 
-    $(".layers").on( "click", function(e) {
+    $(".layers").on("click", function (e) {
 
         e.preventDefault();
 
-       
+
         let id = $(this).attr("id");
 
-        if(id=="clearLayer"){
+        if (id == "clearLayer") {
             mainpageController.clearLayers();
-        }else {
-   
+        } else {
+
             mainpageController.applyMapLayer(id);
         }
 
@@ -67,8 +67,8 @@ $(document).ready(function() {
     /**CONTROLLI SULLA DASHBOARD*/
     let selectedSensor;
 
-    
-    $('#selectSensor').on('change', function() {
+
+    $('#selectSensor').on('change', function () {
         let form = $(this);
         let inputs = form.find("select");
         selectedSensor = form.serialize();
@@ -78,55 +78,46 @@ $(document).ready(function() {
         inputs.prop("disabled", false);
     });
 
-    $("#searchChart").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
-       e.preventDefault();
+    $("#searchChart").on("click", function (e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+        e.preventDefault();
         mainpageController.searchButtonClick();
     });
 
-    $("#barButton").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+    $("#barButton").on("click", function (e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         e.preventDefault();
-         mainpageController.barChartButtonClick();
-     });
+        mainpageController.barChartButtonClick();
+    });
 
-     $("#lineButton").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+    $("#lineButton").on("click", function (e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         e.preventDefault();
-         mainpageController.lineChartButtonClick();
-     });
+        mainpageController.lineChartButtonClick();
+    });
 
-    $("#colorZone").on("click",function(e) {
+    $("#colorZone").on("click", function (e) {
         e.preventDefault();
-         mainpageController.colorZone();
-     });
+        mainpageController.colorZone();
+    });
 
-     $("#nightChart").on("click",function(e) {
-        e.preventDefault();
-        alert("disegno il nightChart");
-         mainpageController.nightChart(); //qui fare qualcosa
-     });
-
-     $("#dayChart").on("click",function(e) {
+    $("#nightChart").on("click", function (e) {
         e.preventDefault();
         alert("disegno il nightChart");
-         mainpageController.dayChart();
-     });
+        mainpageController.nightChart(); //qui fare qualcosa
+    });
+
+    $("#dayChart").on("click", function (e) {
+        e.preventDefault();
+        alert("disegno il nightChart");
+        mainpageController.dayChart();
+    });
 
 
-
-
-
-
-
-     if ($('a#myRoutebtn').is(':visible')) { 
+    if ($('a#myRoutebtn').is(':visible')) {
         $('#loginName').text("Logout");
-        $('#loginLogout').prop("href","index.php?action=logout");
+        $('#loginLogout').prop("href", "index.php?action=logout");
 
     }
 
-    
-
-
-
-    /*PRIVATE DASHBOARD*/ 
+    /*PRIVATE DASHBOARD*/
 
     /*CLICK PER VEDERE LA DASHBOARD NELLA VISUALIZZAZIONE PRIVATA*/
 
@@ -135,35 +126,30 @@ $(document).ready(function() {
             $(".mycontainer-public").fadeIn('fast');
         });
     });
-    
+
     $('#myRouteBtn').click(function () {
 
         $(".mycontainer-public").fadeOut('fast', function () {
-            $(".mycontainer-private").fadeIn('fast');    
+            $(".mycontainer-private").fadeIn('fast');
         });
-       
-   
+
+
         mainpageController.getAllInfoFromSensor($('#sensorNameLbl').text().replace(/\s/g, '')); //chiama ajax per scaricare i dati relativi al sensore
-            
+
     });
 
 
-    $("#search-routes").on("keyup", function() {
+    $("#search-routes").on("keyup", function () {
         let search = $(this).val().toLowerCase();
-        $("#routes-table tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1)
+        $("#routes-table tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(search) > -1)
         });
     });
 
-    $(".tablerow").on("click",function(e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
+    $(".tablerow").on("click", function (e) { //quando clicco su un tab bisogna lanciare un ajax che mi carica il chart corretto in live
         e.preventDefault();
         this.mainpageController.clickOnTableRow();
     });
-
-    
-
-
-
 
 });
 

@@ -43,9 +43,7 @@ export class ChartFactory {
     if (this.chart != null) {
       this.chart.destroy();
     }
-    const dataValues = data.values; // Sostituisci con il tuo array di dati
-
-    // Calcola il valore medio per ogni due misurazioni
+    const dataValues = data.values;
     const meanValues = [];
     for (let i = 0; i < dataValues.length; i += 2) {
       const chunk = dataValues.slice(i, i + 2);
@@ -76,7 +74,7 @@ export class ChartFactory {
           },
           {
             label: "Valore medio",
-            data: meanValues, 
+            data: meanValues,
             borderColor: "red",
             fill: false,
             lineTension: 0.2,

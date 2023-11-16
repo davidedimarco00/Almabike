@@ -1,6 +1,6 @@
 /*This class contains the basic class for controller*/
 
-import  {MainpageModel} from "../../model/javascript/MainpageModel.js";
+import { MainpageModel } from "../../model/javascript/MainpageModel.js";
 
 export class MainPageController {
 
@@ -8,13 +8,13 @@ export class MainPageController {
     this.model = new MainpageModel();
   }
 
-  initializePage(){
+  initializePage() {
     this.model.initpage();
   }
-  
+
   showZones() {
     this.model.clearMapLayers();
-    this.model.showZones();  
+    this.model.showZones();
   }
 
   showColoredNightZone() {
@@ -26,27 +26,27 @@ export class MainPageController {
     this.model.applyMapLayer(mapLayer);
   }
 
-  hideZones(){
+  hideZones() {
     this.model.hideZones();
   }
 
-  clearLayers(){
+  clearLayers() {
     this.model.clearMapLayers();
   }
 
-  getBaseInfoFromSelectedSensor(selectedSensor){
+  getBaseInfoFromSelectedSensor(selectedSensor) {
     console.log("selected Sensor: " + selectedSensor);
     this.model.getBaseInfoFromSelectedSensor(selectedSensor);
     this.model.getAllStatsFromSensor(selectedSensor);
   }
 
 
-  searchButtonClick(){
+  searchButtonClick() {
     this.model.searchButtonClick();
   }
 
   dayChart() {
-   
+
   }
 
   nightChart() {
@@ -70,12 +70,12 @@ export class MainPageController {
     this.model.hideLoadingSpinner();
   }
 
-  colorZone() { 
+  colorZone() {
     this.model.verifyPointInsidePolygon();
   }
 
 
-  /*Reserved Area*/ 
+  /*Reserved Area*/
 
   getAllInfoFromSensor(sensor) {
 
@@ -83,7 +83,7 @@ export class MainPageController {
   }
 
 
-  clickOnTableRow(){
+  clickOnTableRow() {
     this.model.clickOnTableRow();
   }
 

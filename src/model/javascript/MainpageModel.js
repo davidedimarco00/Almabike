@@ -22,7 +22,6 @@ export class MainpageModel {
 
   initpage() {
     $("#myChart").removeAttr("style");
-    //Graph tab click change status to active
     let checkboxes =
       "input#inputdaily,input#inputmonthly,input#inputweekly,input#inputannual";
 
@@ -69,24 +68,18 @@ export class MainpageModel {
     this.mapManager.addMapControls();
     this.mapManager.showZones();
 
-    
+
     if ($("#sensorNameLbl").length > 0) {
 
       let sensorName = "sensorName=" + $('#sensorNameLbl').text().replace(/\s/g, '');
-      //this.getAllStatsFromSensor($('#sensorNameLbl').text().replace(/\s/g, ''));
       this.getAllStatsFromSensor(sensorName);
-
-      //prendo i dati del sensore relativo all'utente
-
-
-      
       //costruisco il grafico
       this.getValuesForAnnualChart(
         sensorName.split("=")[1],
         "2022", //BISOGNEREBBE VISUALIZZARE L'ANNATA CORRENTE, MA NON CI SONO DATI, SONO PRESENTI SOLO DATI DEL 2022
         "annual"
       );
-      
+
     }
     else {
       this.chartFactory.createEmptyChart();
@@ -127,15 +120,12 @@ export class MainpageModel {
   //DASHBOARD FUNCTIONS
   searchButtonClick() {
     let $form = $("#chartForm");
-    //alert("#datepicker, #input"+ selTab);
-    // Let's select and cache all the fields
     let $inputs = $form.find(
       "#datepicker, #" + self.selCheckbox + ", .hour-input"
     );
     // Serialize the data in the form
     let serializedData = $inputs.serialize();
     //FACCIO IL GRAFICO
-
     let formData = new URLSearchParams(serializedData);
     // Accedi al valore di un campo specifico, ad esempio 'typeofdate'
     let typeofdateValue = formData.get("typeofdate");
@@ -151,13 +141,6 @@ export class MainpageModel {
         endhour === null ||
         endhour.trim() === ""
       ) {
-        //alert("i campi sono vuoti");
-        //allora voglio il grafico giornaliero con tutte le misurazioni del giorno
-
-        console.log(
-          "Sensore attualmente selezionato=",
-          $("#selectSensor").val()
-        );
         this.getValuesForDailyChart(
           $("#selectSensor").val(),
           datePickerValue,
@@ -212,7 +195,7 @@ export class MainpageModel {
   }
 
   getBaseInfoFromSelectedSensor(selectedSensor) {
-   
+
     $("#status-message").text("Carico i dati");
     let markers;
     let self = this;
@@ -220,7 +203,7 @@ export class MainpageModel {
       this.hideZones();
       this.mapManager.clearClusterGroup();
     }
-   
+
     $.ajax({
       url: "./src/controller/php/getDynamicSensorCoord.php",
       type: "post",
@@ -255,7 +238,7 @@ export class MainpageModel {
             }
             self.map.addLayer(markers);
           }
-          
+
           self.heatMapFactory.addData(data);
         }
       },
@@ -276,9 +259,6 @@ export class MainpageModel {
   }
 
   createChart(data, type, design) {
-    //alert("Okay ora devo fare il grafico di un " + type);
-    //console.log("dati\n\n\n\n", data);
-
     //isolo l'array che m'interessa per il grafico
     let yaxis = [];
     let xaxis = [];
@@ -461,12 +441,12 @@ export class MainpageModel {
             const timeDifference =
               (new Date(data[key][key1]["Time"]) - new Date(lastTimestamp)) / 1000;
             if (timeDifference > 20) {
-              routes.push([...currentRoute]); 
+              routes.push([...currentRoute]);
               currentRoute = [];
             }
             currentRoute.push({
-              latitude: data[key][key1]["GPS_Latitude"], // Sostituisci con il nome corretto del campo delle coordinate di latitudine
-              longitude: data[key][key1]["GPS_Longitude"], // Sostituisci con il nome corretto del campo delle coordinate di longitudine
+              latitude: data[key][key1]["GPS_Latitude"],
+              longitude: data[key][key1]["GPS_Longitude"],
               time: data[key][key1]["Time"],
               noise: data[key][key1]["Noise_dBA"],
               diff: timeDifference,
@@ -484,7 +464,7 @@ export class MainpageModel {
         return route.length > 1;
       });
 
-    
+
       const table = new DataTable("#routes-table", {
         searching: false,
         lengthChange: false,
@@ -555,7 +535,7 @@ export class MainpageModel {
       $(document).on("click", "a[class^='viewOnMapLink']", function (event) {
         event.preventDefault();
         let linkClass = $(this).attr("class");
-        let index = linkClass.match(/\d+/); // Estrae il numero dall'attributo class
+        let index = linkClass.match(/\d+/); //estrae il numero dall'attributo class
         viewRouteOnMap(index, routesList);
       });
 
@@ -565,7 +545,7 @@ export class MainpageModel {
         routesOnMap.forEach(function (polyline) {
           self.map.removeLayer(polyline);
         });
-        let route = L.polyline(routes[index], { color: "#00B0FF", weight: 5}).addTo(self.map);
+        let route = L.polyline(routes[index], { color: "#00B0FF", weight: 5 }).addTo(self.map);
         self.map.fitBounds(route.getBounds());
         routesOnMap.push(route);
       }
