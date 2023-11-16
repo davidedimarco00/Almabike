@@ -19,9 +19,17 @@
         </div>
       </div>
     </div>
+
+    <div id="loadingBar" class="row">
+    <div class="col-12">
+      <div class="legendCard d-flex justify-content-center">
+        <strong>Sto caricando i dati della mappa, attendere...</strong>
+        </div>
+      </div>
+    </div>
+
+    
   </div>
-
-
 
   <div id="map">
 

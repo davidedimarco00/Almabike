@@ -1,5 +1,4 @@
 <?php
-
     function registerLoggedUser($logininfo) {
     
             $_SESSION["Email"] = $logininfo["Email"];
@@ -18,7 +17,5 @@
         $_SESSION["Cognome"] = NULL;
         $_SESSION["Username"] = NULL;
         session_destroy();
-    }
-
-    
+    } 
 ?>

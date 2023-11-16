@@ -23,7 +23,15 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-
+    public function getInitialYear()
+    {
+        $query = "SELECT YEAR(MIN(`Time`)) as initialYear FROM `readings`;";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $res = json_encode($result);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 
     public function checkLogin($user, $pass)
     {
@@ -184,13 +192,6 @@ class DatabaseHelper
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-
-
-    /* LA QUERY CORRETTA DA APPLICARE PER I FILTRI ORARI E DI DATA èLA SEGUENTE:
-    
-            SELECT * FROM `readings` WHERE `ID_device`='A080' AND Time between '2022-06-06 16:00:00' and '2022-06-06 17:00:00';
-    
-    */
 
 
 

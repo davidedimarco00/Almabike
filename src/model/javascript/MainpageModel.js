@@ -134,9 +134,6 @@ export class MainpageModel {
     );
     // Serialize the data in the form
     let serializedData = $inputs.serialize();
-
-    //alert("A post passo i valori\n" + serializedData);
-
     //FACCIO IL GRAFICO
 
     let formData = new URLSearchParams(serializedData);
@@ -169,7 +166,6 @@ export class MainpageModel {
       } else {
         starthour = starthour + ":00"; //preparo la formattazione dei due parametri
         endhour = endhour + ":00";
-        //alert(starthour + " " + endhour);
         this.getValuesForDailyChartBetweenHours(
           $("#selectSensor").val(),
           datePickerValue,
@@ -190,12 +186,6 @@ export class MainpageModel {
         datePickerValue,
         typeofdateValue
       );
-
-
-     
-
-
-    
     }
   }
 
@@ -216,15 +206,13 @@ export class MainpageModel {
       },
     });
     function success(response) {
-      //console.log("Risultato query: " + response);
-
       let responseParsed = JSON.parse(response);
-
       self.buildCardLabelsForSensor(responseParsed);
     }
   }
 
   getBaseInfoFromSelectedSensor(selectedSensor) {
+   
     $("#status-message").text("Carico i dati");
     let markers;
     let self = this;
@@ -232,7 +220,7 @@ export class MainpageModel {
       this.hideZones();
       this.mapManager.clearClusterGroup();
     }
-
+   
     $.ajax({
       url: "./src/controller/php/getDynamicSensorCoord.php",
       type: "post",
@@ -267,6 +255,7 @@ export class MainpageModel {
             }
             self.map.addLayer(markers);
           }
+          
           self.heatMapFactory.addData(data);
         }
       },
@@ -328,8 +317,7 @@ export class MainpageModel {
   }
 
   buildCardLabelsForSensor(data) {
-    if (data["result"].length != 0) {
-      //se i dati non sono disponibili esco da questa funzione altrimenti da errore e non si capisce perche
+    if (data["result"].length != 0) { //se i dati non sono disponibili esco da questa funzione altrimenti da errore e non si capisce perche
       $("#sensor").text(data["result"][0]["ID_device"]);
       $("#measurements").text(data["result"][0]["Total"]);
       $("#lastMeasurement").text(data["result"][0]["LastDate"]);
@@ -345,10 +333,7 @@ export class MainpageModel {
 
   getValuesForDailyChart(selectedSensor, date, typeofdateValue) {
     //giornalieri
-
     let self = this;
-
-    console.log("I'm here ", selectedSensor, date);
     $.ajax({
       url: "./src/controller/php/getAllMeasureForDay.php",
       type: "POST",
@@ -367,19 +352,8 @@ export class MainpageModel {
     }
   }
 
-  getValuesForDailyChartBetweenHours(
-    selectedSensor,
-    date,
-    startHour,
-    endHour,
-    typeofdateValue
-  ) {
-    //giornalieri nelle ore...
-
+  getValuesForDailyChartBetweenHours(selectedSensor, date, startHour, endHour, typeofdateValue) {
     let self = this;
-
-    console.log("I'm here ", selectedSensor, date);
-
     $.ajax({
       url: "./src/controller/php/getAllMeasureForDayBetweenHours.php",
       type: "POST",
@@ -396,22 +370,15 @@ export class MainpageModel {
         console.log(textStatus, errorThrown);
       },
     });
-
     function success(response) {
-      console.log(response);
-
       let responseParsed = JSON.parse(response);
-
       self.createChart(responseParsed, typeofdateValue, "line");
     }
   }
 
   getValuesForMonthlyChart(selectedSensor, month, typeofdateValue) {
     //mensili
-
     let self = this;
-
-    console.log("I'm here ", selectedSensor, typeofdateValue);
     $.ajax({
       url: "./src/controller/php/getAllMeasureForMonth.php",
       type: "POST",

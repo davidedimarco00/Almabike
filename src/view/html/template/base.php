@@ -119,7 +119,7 @@
         <div class="row title-row align-items-start">
           <div class="col-md-6 align-items-start justify-content-start">
             <!-- Colonna sinistra per il titolo della dashboard -->
-            <h1 class="title">Dashboard di Almabike <span id="loadingSpinner"><img src="resources/images/svg/loadingSpinner.svg"></span> </h1>
+            <h1 class="title">Dashboard di Almabike</h1>
           </div>
           <div class="col-md-6 d-flex align-items-center justify-content-end">
             <!-- Colonna destra per il div della login -->

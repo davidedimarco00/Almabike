@@ -27,6 +27,8 @@ export class ChartFactory {
       data = this.storedData;
     }
 
+    console.log(this.storedData);
+
     switch (design) {
       case "line":
         this.createLineChart(data);
@@ -66,7 +68,7 @@ export class ChartFactory {
         labels: data.labels,
         datasets: [
           {
-            label: "Livello del suono",
+            label: "Livello del rumore medio nel periodo",
             data: data.values,
             borderColor: "blue",
             fill: false,
@@ -74,7 +76,7 @@ export class ChartFactory {
           },
           {
             label: "Valore medio",
-            data: meanValues, // Crea un array con il valore medio ripetuto
+            data: meanValues, 
             borderColor: "red",
             fill: false,
             lineTension: 0.2,

@@ -34,6 +34,8 @@ export class HeatMapFactory {
   }
 
   updateHeatmaps(map) {
+    /*PULISCO I LAYER PRECEDENTI*/
+
     if (this.isEmpty === false) {
       this.map.eachLayer(function (layer) {
         if (layer instanceof L.HeatLayer || layer instanceof L.marker) {
@@ -41,28 +43,36 @@ export class HeatMapFactory {
         }
       });
     }
+
     let greenheat = L.heatLayer(this.greenData, {
       blur: 1,
       radius: 25,
-      opacity: 1,
+
+      //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
       gradient: { 0.2: "green" },
     }).addTo(this.map);
 
     let yellowheat = L.heatLayer(this.yellowData, {
       blur: 1,
       radius: 25,
+
+      //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
       gradient: { 0.5: "yellow" },
     }).addTo(this.map);
 
     let orangeheat = L.heatLayer(this.orangeData, {
       blur: 1,
       radius: 25,
+
+      //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
       gradient: { 0.7: "orange" },
     }).addTo(this.map);
 
     let redheat = L.heatLayer(this.redData, {
       blur: 1,
       radius: 25,
+
+      //da 0 a 60 verde, da 60 a 80 giallo, da 80 a 95 arancione, sopra i 95 rosso
       gradient: { 0.95: "red" },
     }).addTo(this.map);
 

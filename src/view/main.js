@@ -37,11 +37,8 @@ $(document).ready(function() {
             //faccio vedere il giorno
             $('#dayToggle').prop("checked", true);
             mainpageController.hideZones();
-           // mainpageController.showZones();
         } else {
             //attivo la visualizzazione notturna
-            //mainpageController.clearLayers();
-            console.log("Visualizzo la mappa notturna");
             mainpageController.hideZones();
             mainpageController.showColoredNightZone();
 
@@ -76,6 +73,7 @@ $(document).ready(function() {
         let inputs = form.find("select");
         selectedSensor = form.serialize();
         inputs.prop("disabled", true);
+        console.log("ss");
         mainpageController.getBaseInfoFromSelectedSensor(selectedSensor);
         inputs.prop("disabled", false);
     });
@@ -99,6 +97,22 @@ $(document).ready(function() {
         e.preventDefault();
          mainpageController.colorZone();
      });
+
+     $("#nightChart").on("click",function(e) {
+        e.preventDefault();
+        alert("disegno il nightChart");
+         mainpageController.nightChart(); //qui fare qualcosa
+     });
+
+     $("#dayChart").on("click",function(e) {
+        e.preventDefault();
+        alert("disegno il nightChart");
+         mainpageController.dayChart();
+     });
+
+
+
+
 
 
 

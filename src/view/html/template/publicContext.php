@@ -4,8 +4,8 @@
 
 
 
-  <small text="muted">Nella seguente dashboard puoi selezionare i filtri di tuo interesse da visualizzare sulla mappa.
-    Clicca su una zona per visualizzare la dashboard relativa all'area selezionata</small>
+  <small text="muted">Nella seguente dashboard puoi selezionare i filtri di tuo interesse da visualizzare sulla mappa. La mappa visualizza i dati globali del sensore senza tenere in considerazione i filtri.
+    Puoi cliccare su una zona per visualizzare la dashboard relativa all'area selezionata. Nella parte inferiore della pagina sono presenti i dati globali del sensore scelto e il grafico con i dati opportunamente filtrati.</small>
 
   <div class="row mt-4">
     <div class="col-md-12">

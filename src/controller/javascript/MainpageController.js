@@ -45,6 +45,14 @@ export class MainPageController {
     this.model.searchButtonClick();
   }
 
+  dayChart() {
+   
+  }
+
+  nightChart() {
+
+  }
+
   barChartButtonClick() {
     this.model.createChart(null, null, "bar");
   }
@@ -52,6 +60,7 @@ export class MainPageController {
   lineChartButtonClick() {
     this.model.createChart(null, null, "line");
   }
+
 
   showLoadingSpinner() {
     this.model.showLoadingSpinner();

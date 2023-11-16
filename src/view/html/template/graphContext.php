@@ -5,7 +5,7 @@
       <div class="card-body">
         <h5 class="card-title">Grafico Sensore</h5>
         <small text="muted">Qui puoi visualizzare il grafico in base ai filtri selezionati. Nei bottoni sottostanti puoi
-          selezionare gli orari notturni e giornalieri rispettivamente tra le 18:00 e le 06:00 e le 06:00 e le 18. In
+          selezionare gli orari notturni: dalle 00:00 alle 06:00 e dalle 18:00 alle 00:00 e giornalieri: tra le 06:00 e le 18:00. In
           questo caso il valore mostrato è il valore medio notturno e giornaliero per i filtri selezionati.</small>
 
         <!----   <div class="text-end">
@@ -14,10 +14,10 @@
 
         <div class="d-flex flex-column justify-content-center mt-2">
           <div class="d-flex justify-content-center">
-            <button class="btn mr-2 btn-light btn-outline-warning" title="Visualizza i valori medi giornalieri">
+            <button id="dayChart" class="btn mr-2 btn-light btn-outline-warning" title="Visualizza i valori medi giornalieri">
               <i class="fa-solid fa-sun"></i>
             </button>
-            <button class="btn mr-2 btn-light btn-outline-dark" title="Visualizza i valori medi notturni">
+            <button id="nightChart" class="btn mr-2 btn-light btn-outline-dark" title="Visualizza i valori medi notturni">
               <i class="fas fa-moon"></i>
             </button>
           </div>

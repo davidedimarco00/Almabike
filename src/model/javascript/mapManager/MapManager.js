@@ -8,10 +8,9 @@ export class MapManager {
   }
 
   addMapControls() {
-
-    const levelsCard = L.control({ position: 'bottomleft' });
+    const levelsCard = L.control({ position: "bottomleft" });
     levelsCard.onAdd = function () {
-      const div = L.DomUtil.create('div', 'levelsCard');
+      const div = L.DomUtil.create("div", "levelsCard");
       this.update(div);
       return div;
     };
@@ -34,11 +33,9 @@ export class MapManager {
     };
     levelsCard.addTo(this.map);
 
-
-
-    const zonesCard = L.control({ position: 'bottomleft' });
+    const zonesCard = L.control({ position: "bottomleft" });
     zonesCard.onAdd = function () {
-      const div = L.DomUtil.create('div', 'zonesCard');
+      const div = L.DomUtil.create("div", "zonesCard");
       this.update(div);
       return div;
     };
@@ -58,10 +55,9 @@ export class MapManager {
     };
     zonesCard.addTo(this.map);
 
-
-    const infoCard = L.control({ position: 'bottomleft' });
+    const infoCard = L.control({ position: "bottomleft" });
     infoCard.onAdd = function () {
-      const div = L.DomUtil.create('div', 'infoCard');
+      const div = L.DomUtil.create("div", "infoCard");
       this.update(div);
       return div;
     };
@@ -71,23 +67,20 @@ export class MapManager {
 
       <button type="button" class="btn btn-default custom-tooltip" data-toggle="tooltip"
        data-placement="top" title="La mappa visualizza i dati globali del sensore selezionato.
-                                    In assenza di filtri e sensori selezionati la visualizzazione si basa sul livello medio di rumore nelle letie zona della città di Bologna.">
+                                    In assenza di filtri e sensori selezionati la visualizzazione si basa sul livello medio di rumore nelle zone della città di Bologna.">
         <i class="fas fa-info-circle"></i>
       </button>
 
-      `
-
+      `;
     };
     infoCard.addTo(this.map);
 
-    const loginCard = L.control({ position: 'topright' });
+    const loginCard = L.control({ position: "topright" });
     loginCard.onAdd = function () {
-      const div = L.DomUtil.create('div', 'loginCard');
+      const div = L.DomUtil.create("div", "loginCard");
       this.update(div);
       return div;
     };
-
-
   }
 
   applyMapLayer(mapLayer) {
@@ -105,8 +98,9 @@ export class MapManager {
         L.tileLayer(
           "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
           {
-            attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-          },
+            attribution:
+              "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+          }
         ).addTo(this.map);
         break;
 
@@ -115,8 +109,9 @@ export class MapManager {
           "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png",
           {
             maxZoom: 20,
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-          },
+            attribution:
+              '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+          }
         ).addTo(this.map);
         break;
 
@@ -124,7 +119,8 @@ export class MapManager {
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxNativeZoom: 18,
           maxZoom: 50,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(this.map);
         break;
 
@@ -133,8 +129,9 @@ export class MapManager {
           "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png",
           {
             maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          },
+            attribution:
+              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          }
         ).addTo(this.map);
         break;
     }
@@ -144,24 +141,25 @@ export class MapManager {
     }
   }
 
-  addZones(type="all") { 
-
+  addZones(type = "all") {
+    $("#loadingBar").show();
     let allPointsOnMap = [];
     let self = this;
 
     let url = ""; //si basa su quale php chiamare in base al tipo di chiamata
 
-    switch (type) { //di default chiama all
+    switch (
+      type //di default chiama all
+    ) {
       case "all":
-        url = "./src/controller/php/getAllPointsForPolygons.php"
+        url = "./src/controller/php/getAllPointsForPolygons.php";
         break;
       case "night":
-        url = "./src/controller/php/getAllPointsForNightPolygons.php"
+        url = "./src/controller/php/getAllPointsForNightPolygons.php";
         break;
       case "day":
-        url = "./src/controller/php/getAllPointsForDayPolygons.php"
+        url = "./src/controller/php/getAllPointsForDayPolygons.php";
         break;
-
     }
 
     $.ajax({
@@ -179,7 +177,7 @@ export class MapManager {
               let point = {
                 lat: lat,
                 lng: lng,
-                noise: noise
+                noise: noise,
               };
               allPointsOnMap.push(point);
             }
@@ -200,10 +198,10 @@ export class MapManager {
                 fillColor: "black", // colore del riempimento del poligono
                 fillOpacity: 0.05, // opacità del riempimento del poligono
               },
-              onEachFeature: function (feature, layer) { //per ogni poligono
+              onEachFeature: function (feature, layer) {
+                //per ogni poligono
                 layer.bindPopup("<h6>Nessuna info sulla zona</h6>");
-
-              }
+              },
             });
             polygons.addTo(self.map);
 
@@ -212,19 +210,31 @@ export class MapManager {
             // Itera su ogni poligono
             polygons.eachLayer(function (zone) {
               const zoneName = zone.feature.properties.name;
-              let vertices_x = zone.feature.geometry.coordinates[0].map(coord => coord[1]);
-              let vertices_y = zone.feature.geometry.coordinates[0].map(coord => coord[0]);
+              let vertices_x = zone.feature.geometry.coordinates[0].map(
+                (coord) => coord[1]
+              );
+              let vertices_y = zone.feature.geometry.coordinates[0].map(
+                (coord) => coord[0]
+              );
               let points_polygon = vertices_x.length;
 
               // Itera su ciascun punto
-              allPointsOnMap.forEach((point) => { //cicla su tutti i punti
+              allPointsOnMap.forEach((point) => {
+                //cicla su tutti i punti
                 const longitude = point.lat;
                 const latitude = point.lng;
                 let noise = point.noise;
 
                 // Verifica se il punto è all'interno del poligono
-                if (is_in_polygon(points_polygon, vertices_x, vertices_y, longitude, latitude)) {
-
+                if (
+                  is_in_polygon(
+                    points_polygon,
+                    vertices_x,
+                    vertices_y,
+                    longitude,
+                    latitude
+                  )
+                ) {
                   // Mappa il punto alla zona
                   if (!pointsToZones[zoneName]) {
                     pointsToZones[zoneName] = [];
@@ -232,11 +242,29 @@ export class MapManager {
                   pointsToZones[zoneName].push(point);
                 }
 
-                function is_in_polygon(points_polygon, vertices_x, vertices_y, longitude_x, latitude_y, c) {
+                function is_in_polygon(
+                  points_polygon,
+                  vertices_x,
+                  vertices_y,
+                  longitude_x,
+                  latitude_y,
+                  c
+                ) {
                   let i, j;
-                  for (i = 0, j = points_polygon - 1; i < points_polygon; j = i++) {
-                    if ((vertices_y[i] > latitude_y !== (vertices_y[j] > latitude_y)) &&
-                      (longitude_x < (vertices_x[j] - vertices_x[i]) * (latitude_y - vertices_y[i]) / (vertices_y[j] - vertices_y[i]) + vertices_x[i])) {
+                  for (
+                    i = 0, j = points_polygon - 1;
+                    i < points_polygon;
+                    j = i++
+                  ) {
+                    if (
+                      vertices_y[i] > latitude_y !==
+                        vertices_y[j] > latitude_y &&
+                      longitude_x <
+                        ((vertices_x[j] - vertices_x[i]) *
+                          (latitude_y - vertices_y[i])) /
+                          (vertices_y[j] - vertices_y[i]) +
+                          vertices_x[i]
+                    ) {
                       c = !c;
                     }
                   }
@@ -245,13 +273,15 @@ export class MapManager {
               });
 
               /**
-               * TODO: questo pezzo è da spostare in una funziona apparte */ 
+               * TODO: questo pezzo è da spostare in una funziona apparte */
 
               // Verifica se c'è un array di punti associati alla zona
               if (pointsToZones[zoneName]) {
                 // Calcola un valore medio o qualsiasi logica per determinare il colore
                 let averageValue = averageValueInZone(pointsToZones[zoneName]);
-                let numberOfMeasure = numberOfMeasureInZone(pointsToZones[zoneName]);
+                let numberOfMeasure = numberOfMeasureInZone(
+                  pointsToZones[zoneName]
+                );
                 let maxNoise = getMaxNoise(pointsToZones[zoneName]);
                 let minNoise = getMinNoise(pointsToZones[zoneName]);
 
@@ -260,18 +290,16 @@ export class MapManager {
                   fillColor: getColorValue(averageValue),
                   color: getColorValue(averageValue),
                   fillOpacity: 0.3,
-
                 });
 
                 //riempio il popup che referenzia la zona
-                let statusIcon ="";
+                let statusIcon = "";
                 if (averageValue < 60) {
                   statusIcon = "resources/images/svg/checkFill.svg";
                 } else if (averageValue > 60 && averageValue < 95) {
-                  statusIcon ="resources/images/svg/mediumStatus.svg";
-                }
-                else {
-                  statusIcon ="resources/images/svg/exclamationcircle.svg";
+                  statusIcon = "resources/images/svg/mediumStatus.svg";
+                } else {
+                  statusIcon = "resources/images/svg/exclamationcircle.svg";
                 }
 
                 let popupHTML =
@@ -286,47 +314,54 @@ export class MapManager {
                                         <tbody>
                                             <tr>
                                                 <td><small class="text-muted">Rumore medio:</small></td>
-                                                <td id="zonePopupAverage">`+ averageValue + ` dB</td>
+                                                <td id="zonePopupAverage">` +
+                  averageValue +
+                  ` dB</td>
                                             </tr>
                                             <tr>
                                                 <td><small class="text-muted">Numero di rilevazioni:</small></td>
-                                                <td id="zonePopupMeasure">`+numberOfMeasure+`</td>
+                                                <td id="zonePopupMeasure">` +
+                  numberOfMeasure +
+                  `</td>
                                             </tr>
                                             <tr>
                                                 <td id="zonePopupMaxSound"><small class="text-muted">Soglia massima registrata:</small></td>
-                                                <td>`+maxNoise+` dB</td>
+                                                <td>` +
+                  maxNoise +
+                  ` dB</td>
                                             </tr>
                                             <tr>
                                                 <td id="zonePopupMinSound"><small class="text-muted">Soglia minima registrata:</small></td>
-                                                <td>`+minNoise+` dB</td>
+                                                <td>` +
+                  minNoise +
+                  ` dB</td>
                                             </tr>
                                             <tr>
                                                 <td><small class="text-muted">Stato zona:</small></td>
                                                 <td>
-                                                    <img src="`+statusIcon+`"></img>
+                                                    <img src="` +
+                  statusIcon +
+                  `"></img>
                                                 </td>
                                             </tr>
                                         </tbody>
                                  </table>`;
 
-
-                //SPARO IL POPUP SULLA ZONA
+                //metto il popup sulla zona
                 zone.setPopupContent(popupHTML);
-
+                $("#loadingBar").hide();
               }
 
-
-
-              function numberOfMeasureInZone(points) { 
+              function numberOfMeasureInZone(points) {
                 return points.length;
               }
 
-              function getMaxNoise(points) { 
-                return Math.max(...points.map(point => point.noise));
+              function getMaxNoise(points) {
+                return Math.max(...points.map((point) => point.noise));
               }
 
-              function getMinNoise(points) { 
-                return Math.min(...points.map(point => point.noise));
+              function getMinNoise(points) {
+                return Math.min(...points.map((point) => point.noise));
               }
 
               function averageValueInZone(points) {
@@ -344,7 +379,6 @@ export class MapManager {
               }
 
               function getColorValue(value) {
-
                 if (value < 60) {
                   return "green";
                 } else if (value >= 60 && value <= 80) {
@@ -355,7 +389,6 @@ export class MapManager {
                   return "red";
                 }
               }
-
             });
           });
       },
@@ -363,11 +396,9 @@ export class MapManager {
         console.log(textStatus, errorThrown);
       },
     });
-
   }
 
   showColoredNightZone() {
-   
     this.addZones("night");
   }
 
@@ -388,16 +419,14 @@ export class MapManager {
     $("#zonesToggle").prop("checked", false);
   }
 
-
   clearClusterGroup() {
     let self = this;
     self.map.eachLayer(function (layer) {
       if (layer instanceof L.MarkerClusterGroup) {
         self.map.removeLayer(layer); // Rimuovi il markerClusterGroup dalla mappa
         layer.clearLayers(); // Rimuovi tutti i marker dal markerClusterGroup
-      }  
+      }
     });
-
   }
 
   clearMapLayers() {
@@ -409,21 +438,8 @@ export class MapManager {
     this.applyMapLayer("streetMapLayer");
   }
 
-  addRouteToMap(route) { //gli passo l'array di punti calcolato e questa funzione disegna la route sulla mappa
-
-  }
-
-
-
   getMap() {
     return this.map;
   }
-
-  getZoneInfo(zone, map) {
-    // Implementazione del metodo getZoneInfo per visualizzare le label sulle zone
-    // ...
-  }
-
-
 
 }
