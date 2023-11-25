@@ -100,13 +100,11 @@ $(document).ready(function () {
 
     $("#nightChart").on("click", function (e) {
         e.preventDefault();
-        alert("disegno il nightChart");
         mainpageController.nightChart(); //qui fare qualcosa
     });
 
     $("#dayChart").on("click", function (e) {
         e.preventDefault();
-        alert("disegno il nightChart");
         mainpageController.dayChart();
     });
 
@@ -132,10 +130,7 @@ $(document).ready(function () {
         $(".mycontainer-public").fadeOut('fast', function () {
             $(".mycontainer-private").fadeIn('fast');
         });
-
-
         mainpageController.getAllInfoFromSensor($('#sensorNameLbl').text().replace(/\s/g, '')); //chiama ajax per scaricare i dati relativi al sensore
-
     });
 
 
